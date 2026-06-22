@@ -5,7 +5,292 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MuHub — ผูกดวงโหราศาสตร์ไทย</title>
 <script src="astronomy.browser.min.js"></script>
-<style>@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');</style>
+<style>@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
+/* ── TAB BAR & TABS ─────────────────── */
+.tab-bar {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+  flex-wrap: wrap;
+}
+.tab-btn {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.85);
+  padding: 0.45rem 1rem;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.tab-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+.tab-btn.active {
+  background: var(--gold);
+  border-color: var(--gold-d);
+  color: #2B1505;
+  box-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+}
+.tab-content {
+  display: block;
+}
+.tab-content.hidden {
+  display: none !important;
+}
+
+/* ── ASTROLOGER STYLES ───────────────── */
+.astrologer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+.astrologer-card {
+  background: #ffffff;
+  border: 1px solid #E8D0A0;
+  border-radius: 16px;
+  padding: 1.4rem;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+}
+.astrologer-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 25px rgba(212, 175, 55, 0.12);
+  border-color: var(--gold);
+}
+.astrologer-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 3px solid var(--gold);
+  object-fit: cover;
+  margin-bottom: 0.8rem;
+  background: var(--cream2);
+}
+.astrologer-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.3rem;
+}
+.astrologer-specialty {
+  font-size: 0.82rem;
+  color: var(--dim);
+  background: var(--cream2);
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-weight: 500;
+  margin-bottom: 0.6rem;
+}
+.astrologer-rating {
+  color: var(--coral-d);
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+.astrologer-price {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1A3050;
+  margin-bottom: 1.2rem;
+}
+.astrologer-bio {
+  font-size: 0.82rem;
+  color: #555;
+  line-height: 1.4;
+  margin-bottom: 1.2rem;
+  min-height: 50px;
+}
+
+/* ── BOOKING FORM STYLES ─────────────── */
+.booking-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+.booking-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+@media (max-width: 600px) {
+  .booking-grid { grid-template-columns: 1fr; }
+}
+.time-slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.slot-btn {
+  background: #ffffff;
+  border: 1px solid #D4AF3744;
+  padding: 0.5rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  font-family: inherit;
+}
+.slot-btn:hover {
+  background: var(--cream2);
+  border-color: var(--gold);
+}
+.slot-btn.active {
+  background: var(--gold);
+  border-color: var(--gold-d);
+  color: #2B1505;
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+}
+.slot-btn.busy {
+  background: #f5f5f5;
+  border-color: #e0e0e0;
+  color: #bbb;
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+/* ── QUEUE / BOOKING TRACKING ───────── */
+.booking-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.booking-item {
+  background: #ffffff;
+  border: 1px solid #E8D0A0;
+  border-radius: 12px;
+  padding: 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.booking-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.booking-status {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.status-pending { background: #FFF3CD; color: #856404; }
+.status-confirmed { background: #D4EDDA; color: #155724; }
+.status-completed { background: #E2E3E5; color: #383D41; }
+
+/* ── MU SHOP STYLES ──────────────────── */
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+.shop-card {
+  background: #ffffff;
+  border: 1px solid #E8D0A0;
+  border-radius: 16px;
+  padding: 1.2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.25s ease;
+}
+.shop-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(212, 175, 55, 0.1);
+  border-color: var(--gold);
+}
+.shop-img-holder {
+  height: 160px;
+  background: var(--cream2);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.8rem;
+  font-size: 3rem;
+  color: var(--gold-d);
+  overflow: hidden;
+  position: relative;
+}
+.shop-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.4rem;
+}
+.shop-price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--coral-d);
+  margin-bottom: 0.6rem;
+}
+.shop-desc {
+  font-size: 0.82rem;
+  color: var(--dim);
+  line-height: 1.4;
+  margin-bottom: 1rem;
+  flex-grow: 1;
+}
+
+/* ── MOCK CHECKOUT MODAL ────────────── */
+.mu-modal {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.mu-modal-content {
+  background: #ffffff;
+  border: 2px solid var(--gold);
+  border-radius: 20px;
+  width: 90%;
+  max-width: 460px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  position: relative;
+}
+.modal-close-btn {
+  position: absolute;
+  top: 1rem; right: 1rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: none; border: none;
+  cursor: pointer; color: var(--dim);
+}
+.modal-close-btn:hover { color: var(--text); }
+
+</style>
 <style>
 :root{
   --coral:#F07060; --coral-l:#F59080; --coral-d:#B03828;
@@ -193,10 +478,17 @@ main{max-width:1360px;margin:0 auto 0 0;padding:1.2rem 1.2rem 3rem 1.2rem}
 <body>
 
 <!-- HEADER + NAME ROW WRAPPER -->
-<div style="position: relative;">
+<div style="position: relative; margin-bottom: 1rem;">
   <!-- HEADER -->
-  <header style="padding-right: 120px;">
+  <header style="padding-right: 120px; display: flex; flex-direction: column; gap: 8px;">
     <span class="header-tag">ผูกดวงโหราศาสตร์ไทย ปฏิทินลาหิรี (นิรายนะ)</span>
+    <div class="tab-bar">
+      <button id="btn-calculator-tab" class="tab-btn active" onclick="switchTab('calculator-tab')">🔮 ผูกดวงชะตา</button>
+      <button id="btn-astrologers-tab" class="tab-btn" onclick="switchTab('astrologers-tab')">🧙‍♂️ นักพยากรณ์</button>
+      <button id="btn-booking-tab" class="tab-btn" onclick="switchTab('booking-tab')">🗓️ จองคิวดูดวง</button>
+      <button id="btn-my-bookings-tab" class="tab-btn" onclick="switchTab('my-bookings-tab')">📌 คิวของฉัน</button>
+      <button id="btn-shop-tab" class="tab-btn" onclick="switchTab('shop-tab')">🛍️ ร้านค้าสายมู</button>
+    </div>
   </header>
   <div class="name-bar bar-row" style="padding-right: 120px;">
     <div class="field field-name">
@@ -209,6 +501,9 @@ main{max-width:1360px;margin:0 auto 0 0;padding:1.2rem 1.2rem 3rem 1.2rem}
     <img src="logo.png" alt="MuHub Logo">
   </div>
 </div>
+
+<!-- CALCULATOR TAB START -->
+<div id="calculator-tab" class="tab-content">
 
 <div class="birth-bar bar-row">
   <button class="tog tog-n" id="togN" onclick="toggleLayer('n')">ดวงกำเนิด</button>
@@ -314,7 +609,9 @@ main{max-width:1360px;margin:0 auto 0 0;padding:1.2rem 1.2rem 3rem 1.2rem}
       <div class="legend">
         <div class="legend-item"><div class="lc" style="background:var(--blue-l)"></div> ดวงกำเนิด (วงใน) — เลขไทย</div>
         <div class="legend-item"><div class="lc" style="background:var(--white);border:1px solid #bbb"></div> ดวงจร (วงนอก) — เลขอารบิก</div>
-        <div class="legend-item"><span style="font-size:.85rem;color:var(--coral-d)">*</span> ถอยหลัง</div>
+        <div class="legend-item"><strong style="color:#7A5510;font-size:.85rem">พ</strong> พักร์</div>
+        <div class="legend-item"><strong style="color:#2E7D32;font-size:.85rem">ม</strong> มนต์</div>
+        <div class="legend-item"><strong style="color:#1976D2;font-size:.85rem">ส</strong> เสริด</div>
       </div>
     </div>
  
@@ -353,6 +650,196 @@ main{max-width:1360px;margin:0 auto 0 0;padding:1.2rem 1.2rem 3rem 1.2rem}
     </div>
   </div>
 </main>
+</div><!-- END calculator-tab -->
+
+
+<!-- ============================================================
+     NEW TABS CONTENT
+     ============================================================ -->
+
+<!-- ASTROLOGERS TAB -->
+<div id="astrologers-tab" class="tab-content hidden">
+  <div class="card">
+    <div class="card-title">🧙‍♂️ ทำความรู้จักทีมนักพยากรณ์</div>
+    <div style="font-size: 0.88rem; color: var(--dim); margin-bottom: 1.2rem;">เลือกนักพยากรณ์ที่เชี่ยวชาญศาสตร์ที่คุณสนใจเพื่อรับคำปรึกษาเจาะลึก</div>
+    <div class="astrologer-grid">
+      <!-- Card 1 -->
+      <div class="astrologer-card">
+        <div style="font-size: 1.8rem; margin-bottom: 0.4rem;">⛰️</div>
+        <div class="astrologer-name">อ.ศิลา โหราจารย์</div>
+        <div class="astrologer-specialty">โหราศาสตร์ไทย & ฤกษ์มงคล</div>
+        <div class="astrologer-rating">⭐ 4.9 (124 รีวิว)</div>
+        <div class="astrologer-price">500 ฿ / ชั่วโมง</div>
+        <div class="astrologer-bio">ผู้เชี่ยวชาญด้านโหราศาสตร์ไทยดั้งเดิม การผูกดวงชะตา วิเคราะห์จุดเด่นจุดด้อยชีวิต และการคำนวณฤกษ์มงคลต่างๆ</div>
+        <button class="btn btn-coral" style="width: 100%;" onclick="selectAstrologer('อ.ศิลา โหราจารย์')">🗓️ จองคิว</button>
+      </div>
+      <!-- Card 2 -->
+      <div class="astrologer-card">
+        <div style="font-size: 1.8rem; margin-bottom: 0.4rem;">🃏</div>
+        <div class="astrologer-name">หมอแพรว ยิปซีจิตสัมผัส</div>
+        <div class="astrologer-specialty">ไพ่ยิปซี & ไพ่ทาโรต์</div>
+        <div class="astrologer-rating">⭐ 4.8 (98 รีวิว)</div>
+        <div class="astrologer-price">390 ฿ / 45 นาที</div>
+        <div class="astrologer-bio">ให้คำปรึกษาปัญหาความรัก การเรียน และการงานด้วยไพ่ยิปซีจิตสัมผัส ตอบทุกคำถามคาใจได้อย่างแม่นยำและตรงจุด</div>
+        <button class="btn btn-coral" style="width: 100%;" onclick="selectAstrologer('หมอแพรว ยิปซีจิตสัมผัส')">🗓️ จองคิว</button>
+      </div>
+      <!-- Card 3 -->
+      <div class="astrologer-card">
+        <div style="font-size: 1.8rem; margin-bottom: 0.4rem;">🐉</div>
+        <div class="astrologer-name">อ.เชน ฮวงจุ้ยเปลี่ยนชีวิต</div>
+        <div class="astrologer-specialty">ฮวงจุ้ย & ลายมือลิขิต</div>
+        <div class="astrologer-rating">⭐ 4.95 (150 รีวิว)</div>
+        <div class="astrologer-price">800 ฿ / ชั่วโมง</div>
+        <div class="astrologer-bio">ซินแสฮวงจุ้ยและศาสตร์การอ่านลายมือ ปรับแต่งดวงชะตาที่อยู่อาศัยและการงานเพื่อหนุนนำโชคลาภความสำเร็จ</div>
+        <button class="btn btn-coral" style="width: 100%;" onclick="selectAstrologer('อ.เชน ฮวงจุ้ยเปลี่ยนชีวิต')">🗓️ จองคิว</button>
+      </div>
+      <!-- Card 4 -->
+      <div class="astrologer-card">
+        <div style="font-size: 1.8rem; margin-bottom: 0.4rem;">🔢</div>
+        <div class="astrologer-name">แม่หมอแก้ว เลขะมงคล</div>
+        <div class="astrologer-specialty">ศาสตร์ตัวเลข & เบอร์มงคล</div>
+        <div class="astrologer-rating">⭐ 4.75 (82 รีวิว)</div>
+        <div class="astrologer-price">290 ฿ / วิเคราะห์เคส</div>
+        <div class="astrologer-bio">วิเคราะห์เบอร์โทรศัพท์ เลขทะเบียนรถ เลขที่บ้าน และเลขศาสตร์ที่ส่งผลดีต่อชีวิต เพื่อการเจรจาและการค้าขายที่ราบรื่น</div>
+        <button class="btn btn-coral" style="width: 100%;" onclick="selectAstrologer('แม่หมอแก้ว เลขะมงคล')">🗓️ จองคิว</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BOOKING TAB -->
+<div id="booking-tab" class="tab-content hidden">
+  <div class="card booking-container">
+    <div class="card-title">🗓️ ระบบจองคิวตรวจดวงชะตา</div>
+    <div style="font-size: 0.88rem; color: var(--dim); margin-bottom: 1.5rem;">ระบุรายละเอียดเพื่อยืนยันนัดหมายของคุณกับหมอดู</div>
+    <form id="bookingForm" onsubmit="submitBooking(event)">
+      
+      <div class="booking-grid">
+        <div class="field">
+          <label>เลือกนักพยากรณ์</label>
+          <select id="bookAstrologer" style="width: 100%;" required>
+            <option value="">-- เลือกนักพยากรณ์ --</option>
+            <option value="อ.ศิลา โหราจารย์">อ.ศิลา โหราจารย์ (500฿/ชม.)</option>
+            <option value="หมอแพรว ยิปซีจิตสัมผัส">หมอแพรว ยิปซีจิตสัมผัส (390฿/45นาที)</option>
+            <option value="อ.เชน ฮวงจุ้ยเปลี่ยนชีวิต">อ.เชน ฮวงจุ้ยเปลี่ยนชีวิต (800฿/ชม.)</option>
+            <option value="แม่หมอแก้ว เลขะมงคล">แม่หมอแก้ว เลขะมงคล (290฿/เคส)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>รูปแบบบริการ</label>
+          <select id="bookService" style="width: 100%;" required>
+            <option value="โทรเสียง / วิดีโอคอล">โทรเสียง / วิดีโอคอลออนไลน์</option>
+            <option value="พิมพ์แชทถามตอบ">พิมพ์แชทถามตอบออนไลน์</option>
+            <option value="ส่งสรุปเอกสาร PDF">สรุปวิเคราะห์เอกสาร PDF</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 1.5rem;">
+        <div style="font-size: 0.85rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text);">เลือกเวลาที่สะดวก</div>
+        <div class="time-slots" id="slotsContainer">
+          <!-- Slots will be populated dynamically -->
+        </div>
+        <input type="hidden" id="selectedTime" required>
+      </div>
+
+      <div class="card" style="border: 1px dashed #E8D0A0; background: var(--cream1); margin-bottom: 1.5rem; padding: 1rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; flex-wrap: wrap; gap: 0.5rem;">
+          <span style="font-size: 0.9rem; font-weight: 700; color: var(--text);">📝 ข้อมูลวันเกิดสำหรับทำนายดวง</span>
+          <button type="button" class="btn btn-ghost" style="padding: 2px 10px; font-size: 0.78rem;" onclick="autoFillBooking()">📥 ดึงข้อมูลจากการคำนวณล่าสุด</button>
+        </div>
+        <div class="booking-grid">
+          <div class="field">
+            <label>ชื่อผู้รับทำนาย</label>
+            <input type="text" id="bookName" style="width: 100%;" placeholder="ชื่อเล่น หรือชื่อจริง" required>
+          </div>
+          <div class="field">
+            <label>วันเกิด</label>
+            <input type="date" id="bookBirthdate" style="width: 100%;" required>
+          </div>
+          <div class="field">
+            <label>เวลาเกิด</label>
+            <input type="time" id="bookTime" style="width: 100%;" required>
+          </div>
+          <div class="field">
+            <label>สถานที่เกิด (จังหวัด/ประเทศ)</label>
+            <input type="text" id="bookPlace" style="width: 100%;" placeholder="กรุงเทพมหานคร / ประเทศไทย" required>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align: right;">
+        <button type="submit" class="btn btn-coral" style="padding: 0.6rem 2rem;">✦ ยืนยันการจองคิว</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MY BOOKINGS TAB -->
+<div id="my-bookings-tab" class="tab-content hidden">
+  <div class="card" style="max-width: 800px; margin: 0 auto;">
+    <div class="card-title">📌 สถานะคิวดูดวงของฉัน</div>
+    <div style="font-size: 0.88rem; color: var(--dim); margin-bottom: 1rem;">คิวที่คุณลงทะเบียนไว้ทั้งหมด รายละเอียด และประวัติตรวจดวง</div>
+    <div class="booking-list" id="bookingsList">
+      <!-- Dynamic list -->
+    </div>
+  </div>
+</div>
+
+<!-- MU SHOP TAB -->
+<div id="shop-tab" class="tab-content hidden">
+  <div class="card">
+    <div class="card-title">🛍️ ร้านค้าสายมู เสริมดวงชะตา</div>
+    <div style="font-size: 0.88rem; color: var(--dim); margin-bottom: 1.2rem;">เลือกบูชาของมงคลเพื่อกระตุ้นโชคลาภ การเงิน และความรักตามพื้นดวงของคุณ</div>
+    <div class="shop-grid">
+      <!-- Item 1 -->
+      <div class="shop-card">
+        <div class="shop-img-holder">📱</div>
+        <div class="shop-title">วอลเปเปอร์เสริมดวงเฉพาะดวงชะตา</div>
+        <div class="shop-price">299 ฿</div>
+        <div class="shop-desc">วอลเปเปอร์หน้าจอมือถือที่สร้างขึ้นเฉพาะตัวคุณ คำนวณจากตำแหน่งดาวลัคนาเดิมในราศีเกิดของคุณ เพื่อหนุนเรื่องที่ต้องการมากที่สุด (การเงิน/งาน/รัก)</div>
+        <button class="btn btn-coral" onclick="openShopModal('วอลเปเปอร์เสริมดวงชะตาเฉพาะบุคคล', 299, 'wallpaper')">🛒 สั่งทำเฉพาะตัว</button>
+      </div>
+      <!-- Item 2 -->
+      <div class="shop-card">
+        <div class="shop-img-holder">📄</div>
+        <div class="shop-title">คัมภีร์คำทำนายชีวิตประจำปี 2569</div>
+        <div class="shop-price">199 ฿</div>
+        <div class="shop-desc">รายงานเอกสาร PDF คำทำนายวิเคราะห์แนวโน้มชีวิตแบบเจาะลึก 12 เดือน วิเคราะห์อิทธิพลของเสาร์ ราหู และพฤหัสบดีที่โคจรจรทับดาวชะตาเดิมของคุณ</div>
+        <button class="btn btn-coral" onclick="openShopModal('คัมภีร์คำทำนายชีวิตประจำปี 2569', 199, 'report')">🛒 สั่งซื้อรายงาน</button>
+      </div>
+      <!-- Item 3 -->
+      <div class="shop-card">
+        <div class="shop-img-holder">📿</div>
+        <div class="shop-title">กำไลหินธิเบตหนุนธาตุมงคล</div>
+        <div class="shop-price">499 ฿</div>
+        <div class="shop-desc">สร้อยข้อมือหินแท้ธรรมชาติ คัดสรรประเภทหินตามธาตุราศีลัคนาของดวงชะตา ช่วยปรับความสมดุลพลังงานและดึงดูดกระแสทรัพย์สินเงินทอง</div>
+        <button class="btn btn-coral" onclick="openShopModal('สร้อยข้อมือหินมงคลหนุนธาตุชะตา', 499, 'bracelet')">🛒 สั่งบูชาสินค้า</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKOUT MOCK MODAL -->
+<div class="mu-modal" id="shopModal">
+  <div class="mu-modal-content">
+    <button class="modal-close-btn" onclick="closeShopModal()">&times;</button>
+    <div style="font-size: 1.3rem; font-weight: 700; color: var(--text); border-bottom: 2.5px solid #E8D0A0; padding-bottom: 0.5rem; margin-bottom: 1rem;" id="modalItemTitle">ยืนยันการบูชาสินค้า</div>
+    <div style="font-size: 0.95rem; margin-bottom: 1.2rem;">
+      <span style="color: var(--dim);">สินค้า:</span> <strong id="modalItemName">-</strong><br>
+      <span style="color: var(--dim);">ราคา:</span> <strong style="color: var(--coral-d);" id="modalItemPrice">- ฿</strong>
+    </div>
+    
+    <div id="modalFormArea" style="margin-bottom: 1.5rem; padding: 1rem; background: var(--cream1); border-radius: 10px; border: 1px solid #D4AF3744;">
+      <!-- Populated dynamically depending on product -->
+    </div>
+
+    <div style="text-align: center;">
+      <button class="btn btn-coral" style="padding: 0.6rem 2.5rem; width: 100%;" onclick="simulatePurchase()">💳 ชำระเงินจำลอง (Simulated Pay)</button>
+    </div>
+  </div>
+</div>
+
 
 <!-- ============================================================
      JAVASCRIPT
@@ -731,32 +1218,56 @@ const LOCATION_DATABASE = {
     "lon": 133,
     "cities": [
       {
+        "id": "adelaide",
+        "name": "แอดิเลด (Adelaide)",
+        "lat": -34.9285,
+        "lon": 138.6007
+      },
+      {
         "id": "brisbane",
-        "name": "Brisbane",
+        "name": "บริสเบน (Brisbane)",
         "lat": -27.4698,
         "lon": 153.0251
       },
       {
+        "id": "cairns",
+        "name": "แคนส์ (Cairns)",
+        "lat": -16.9186,
+        "lon": 145.7781
+      },
+      {
         "id": "canberra",
-        "name": "Canberra",
+        "name": "แคนเบอร์รา (Canberra)",
         "lat": -35.2809,
         "lon": 149.13
       },
       {
+        "id": "darwin",
+        "name": "ดาร์วิน (Darwin)",
+        "lat": -12.4634,
+        "lon": 130.8456
+      },
+      {
+        "id": "hobart",
+        "name": "โฮบาร์ต (Hobart)",
+        "lat": -42.8821,
+        "lon": 147.3272
+      },
+      {
         "id": "melbourne",
-        "name": "Melbourne",
+        "name": "เมลเบิร์น (Melbourne)",
         "lat": -37.8136,
         "lon": 144.9631
       },
       {
         "id": "perth",
-        "name": "Perth",
+        "name": "เพิร์ท (Perth)",
         "lat": -31.9505,
         "lon": 115.8605
       },
       {
         "id": "sydney",
-        "name": "Sydney",
+        "name": "ซิดนีย์ (Sydney)",
         "lat": -33.8688,
         "lon": 151.2093
       }
@@ -1198,10 +1709,202 @@ const LOCATION_DATABASE = {
     "lon": 105,
     "cities": [
       {
-        "id": "capital",
-        "name": "Beijing",
-        "lat": 35,
-        "lon": 105
+        "id": "anhui",
+        "name": "อานฮุย (Anhui)",
+        "lat": 31.8206,
+        "lon": 117.2272
+      },
+      {
+        "id": "beijing",
+        "name": "ปักกิ่ง (Beijing)",
+        "lat": 39.9042,
+        "lon": 116.4074
+      },
+      {
+        "id": "chongqing",
+        "name": "ฉงชิ่ง (Chongqing)",
+        "lat": 29.5628,
+        "lon": 106.5516
+      },
+      {
+        "id": "fujian",
+        "name": "ฝูเจี้ยน (Fujian)",
+        "lat": 26.0745,
+        "lon": 119.2965
+      },
+      {
+        "id": "gansu",
+        "name": "กานซู่ (Gansu)",
+        "lat": 36.0611,
+        "lon": 103.8343
+      },
+      {
+        "id": "guangdong",
+        "name": "กวางตุ้ง (Guangdong)",
+        "lat": 23.1291,
+        "lon": 113.2644
+      },
+      {
+        "id": "guangxi",
+        "name": "กว่างซี (Guangxi)",
+        "lat": 22.817,
+        "lon": 108.3665
+      },
+      {
+        "id": "guizhou",
+        "name": "กุ้ยโจว (Guizhou)",
+        "lat": 26.6477,
+        "lon": 106.6302
+      },
+      {
+        "id": "hainan",
+        "name": "ไห่หนาน (Hainan)",
+        "lat": 20.0174,
+        "lon": 110.3492
+      },
+      {
+        "id": "hebei",
+        "name": "เหอเป่ย์ (Hebei)",
+        "lat": 38.0428,
+        "lon": 114.5149
+      },
+      {
+        "id": "heilongjiang",
+        "name": "เฮยหลงเจียง (Heilongjiang)",
+        "lat": 45.8038,
+        "lon": 126.535
+      },
+      {
+        "id": "henan",
+        "name": "เหอหนาน (Henan)",
+        "lat": 34.7578,
+        "lon": 113.6654
+      },
+      {
+        "id": "hong_kong",
+        "name": "ฮ่องกง (Hong Kong)",
+        "lat": 22.3193,
+        "lon": 114.1694
+      },
+      {
+        "id": "hubei",
+        "name": "หูเป่ย์ (Hubei)",
+        "lat": 30.5928,
+        "lon": 114.3055
+      },
+      {
+        "id": "hunan",
+        "name": "หูหนาน (Hunan)",
+        "lat": 28.2282,
+        "lon": 112.9388
+      },
+      {
+        "id": "inner_mongolia",
+        "name": "มองโกเลียใน (Inner Mongolia)",
+        "lat": 40.8174,
+        "lon": 111.7664
+      },
+      {
+        "id": "jiangsu",
+        "name": "เจียงซู (Jiangsu)",
+        "lat": 32.0603,
+        "lon": 118.7969
+      },
+      {
+        "id": "jiangxi",
+        "name": "เจียงซี (Jiangxi)",
+        "lat": 28.682,
+        "lon": 115.8579
+      },
+      {
+        "id": "jilin",
+        "name": "จี๋หลิน (Jilin)",
+        "lat": 43.8171,
+        "lon": 125.3235
+      },
+      {
+        "id": "liaoning",
+        "name": "เหลียวหนิง (Liaoning)",
+        "lat": 41.8057,
+        "lon": 123.4315
+      },
+      {
+        "id": "macao",
+        "name": "มาเก๊า (Macao)",
+        "lat": 22.1987,
+        "lon": 113.5439
+      },
+      {
+        "id": "ningxia",
+        "name": "หนิงเซี่ย (Ningxia)",
+        "lat": 38.4872,
+        "lon": 106.2309
+      },
+      {
+        "id": "qinghai",
+        "name": "ชิงไห่ (Qinghai)",
+        "lat": 36.6171,
+        "lon": 101.7785
+      },
+      {
+        "id": "shaanxi",
+        "name": "ส่านซี (Shaanxi)",
+        "lat": 34.3416,
+        "lon": 108.9398
+      },
+      {
+        "id": "shandong",
+        "name": "ซานตง (Shandong)",
+        "lat": 36.6509,
+        "lon": 116.9797
+      },
+      {
+        "id": "shanghai",
+        "name": "เซี่ยงไฮ้ (Shanghai)",
+        "lat": 31.2304,
+        "lon": 121.4737
+      },
+      {
+        "id": "shanxi",
+        "name": "ซานซี (Shanxi)",
+        "lat": 37.8706,
+        "lon": 112.5488
+      },
+      {
+        "id": "sichuan",
+        "name": "เสฉวน (Sichuan)",
+        "lat": 30.5728,
+        "lon": 104.0668
+      },
+      {
+        "id": "tibet",
+        "name": "ทิเบต (Tibet)",
+        "lat": 29.6524,
+        "lon": 91.1172
+      },
+      {
+        "id": "tianjin",
+        "name": "เทียนจิน (Tianjin)",
+        "lat": 39.0841,
+        "lon": 117.2009
+      },
+      {
+        "id": "xinjiang",
+        "name": "ซินเจียง (Xinjiang)",
+        "lat": 43.8256,
+        "lon": 87.6168
+      },
+      {
+        "id": "yunnan",
+        "name": "ยูนนาน (Yunnan)",
+        "lat": 25.0422,
+        "lon": 102.7122
+      },
+      {
+        "id": "zhejiang",
+        "name": "เจ้อเจียง (Zhejiang)",
+        "lat": 30.2741,
+        "lon": 120.1551
       }
     ]
   },
@@ -1439,27 +2142,51 @@ const LOCATION_DATABASE = {
     "cities": [
       {
         "id": "berlin",
-        "name": "Berlin",
+        "name": "เบอร์ลิน (Berlin)",
         "lat": 52.52,
         "lon": 13.405
       },
       {
+        "id": "bremen",
+        "name": "เบรเมน (Bremen)",
+        "lat": 53.0793,
+        "lon": 8.8017
+      },
+      {
+        "id": "cologne",
+        "name": "โคโลญ (Cologne)",
+        "lat": 50.9375,
+        "lon": 6.9603
+      },
+      {
         "id": "frankfurt",
-        "name": "Frankfurt",
+        "name": "แฟรงก์เฟิร์ต (Frankfurt)",
         "lat": 50.1109,
         "lon": 8.6821
       },
       {
         "id": "hamburg",
-        "name": "Hamburg",
+        "name": "ฮัมบูร์ก (Hamburg)",
         "lat": 53.5511,
         "lon": 9.9937
       },
       {
+        "id": "leipzig",
+        "name": "ไลป์ซิก (Leipzig)",
+        "lat": 51.3401,
+        "lon": 12.3731
+      },
+      {
         "id": "munich",
-        "name": "Munich",
+        "name": "มิวนิก (Munich)",
         "lat": 48.1351,
         "lon": 11.582
+      },
+      {
+        "id": "stuttgart",
+        "name": "สตุตการ์ต (Stuttgart)",
+        "lat": 48.7758,
+        "lon": 9.1829
       }
     ]
   },
@@ -1768,28 +2495,58 @@ const LOCATION_DATABASE = {
     "lon": -2,
     "cities": [
       {
+        "id": "belfast",
+        "name": "เบลฟาสต์ (Belfast)",
+        "lat": 54.5973,
+        "lon": -5.9301
+      },
+      {
         "id": "birmingham",
-        "name": "Birmingham",
+        "name": "เบอร์มิงแฮม (Birmingham)",
         "lat": 52.4862,
         "lon": -1.8904
       },
       {
+        "id": "bristol",
+        "name": "บริสตอล (Bristol)",
+        "lat": 51.4545,
+        "lon": -2.5879
+      },
+      {
+        "id": "cardiff",
+        "name": "คาร์ดิฟฟ์ (Cardiff)",
+        "lat": 51.4816,
+        "lon": -3.1791
+      },
+      {
         "id": "edinburgh",
-        "name": "Edinburgh",
+        "name": "เอดินบะระ (Edinburgh)",
         "lat": 55.9533,
         "lon": -3.1883
       },
       {
+        "id": "glasgow",
+        "name": "กลาสโกว์ (Glasgow)",
+        "lat": 55.8642,
+        "lon": -4.2518
+      },
+      {
         "id": "london",
-        "name": "London",
+        "name": "ลอนดอน (London)",
         "lat": 51.5074,
         "lon": -0.1278
       },
       {
         "id": "manchester",
-        "name": "Manchester",
+        "name": "แมนเชสเตอร์ (Manchester)",
         "lat": 53.4808,
         "lon": -2.2426
+      },
+      {
+        "id": "newcastle",
+        "name": "นิวคาสเซิล (Newcastle)",
+        "lat": 54.9783,
+        "lon": -1.6178
       }
     ]
   },
@@ -2344,33 +3101,75 @@ const LOCATION_DATABASE = {
     "cities": [
       {
         "id": "fukuoka",
-        "name": "Fukuoka",
+        "name": "ฟุกุโอกะ (Fukuoka)",
         "lat": 33.5902,
         "lon": 130.4017
       },
       {
+        "id": "hiroshima",
+        "name": "ฮิโรชิม่า (Hiroshima)",
+        "lat": 34.3853,
+        "lon": 132.4553
+      },
+      {
         "id": "kyoto",
-        "name": "Kyoto",
+        "name": "เกียวโต (Kyoto)",
         "lat": 35.0116,
         "lon": 135.7681
       },
       {
+        "id": "matsuyama",
+        "name": "มัตสึยามะ (Matsuyama)",
+        "lat": 33.8392,
+        "lon": 132.7653
+      },
+      {
         "id": "nagoya",
-        "name": "Nagoya",
+        "name": "นาโกย่า (Nagoya)",
         "lat": 35.1815,
         "lon": 136.9066
       },
       {
+        "id": "naha",
+        "name": "นาฮา (Naha)",
+        "lat": 26.2124,
+        "lon": 127.6809
+      },
+      {
+        "id": "niigata",
+        "name": "นีงาตะ (Niigata)",
+        "lat": 37.9162,
+        "lon": 139.0364
+      },
+      {
         "id": "osaka",
-        "name": "Osaka",
+        "name": "โอซาก้า (Osaka)",
         "lat": 34.6937,
         "lon": 135.5023
       },
       {
+        "id": "sapporo",
+        "name": "ซัปโปโร (Sapporo)",
+        "lat": 43.0618,
+        "lon": 141.3545
+      },
+      {
+        "id": "sendai",
+        "name": "เซนได (Sendai)",
+        "lat": 38.2682,
+        "lon": 140.8694
+      },
+      {
         "id": "tokyo",
-        "name": "Tokyo",
+        "name": "โตเกียว (Tokyo)",
         "lat": 35.6762,
         "lon": 139.6503
+      },
+      {
+        "id": "yokohama",
+        "name": "โยโกฮาม่า (Yokohama)",
+        "lat": 35.4437,
+        "lon": 139.638
       }
     ]
   },
@@ -5795,11 +6594,11 @@ function drawWheel(){
               font-size="20" fill="${C_NAT_T}" font-family="Sarabun,sans-serif" font-weight="700">${p.numTH}</text>`;
       }
       if (p.retro === "พักร์" || p.retro === true) {
-        s += `<text x="${f(px+10)}" y="${f(py-10)}" font-size="13" fill="#7A5510" font-weight="bold">*</text>`;
+        s += `<text x="${f(px+2.5)}" y="${f(py-2.2)}" font-size="11" fill="#7A5510" font-family="Sarabun,sans-serif" font-weight="bold">พ</text>`;
       } else if (p.retro === "มนต์") {
-        s += `<text x="${f(px+10)}" y="${f(py-10)}" font-size="9" fill="#2E7D32" font-family="Sarabun,sans-serif" font-weight="bold">ม</text>`;
+        s += `<text x="${f(px+2.5)}" y="${f(py-2.2)}" font-size="11" fill="#2E7D32" font-family="Sarabun,sans-serif" font-weight="bold">ม</text>`;
       } else if (p.retro === "เสริด") {
-        s += `<text x="${f(px+10)}" y="${f(py-10)}" font-size="9" fill="#1976D2" font-family="Sarabun,sans-serif" font-weight="bold">ส</text>`;
+        s += `<text x="${f(px+2.5)}" y="${f(py-2.2)}" font-size="11" fill="#1976D2" font-family="Sarabun,sans-serif" font-weight="bold">ส</text>`;
       }
     });
   }
@@ -5902,17 +6701,16 @@ function drawWheel(){
         if (p.isAgeLagna) {
           // Draw a green star symbol directly (without a circle)
           s += `<text x="${f(tx)}" y="${f(ty)}" text-anchor="middle" dominant-baseline="central"
-               font-size="33" fill="#2E7D32" font-family="Sarabun,sans-serif" font-weight="900">★</text>`;
+               font-size="26" fill="#2E7D32" font-family="Sarabun,sans-serif" font-weight="900">★</text>`;
         } else {
-          s += `<circle cx="${f(tx)}" cy="${f(ty)}" r="16.5" fill="${C_TRN}" stroke="#8AAABB88" stroke-width="1.2" opacity=".95"/>`;
           s += `<text x="${f(tx)}" y="${f(ty)}" text-anchor="middle" dominant-baseline="central"
-               font-size="20" fill="${C_TRN_T}" font-family="Sarabun,sans-serif" font-weight="700">${lbl}</text>`;
+               font-size="16" fill="${C_TRN_T}" font-family="Sarabun,sans-serif" font-weight="700">${lbl}</text>`;
           if (isR === "พักร์" || isR === true) {
-            s += `<text x="${f(tx+11)}" y="${f(ty-11)}" font-size="13" fill="#4a148c" font-weight="bold">*</text>`;
+            s += `<text x="${f(tx+3.2)}" y="${f(ty-3.0)}" font-size="10" fill="#4a148c" font-family="Sarabun,sans-serif" font-weight="bold">พ</text>`;
           } else if (isR === "มนต์") {
-            s += `<text x="${f(tx+11)}" y="${f(ty-11)}" font-size="9" fill="#2E7D32" font-family="Sarabun,sans-serif" font-weight="bold">ม</text>`;
+            s += `<text x="${f(tx+3.2)}" y="${f(ty-3.0)}" font-size="10" fill="#2E7D32" font-family="Sarabun,sans-serif" font-weight="bold">ม</text>`;
           } else if (isR === "เสริด") {
-            s += `<text x="${f(tx+11)}" y="${f(ty-11)}" font-size="9" fill="#1976D2" font-family="Sarabun,sans-serif" font-weight="bold">ส</text>`;
+            s += `<text x="${f(tx+3.2)}" y="${f(ty-3.0)}" font-size="10" fill="#1976D2" font-family="Sarabun,sans-serif" font-weight="bold">ส</text>`;
           }
         }
       });
@@ -5969,7 +6767,7 @@ function drawRing(pos,retro,rMid,dotFill,dotText,useThaiNum){
       s+=`<text x="${f(x)}" y="${f(y)}" text-anchor="middle" dominant-baseline="central"
            font-size="${fontSize}" fill="${dotText}" font-family="Sarabun,sans-serif" font-weight="700">${lbl}</text>`;
       if(motion==="พักร์" || motion===true){
-        s+=`<text x="${f(x+8)}" y="${f(y-8)}" font-size="7" fill="${dotFill==='#F8F5EE'?'#884422':'#88CCFF'}" font-family="sans-serif">*</text>`;
+        s+=`<text x="${f(x+8)}" y="${f(y-8)}" font-size="7" fill="${dotFill==='#F8F5EE'?'#884422':'#88CCFF'}" font-family="Sarabun,sans-serif" font-weight="bold">พ</text>`;
       } else if(motion==="มนต์"){
         s+=`<text x="${f(x+8)}" y="${f(y-8)}" font-size="7" fill="${dotFill==='#F8F5EE'?'#2E7D32':'#81C784'}" font-family="Sarabun,sans-serif" font-weight="bold">ม</text>`;
       } else if(motion==="เสริด"){
@@ -6077,6 +6875,273 @@ function renderTable(){
   if(showT&&tData) rows(tData,'col-t','ดวงจร',false);
   tbody.innerHTML=h||'<tr><td colspan="5" style="padding:.6rem;color:var(--dim);text-align:center">กดผูกดวงเพื่อดูผล</td></tr>';
 }
+
+
+// ── TAB NAVIGATION & BOOKING SYSTEM LOGIC ─────────────────────────────────
+window.switchTab = function(tabId) {
+  // Hide all tab contents
+  document.querySelectorAll('.tab-content').forEach(el => {
+    el.classList.add('hidden');
+    el.classList.remove('active');
+  });
+  
+  // Show target tab content
+  const activeTab = document.getElementById(tabId);
+  if (activeTab) {
+    activeTab.classList.remove('hidden');
+    activeTab.classList.add('active');
+  }
+  
+  // Update active state on tab buttons
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  
+  const activeBtn = document.getElementById('btn-' + tabId);
+  if (activeBtn) {
+    activeBtn.classList.add('active');
+  }
+
+  // Scroll to top of tab view
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+// Available time slots (simulated)
+const MOCK_SLOTS = [
+  { time: '09:00 - 10:00', busy: false },
+  { time: '10:00 - 11:00', busy: true },
+  { time: '11:00 - 12:00', busy: false },
+  { time: '13:00 - 14:00', busy: false },
+  { time: '14:00 - 15:00', busy: false },
+  { time: '15:00 - 16:00', busy: true },
+  { time: '16:00 - 17:00', busy: false },
+  { time: '19:00 - 20:00', busy: false }
+];
+
+// User bookings list (initially contains one completed/past booking)
+const MY_BOOKINGS = [
+  {
+    id: 'Q-9812',
+    astrologer: 'อ.ศิลา โหราจารย์',
+    service: 'โทรเสียง / วิดีโอคอล',
+    time: '2026-06-20 (14:00 - 15:00)',
+    name: 'ส้มส้ม',
+    status: 'completed',
+    statusText: 'ตรวจดวงแล้ว'
+  }
+];
+
+function populateSlots() {
+  const container = document.getElementById('slotsContainer');
+  if (!container) return;
+  
+  container.innerHTML = '';
+  MOCK_SLOTS.forEach(slot => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'slot-btn' + (slot.busy ? ' busy' : '');
+    btn.textContent = slot.time;
+    if (!slot.busy) {
+      btn.onclick = () => selectSlot(btn, slot.time);
+    }
+    container.appendChild(btn);
+  });
+}
+
+function selectSlot(btn, time) {
+  document.querySelectorAll('.slot-btn').forEach(el => el.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('selectedTime').value = time;
+}
+
+window.selectAstrologer = function(name) {
+  const select = document.getElementById('bookAstrologer');
+  if (select) {
+    select.value = name;
+  }
+  switchTab('booking-tab');
+};
+
+window.autoFillBooking = function() {
+  // Grab name from calculator
+  const calcName = document.getElementById('bName').value || 'เจ้าชะตา';
+  document.getElementById('bookName').value = calcName;
+  
+  // Grab date from calculator dropdowns
+  const day = document.getElementById('bDay').value;
+  const month = document.getElementById('bMonth').value;
+  const yearBE = document.getElementById('bYear').value;
+  
+  if (day && month && yearBE) {
+    const yearAD = parseInt(yearBE) - 543;
+    // Format YYYY-MM-DD
+    const dateStr = `${yearAD}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+    document.getElementById('bookBirthdate').value = dateStr;
+  }
+  
+  // Grab birth time
+  const hr = document.getElementById('bHour').value || '00';
+  const mn = document.getElementById('bMin').value || '00';
+  document.getElementById('bookTime').value = `${hr}:${mn}`;
+  
+  // Grab birth location
+  const citySelect = document.getElementById('bCity');
+  const cityText = citySelect ? citySelect.options[citySelect.selectedIndex].text : 'กรุงเทพมหานคร';
+  document.getElementById('bookPlace').value = cityText;
+  
+  alert('📥 ดึงข้อมูลดวงกำเนิดล่าสุดเสร็จสิ้น!');
+};
+
+window.submitBooking = function(event) {
+  event.preventDefault();
+  
+  const astrologer = document.getElementById('bookAstrologer').value;
+  const service = document.getElementById('bookService').value;
+  const slot = document.getElementById('selectedTime').value;
+  const name = document.getElementById('bookName').value;
+  const dateVal = document.getElementById('bookBirthdate').value;
+  
+  if (!slot) {
+    alert('⚠️ กรุณาเลือกช่วงเวลาที่ต้องการดูดวง');
+    return;
+  }
+  
+  // Generate mock queue ID
+  const queueId = 'Q-' + Math.floor(1000 + Math.random() * 9000);
+  
+  const newBooking = {
+    id: queueId,
+    astrologer: astrologer,
+    service: service,
+    time: `${dateVal} (${slot})`,
+    name: name,
+    status: 'confirmed',
+    statusText: 'รอรับคิวดูดวง'
+  };
+  
+  MY_BOOKINGS.unshift(newBooking);
+  renderBookings();
+  
+  // Reset form
+  document.getElementById('bookingForm').reset();
+  document.querySelectorAll('.slot-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('selectedTime').value = '';
+  
+  alert(`✅ ลงทะเบียนจองคิวดูดวงสำเร็จ! หมายเลขคิวของคุณคือ: ${queueId}`);
+  switchTab('my-bookings-tab');
+};
+
+function renderBookings() {
+  const container = document.getElementById('bookingsList');
+  if (!container) return;
+  
+  if (MY_BOOKINGS.length === 0) {
+    container.innerHTML = '<div style="text-align:center;color:var(--dim);padding:2rem;">ยังไม่มีคิวจองประวัติของคุณ</div>';
+    return;
+  }
+  
+  container.innerHTML = '';
+  MY_BOOKINGS.forEach(b => {
+    let badgeClass = 'status-pending';
+    if (b.status === 'confirmed') badgeClass = 'status-confirmed';
+    if (b.status === 'completed') badgeClass = 'status-completed';
+    
+    container.innerHTML += `
+      <div class="booking-item">
+        <div class="booking-meta">
+          <div style="font-weight:700;color:var(--text);font-size:1.05rem;">${b.astrologer}</div>
+          <div style="font-size:0.85rem;color:var(--dim);"><span style="font-weight:600;">คิว ID:</span> ${b.id} — คุณ ${b.name}</div>
+          <div style="font-size:0.82rem;color:var(--dim);"><span style="font-weight:600;">บริการ:</span> ${b.service}</div>
+          <div style="font-size:0.82rem;color:var(--text);font-weight:500;margin-top:4px;"><span style="font-size:1.1rem;vertical-align:-1px;">🕒</span> ${b.time}</div>
+        </div>
+        <div style="text-align:right;display:flex;flex-direction:column;gap:6px;align-items:flex-end;">
+          <span class="booking-status ${badgeClass}">${b.statusText}</span>
+          ${b.status === 'confirmed' ? `<button class="btn btn-ghost" style="padding:2px 8px;font-size:0.75rem;" onclick="alert('ยกเลิกคิวแล้ว ทางทีมจะทำการติดต่อทำรายการคืนเงินจำลอง')">ยกเลิกจอง</button>` : ''}
+        </div>
+      </div>
+    `;
+  });
+}
+
+// Shop modal variables
+let currentItem = '';
+let currentPrice = 0;
+let currentItemType = '';
+
+window.openShopModal = function(name, price, type) {
+  currentItem = name;
+  currentPrice = price;
+  currentItemType = type;
+  
+  document.getElementById('modalItemTitle').textContent = 'สั่งซื้อ/บูชาเครื่องรางมงคล';
+  document.getElementById('modalItemName').textContent = name;
+  document.getElementById('modalItemPrice').textContent = price + ' ฿';
+  
+  const formArea = document.getElementById('modalFormArea');
+  formArea.innerHTML = '';
+  
+  if (type === 'wallpaper') {
+    formArea.innerHTML = `
+      <div style="font-size:0.8rem;font-weight:700;margin-bottom:0.4rem;">เลือกเรื่องที่ต้องการเน้นเสริมดวง:</div>
+      <select id="shopFocus" style="width:100%;margin-bottom:0.8rem;padding:0.4rem;border-radius:4px;border:1px solid #ddd;">
+        <option value="การงาน/ความสำเร็จ">การงานการทำธุรกิจ การงานราบรื่น</option>
+        <option value="การเงิน/โชคลาภ">การเงิน โชคลาภพูนทวี</option>
+        <option value="ความรัก/เสน่ห์">ความรัก เมตตามหานิยม</option>
+      </select>
+      <div style="font-size:0.75rem;color:var(--dim);">* วอลเปเปอร์จะถูกคำนวณและปรับสีตามราศีลัคนาของท่านโดยอ้างอิงจากการผูกดวงล่าสุด</div>
+    `;
+  } else if (type === 'report') {
+    formArea.innerHTML = `
+      <div style="font-size:0.8rem;font-weight:700;margin-bottom:0.4rem;">ระบุอีเมลรับเอกสาร PDF:</div>
+      <input type="email" id="shopEmail" style="width:100%;margin-bottom:0.4rem;padding:0.4rem;border-radius:4px;border:1px solid #ddd;" placeholder="example@gmail.com" required>
+      <div style="font-size:0.75rem;color:var(--dim);">* ระบบจะจัดส่งสมุดสรุปชะตารายปีเป็นไฟล์ PDF ภายใน 10 นาทีหลังจากชำระเงิน</div>
+    `;
+  } else {
+    formArea.innerHTML = `
+      <div style="font-size:0.8rem;font-weight:700;margin-bottom:0.4rem;">ระบุขนาดข้อมือและที่อยู่จัดส่ง:</div>
+      <input type="text" id="shopSize" style="width:100%;margin-bottom:0.5rem;padding:0.4rem;border-radius:4px;border:1px solid #ddd;" placeholder="ขนาดข้อมือ (เซนติเมตร) เช่น 16 ซม." required>
+      <textarea id="shopAddress" style="width:100%;height:60px;padding:0.4rem;border-radius:4px;border:1px solid #ddd;" placeholder="ที่อยู่ในการจัดส่งไปรษณีย์" required></textarea>
+    `;
+  }
+  
+  document.getElementById('shopModal').style.display = 'flex';
+};
+
+window.closeShopModal = function() {
+  document.getElementById('shopModal').style.display = 'none';
+};
+
+window.simulatePurchase = function() {
+  if (currentItemType === 'report') {
+    const email = document.getElementById('shopEmail').value;
+    if (!email) { alert('กรุณากรอกอีเมลเพื่อรับรายงาน'); return; }
+  } else if (currentItemType === 'bracelet') {
+    const size = document.getElementById('shopSize').value;
+    const addr = document.getElementById('shopAddress').value;
+    if (!size || !addr) { alert('กรุณาระบุขนาดข้อมือและที่อยู่จัดส่ง'); return; }
+  }
+  
+  closeShopModal();
+  
+  // Calculate based on Lagna if possible
+  const lagnaBadge = document.getElementById('lagnaBadge');
+  const lagnaText = lagnaBadge ? lagnaBadge.textContent : 'ราศีเมษ';
+  
+  let resultMsg = `🎉 ชำระเงินจำลองสำเร็จ! บูชา: ${currentItem}\n`;
+  if (currentItemType === 'wallpaper') {
+    const focus = document.getElementById('shopFocus').value;
+    resultMsg += `เรากำลังสร้างรูปภาพวอลเปเปอร์ที่เสริมดวงเรื่อง [${focus}] ปรับแต่งตาม [${lagnaText}] ให้คุณสำหรับดาวน์โหลด...`;
+  } else {
+    resultMsg += `คำสั่งซื้อของคุณได้รับการยืนยันแล้ว ทางเราจะรีบจัดส่งมงคลชีวิตชิ้นนี้ให้คุณโดยเร็วที่สุด!`;
+  }
+  
+  alert(resultMsg);
+};
+
+// Initialize Slots and Bookings on load
+populateSlots();
+renderBookings();
+
 
 // ── INIT ────────────────────────────────────────────────────────────────
 populateDateDropdowns('b', '1990-04-13');
