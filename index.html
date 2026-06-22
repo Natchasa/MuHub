@@ -327,9 +327,10 @@ main{max-width:1360px;margin:0 auto 0 0;padding:1.2rem 1.2rem 3rem 1.2rem}
           <thead>
             <tr>
               <th style="text-align:center; width: 8%;">สัญลักษณ์</th>
-              <th style="width: 28%;">ดาว/ปัจจัย</th>
-              <th style="width: 24%;">ราศี</th>
-              <th style="width: 40%; white-space: nowrap;">ค่าองศา / ลิปดา</th>
+              <th style="width: 22%;">ดาว/ปัจจัย</th>
+              <th style="width: 18%;">ราศี</th>
+              <th style="width: 26%; white-space: nowrap;">ค่าองศา / ลิปดา</th>
+              <th style="width: 26%;">มาตรฐานดาว</th>
             </tr>
           </thead>
           <tbody id="tableTbody"></tbody>
@@ -5752,22 +5753,34 @@ function drawWheel(){
     }
   }
 
+  const SECTOR_CENTERS = [
+    { x: 260, y: 130 }, // 0: Aries (เมษ)
+    { x: 175, y: 118 }, // 1: Taurus (พฤษภ)
+    { x: 118, y: 175 }, // 2: Gemini (มิถุน)
+    { x: 130, y: 260 }, // 3: Cancer (กรกฎ)
+    { x: 118, y: 345 }, // 4: Leo (สิงห์)
+    { x: 175, y: 402 }, // 5: Virgo (กันย์)
+    { x: 260, y: 390 }, // 6: Libra (ตุลย์)
+    { x: 345, y: 402 }, // 7: Scorpio (พิจิก)
+    { x: 402, y: 345 }, // 8: Sagittarius (ธนู)
+    { x: 390, y: 260 }, // 9: Capricorn (มกร)
+    { x: 402, y: 175 }, // 10: Aquarius (กุมภ์)
+    { x: 345, y: 118 }  // 11: Pisces (มีน)
+  ];
+
   for(let i=0;i<12;i++){
     const grp = natalGroups[i];
     const N = grp.length;
     if (N === 0) continue;
 
-    const isAxis = (i % 3 === 0);
-    const rCluster = isAxis ? 116 : 144;
-    const a = toRad(90 + i * 30);
-    const cx = CX + rCluster * Math.cos(a);
-    const cy = CY - rCluster * Math.sin(a);
+    const cx = SECTOR_CENTERS[i].x;
+    const cy = SECTOR_CENTERS[i].y;
 
     grp.forEach((p, k) => {
       let px = cx, py = cy;
       if (N > 1) {
         const angle = k * (2 * Math.PI / N) - Math.PI / 2;
-        const rOffset = 19;
+        const rOffset = 15;
         px = cx + rOffset * Math.cos(angle);
         py = cy + rOffset * Math.sin(angle);
       }
@@ -5782,11 +5795,11 @@ function drawWheel(){
               font-size="20" fill="${C_NAT_T}" font-family="Sarabun,sans-serif" font-weight="700">${p.numTH}</text>`;
       }
       if (p.retro === "พักร์" || p.retro === true) {
-        s += `<text x="${f(px+12)}" y="${f(py-12)}" font-size="13" fill="#7A5510" font-weight="bold">*</text>`;
+        s += `<text x="${f(px+10)}" y="${f(py-10)}" font-size="13" fill="#7A5510" font-weight="bold">*</text>`;
       } else if (p.retro === "มนต์") {
-        s += `<text x="${f(px+12)}" y="${f(py-12)}" font-size="9" fill="#2E7D32" font-family="Sarabun,sans-serif" font-weight="bold">ม</text>`;
+        s += `<text x="${f(px+10)}" y="${f(py-10)}" font-size="9" fill="#2E7D32" font-family="Sarabun,sans-serif" font-weight="bold">ม</text>`;
       } else if (p.retro === "เสริด") {
-        s += `<text x="${f(px+12)}" y="${f(py-12)}" font-size="9" fill="#1976D2" font-family="Sarabun,sans-serif" font-weight="bold">ส</text>`;
+        s += `<text x="${f(px+10)}" y="${f(py-10)}" font-size="9" fill="#1976D2" font-family="Sarabun,sans-serif" font-weight="bold">ส</text>`;
       }
     });
   }
@@ -5967,6 +5980,59 @@ function drawRing(pos,retro,rMid,dotFill,dotText,useThaiNum){
   return s;
 }
 
+// ── PLANET DIGNITY ───────────────────────────────────────────────────────
+function getDignityHTML(planetId, signIdx) {
+  const list = [];
+  
+  const kasetMap = {
+    'sun': [4], 'moon': [3], 'mars': [0, 7], 'mercury': [2, 5],
+    'jupiter': [8, 11], 'venus': [1, 6], 'saturn': [9], 'rahu': [10]
+  };
+  const praMap = {
+    'sun': [10], 'moon': [9], 'mars': [6, 1], 'mercury': [8, 11],
+    'jupiter': [2, 5], 'venus': [7, 0], 'saturn': [3], 'rahu': [4]
+  };
+  const uchMap = {
+    'sun': [0], 'moon': [1], 'mars': [9], 'mercury': [5],
+    'jupiter': [3], 'venus': [11], 'saturn': [6], 'rahu': [2]
+  };
+  const nitchMap = {
+    'sun': [6], 'moon': [7], 'mars': [3], 'mercury': [11],
+    'jupiter': [9], 'venus': [5], 'saturn': [0], 'rahu': [8]
+  };
+  const rachaChokMap = {
+    'sun': [5], 'moon': [6], 'mars': [2], 'mercury': [10],
+    'jupiter': [1], 'venus': [0], 'saturn': [8], 'rahu': [7]
+  };
+  const mahaChakMap = {
+    'sun': [3], 'moon': [0], 'mars': [5], 'mercury': [4],
+    'jupiter': [7], 'venus': [8], 'saturn': [1], 'rahu': [9]
+  };
+
+  const styleBadge = (text, bg, fg) => `<span style="display: inline-block; padding: 2px 6px; border-radius: 4px; font-size: 0.78rem; font-weight: 700; background: ${bg}; color: ${fg}; margin-right: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.06);">${text}</span>`;
+
+  if (kasetMap[planetId] && kasetMap[planetId].includes(signIdx)) {
+    list.push(styleBadge('เกษตร', '#E8F5E9', '#2E7D32'));
+  }
+  if (praMap[planetId] && praMap[planetId].includes(signIdx)) {
+    list.push(styleBadge('ประ', '#EFEBE9', '#5D4037'));
+  }
+  if (uchMap[planetId] && uchMap[planetId].includes(signIdx)) {
+    list.push(styleBadge('อุจจ์', '#FFF8E1', '#F57F17'));
+  }
+  if (nitchMap[planetId] && nitchMap[planetId].includes(signIdx)) {
+    list.push(styleBadge('นิจจ์', '#FFEBEE', '#C62828'));
+  }
+  if (rachaChokMap[planetId] && rachaChokMap[planetId].includes(signIdx)) {
+    list.push(styleBadge('ราชาโชค', '#EDE7F6', '#6A1B9A'));
+  }
+  if (mahaChakMap[planetId] && mahaChakMap[planetId].includes(signIdx)) {
+    list.push(styleBadge('มหาจักร', '#E1F5FE', '#0277BD'));
+  }
+
+  return list.join('') || '<span style="color: #bbb; font-size: 0.8rem;">-</span>';
+}
+
 // ── PLANET TABLE ────────────────────────────────────────────────────────
 function renderTable(){
   const tbody=document.getElementById('tableTbody');
@@ -5981,7 +6047,7 @@ function renderTable(){
     const headerBg = isNatal ? '#fff0dc' : '#FFEAB0'; // Cream vs Soft Gold header
     const headerTextColor = '#000000'; // Black
 
-    h+=`<tr class="group-head"><td colspan="4" style="background: ${headerBg}; color: ${headerTextColor}; padding: .4rem .8rem; font-size: .78rem; font-weight: 700; border-bottom: 1.5px solid #E8D0A0; text-align: left;">${label} — ${data.dateStr} ${data.timeStr}</td></tr>`;
+    h+=`<tr class="group-head"><td colspan="5" style="background: ${headerBg}; color: ${headerTextColor}; padding: .4rem .8rem; font-size: .78rem; font-weight: 700; border-bottom: 1.5px solid #E8D0A0; text-align: left;">${label} — ${data.dateStr} ${data.timeStr}</td></tr>`;
     for(const p of PLANETS){
       if(data.pos[p.id]===undefined) continue;
       const sp=signPos(data.pos[p.id]);
@@ -5996,18 +6062,20 @@ function renderTable(){
       }
       const lbl=useThaiNum?p.numTH:p.numAR;
       const thName = (p.id === 'lagna' && isNatal && isUnknownTime) ? 'ลัคนา (อ.)' : p.th;
+      const dignityHTML = getDignityHTML(p.id, sp.si);
       h+=`<tr style="background: ${rowBg}; color: ${rowTextColor};">
           <td style="text-align:center; font-weight:700; font-size:1.05rem; color: ${nameColor}; border-bottom: 1px solid #E8D0A044; border-right: 1px solid #E8D0A044;">${lbl}</td>
           <td style="border-bottom: 1px solid #E8D0A044; border-right: 1px solid #E8D0A044;"><span class="pname" style="font-weight:700; color: ${nameColor};">${thName}</span>${retTag}</td>
           <td style="border-bottom: 1px solid #E8D0A044; border-right: 1px solid #E8D0A044; font-weight:500; color: ${rowTextColor};">${SIGNS_TH[sp.si]}</td>
-          <td style="font-family:monospace; font-size:0.95rem; font-weight:600; border-bottom: 1px solid #E8D0A044; color: ${rowTextColor}; white-space: nowrap;">${String(sp.deg).padStart(2,'0')}° ${String(sp.min).padStart(2,'0')}'</td>
+          <td style="font-family:monospace; font-size:0.95rem; font-weight:600; border-bottom: 1px solid #E8D0A044; border-right: 1px solid #E8D0A044; color: ${rowTextColor}; white-space: nowrap;">${String(sp.deg).padStart(2,'0')}° ${String(sp.min).padStart(2,'0')}'</td>
+          <td style="border-bottom: 1px solid #E8D0A044; color: ${rowTextColor};">${dignityHTML}</td>
           </tr>`;
     }
   }
 
   if(showN&&nData) rows(nData,'col-n','ดวงกำเนิด',true);
   if(showT&&tData) rows(tData,'col-t','ดวงจร',false);
-  tbody.innerHTML=h||'<tr><td colspan="4" style="padding:.6rem;color:var(--dim);text-align:center">กดผูกดวงเพื่อดูผล</td></tr>';
+  tbody.innerHTML=h||'<tr><td colspan="5" style="padding:.6rem;color:var(--dim);text-align:center">กดผูกดวงเพื่อดูผล</td></tr>';
 }
 
 // ── INIT ────────────────────────────────────────────────────────────────
@@ -6016,9 +6084,29 @@ document.getElementById('bHour').value = "08";
 document.getElementById('bMin').value = "00";
 populateCities('b', 'bangkok');
 
-// Initialize transit to current time
+// Initialize transit date/month matching birth date, with year adjusted relative to current date
+const bDayVal = parseInt(document.getElementById('bDay').value) || 13;
+const bMonthVal = parseInt(document.getElementById('bMonth').value) || 4;
+
+const today = new Date();
+const currentYear = today.getFullYear();
+const currentMonth = today.getMonth() + 1;
+const currentDay = today.getDate();
+
+let transitYear = currentYear;
+if (currentMonth < bMonthVal || (currentMonth === bMonthVal && currentDay < bDayVal)) {
+  transitYear = currentYear - 1;
+}
+
 populateDateDropdowns('t');
-setTransitNow();
+document.getElementById('tDay').value = bDayVal;
+document.getElementById('tMonth').value = bMonthVal;
+document.getElementById('tYear').value = transitYear + 543;
+
+// Set transit time to current hour/minute
+document.getElementById('tHour').value = String(today.getHours()).padStart(2, '0');
+document.getElementById('tMin').value = String(today.getMinutes()).padStart(2, '0');
+
 populateCities('t', 'bangkok');
 
 drawWheel();
