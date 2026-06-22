@@ -14,30 +14,33 @@
   flex-wrap: wrap;
 }
 .tab-btn {
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.85);
-  padding: 0.45rem 1rem;
-  border-radius: 8px;
-  font-size: 0.88rem;
-  font-weight: 600;
+  background: #FFF9E6;
+  border: 2px solid var(--blue);
+  color: var(--blue);
+  padding: .38rem 1.05rem;
+  border-radius: 18px;
+  font-size: 0.8rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: all .12s;
   font-family: inherit;
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
+  justify-content: center;
+  gap: 0.35rem;
+  height: 2.25rem;
+  user-select: none;
 }
 .tab-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.3);
+  background: var(--cream2);
+  color: var(--blue);
+  border-color: var(--blue);
 }
 .tab-btn.active {
-  background: var(--gold);
-  border-color: var(--gold-d);
-  color: #2B1505;
-  box-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+  background: var(--blue);
+  border-color: var(--blue-d);
+  color: #ffffff;
+  box-shadow: 0 2px 10px rgba(42, 107, 173, 0.3);
 }
 .tab-content {
   display: block;
@@ -313,7 +316,7 @@ header{
 }
 .logo-mu{font-size:1.7rem;font-weight:800;color:#fff;text-shadow:2px 2px 0 var(--coral-d);line-height:1}
 .logo-hub{font-size:1.7rem;font-weight:800;color:#FFF8D0;text-shadow:2px 2px 0 var(--gold-d);line-height:1}
-.header-tag{color:rgba(255,255,255,.88);font-size:.85rem;font-weight:500;letter-spacing:.04em;margin-left:.2rem}
+.header-tag{color:#ffffff;font-size:1.6rem;font-weight:700;letter-spacing:.04em;margin-left:.2rem;text-shadow:1px 1px 3px rgba(0,0,0,0.15)}
 .header-logo-container {
   position: absolute;
   top: 50%;
@@ -369,7 +372,7 @@ header{
   letter-spacing: .04em;
   white-space: nowrap;
 }
-.bar-row input, .bar-row select {
+input, select, textarea {
   background: var(--cream);
   border: 1.5px solid #D4A84066;
   border-radius: 6px;
@@ -380,15 +383,15 @@ header{
   transition: border-color .15s;
   height: 2.1rem;
 }
-.bar-row input[type="number"] {
+input[type="number"] {
   padding: .38rem .3rem .38rem .5rem;
 }
-.bar-row input:focus, .bar-row select:focus {
+input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: var(--coral);
   box-shadow: 0 0 0 2px rgba(240, 112, 96, .12);
 }
-.bar-row select option {
+select option {
   background: #fff;
 }
 .bar-row .field-name { flex: 0 1 320px; }
@@ -414,13 +417,15 @@ header{
   user-select: none;
   transition: all .12s;
   height: 2.1rem;
-  width: 110px;
+  width: auto;
+  min-width: 110px;
   align-self: flex-end;
 }
 .tog-n{background:var(--blue);color:#fff;border-color:var(--blue-d)}
-.tog-n.off{background:transparent;color:var(--blue);border-color:var(--blue)}
+.tog-n.off{background:#FFF9E6;color:var(--blue);border-color:var(--blue)}
 .tog-t{background:var(--blue);color:#fff;border-color:var(--blue-d)}
-.tog-t.off{background:transparent;color:var(--blue);border-color:var(--blue)}
+.tog-t.off{background:#FFF9E6;color:var(--blue);border-color:var(--blue)}
+.tog.off:hover{background:var(--cream2)}
 .tog-dot{width:8px;height:8px;border-radius:50%;background:currentColor}
 .btn {
   padding: .32rem .75rem;
@@ -432,7 +437,8 @@ header{
   cursor: pointer;
   transition: all .12s;
   height: 2.1rem;
-  width: 110px;
+  width: auto;
+  min-width: 110px;
   align-self: flex-end;
 }
 .btn:hover{filter:brightness(1.07);transform:translateY(-1px)}
@@ -486,14 +492,23 @@ main{max-width:1360px;margin:0 auto 0 0;padding:1.2rem 1.2rem 3rem 1.2rem}
       <button id="btn-calculator-tab" class="tab-btn active" onclick="switchTab('calculator-tab')">🔮 ผูกดวงชะตา</button>
       <button id="btn-astrologers-tab" class="tab-btn" onclick="switchTab('astrologers-tab')">🧙‍♂️ นักพยากรณ์</button>
       <button id="btn-booking-tab" class="tab-btn" onclick="switchTab('booking-tab')">🗓️ จองคิวดูดวง</button>
-      <button id="btn-my-bookings-tab" class="tab-btn" onclick="switchTab('my-bookings-tab')">📌 คิวของฉัน</button>
+      <button id="btn-my-bookings-tab" class="tab-btn" onclick="switchTab('my-bookings-tab')">🎁 ดูดวงฟรี</button>
       <button id="btn-shop-tab" class="tab-btn" onclick="switchTab('shop-tab')">🛍️ ร้านค้าสายมู</button>
     </div>
   </header>
-  <div class="name-bar bar-row" style="padding-right: 120px;">
-    <div class="field field-name">
+  <div class="name-bar bar-row" style="padding-right: 120px; display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap;">
+    <div class="field field-name" style="flex: 0 1 320px;">
       <label>ชื่อ</label>
       <input type="text" id="bName" placeholder="ชื่อ (ไม่บังคับ)">
+    </div>
+    <div class="field field-line-id" style="flex: 0 1 200px;">
+      <label>Line ID</label>
+      <input type="text" id="bLineId" placeholder="Line ID (ไม่บังคับ)">
+    </div>
+    <div style="margin-bottom: 0px;">
+      <button type="button" class="btn" style="background-color: #06C755; color: white; border: none; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; padding: 0 1.2rem; height: 2.1rem; border-radius: 6px; cursor: pointer; transition: background-color 0.2s; min-width: auto; width: auto;" onmouseover="this.style.backgroundColor='#05b04b'" onmouseout="this.style.backgroundColor='#06C755'" onclick="window.open('https://line.me', '_blank')">
+        💬 เพิ่มเพื่อนในไลน์ OA
+      </button>
     </div>
   </div>
   <!-- LARGE FLOATING LOGO -->
@@ -665,43 +680,33 @@ main{max-width:1360px;margin:0 auto 0 0;padding:1.2rem 1.2rem 3rem 1.2rem}
     <div class="astrologer-grid">
       <!-- Card 1 -->
       <div class="astrologer-card">
-        <div style="font-size: 1.8rem; margin-bottom: 0.4rem;">⛰️</div>
-        <div class="astrologer-name">อ.ศิลา โหราจารย์</div>
-        <div class="astrologer-specialty">โหราศาสตร์ไทย & ฤกษ์มงคล</div>
+        <div style="font-size: 1.8rem; margin-bottom: 0.4rem;">🔮</div>
+        <div class="astrologer-name">อ. โกโก้</div>
+        <div class="astrologer-specialty">โหราศาสตร์ไทย ระบบลาหิรี</div>
         <div class="astrologer-rating">⭐ 4.9 (124 รีวิว)</div>
-        <div class="astrologer-price">500 ฿ / ชั่วโมง</div>
-        <div class="astrologer-bio">ผู้เชี่ยวชาญด้านโหราศาสตร์ไทยดั้งเดิม การผูกดวงชะตา วิเคราะห์จุดเด่นจุดด้อยชีวิต และการคำนวณฤกษ์มงคลต่างๆ</div>
-        <button class="btn btn-coral" style="width: 100%;" onclick="selectAstrologer('อ.ศิลา โหราจารย์')">🗓️ จองคิว</button>
+        <div class="astrologer-price">399 ฿ / 45 นาที</div>
+        <div class="astrologer-bio">ไขข้อข้องใจผ่านแผนที่ดวงดาวอย่างสร้างสรรค์ พร้อมมอบพลังใจดีๆ และแนะนำแนวทางการแก้ไขปัญหาชีวิต เพื่อก้าวเดินต่อไปได้อย่างมั่นใจในทุกเรื่องราว</div>
+        <button class="btn btn-coral" style="width: 100%;" onclick="selectAstrologer('อ. โกโก้ (โหราศาสตร์ไทย ระบบลาหิรี)')">🗓️ จองคิว</button>
       </div>
       <!-- Card 2 -->
       <div class="astrologer-card">
-        <div style="font-size: 1.8rem; margin-bottom: 0.4rem;">🃏</div>
-        <div class="astrologer-name">หมอแพรว ยิปซีจิตสัมผัส</div>
-        <div class="astrologer-specialty">ไพ่ยิปซี & ไพ่ทาโรต์</div>
-        <div class="astrologer-rating">⭐ 4.8 (98 รีวิว)</div>
-        <div class="astrologer-price">390 ฿ / 45 นาที</div>
-        <div class="astrologer-bio">ให้คำปรึกษาปัญหาความรัก การเรียน และการงานด้วยไพ่ยิปซีจิตสัมผัส ตอบทุกคำถามคาใจได้อย่างแม่นยำและตรงจุด</div>
-        <button class="btn btn-coral" style="width: 100%;" onclick="selectAstrologer('หมอแพรว ยิปซีจิตสัมผัส')">🗓️ จองคิว</button>
+        <div style="font-size: 1.8rem; margin-bottom: 0.4rem;">🔢</div>
+        <div class="astrologer-name">อ. โกโก้</div>
+        <div class="astrologer-specialty">วิเคราะห์เบอร์มงคล / ชื่อ</div>
+        <div class="astrologer-rating">⭐ 4.85 (72 รีวิว)</div>
+        <div class="astrologer-price">399 ฿ / 30 นาที</div>
+        <div class="astrologer-bio">ไขข้อข้องใจและชี้แนะแนวทางแก้ปัญหาความติดขัดในชีวิต ผ่านศาสตร์ตัวเลขและชื่อมงคล คัดเลือกตัวเลขเปิดทางบวก เติมกำลังใจให้พร้อมรับสิ่งดีๆ เข้ามา</div>
+        <button class="btn btn-coral" style="width: 100%;" onclick="selectAstrologer('อ. โกโก้ (วิเคราะห์เบอร์มงคล/ชื่อ)')">🗓️ จองคิว</button>
       </div>
       <!-- Card 3 -->
       <div class="astrologer-card">
-        <div style="font-size: 1.8rem; margin-bottom: 0.4rem;">🐉</div>
-        <div class="astrologer-name">อ.เชน ฮวงจุ้ยเปลี่ยนชีวิต</div>
-        <div class="astrologer-specialty">ฮวงจุ้ย & ลายมือลิขิต</div>
-        <div class="astrologer-rating">⭐ 4.95 (150 รีวิว)</div>
-        <div class="astrologer-price">800 ฿ / ชั่วโมง</div>
-        <div class="astrologer-bio">ซินแสฮวงจุ้ยและศาสตร์การอ่านลายมือ ปรับแต่งดวงชะตาที่อยู่อาศัยและการงานเพื่อหนุนนำโชคลาภความสำเร็จ</div>
-        <button class="btn btn-coral" style="width: 100%;" onclick="selectAstrologer('อ.เชน ฮวงจุ้ยเปลี่ยนชีวิต')">🗓️ จองคิว</button>
-      </div>
-      <!-- Card 4 -->
-      <div class="astrologer-card">
-        <div style="font-size: 1.8rem; margin-bottom: 0.4rem;">🔢</div>
-        <div class="astrologer-name">แม่หมอแก้ว เลขะมงคล</div>
-        <div class="astrologer-specialty">ศาสตร์ตัวเลข & เบอร์มงคล</div>
-        <div class="astrologer-rating">⭐ 4.75 (82 รีวิว)</div>
-        <div class="astrologer-price">290 ฿ / วิเคราะห์เคส</div>
-        <div class="astrologer-bio">วิเคราะห์เบอร์โทรศัพท์ เลขทะเบียนรถ เลขที่บ้าน และเลขศาสตร์ที่ส่งผลดีต่อชีวิต เพื่อการเจรจาและการค้าขายที่ราบรื่น</div>
-        <button class="btn btn-coral" style="width: 100%;" onclick="selectAstrologer('แม่หมอแก้ว เลขะมงคล')">🗓️ จองคิว</button>
+        <div style="font-size: 1.8rem; margin-bottom: 0.4rem;">✨</div>
+        <div class="astrologer-name">อ. นัดสา</div>
+        <div class="astrologer-specialty">โหราศาสตร์ไทย ระบบลาหิรี</div>
+        <div class="astrologer-rating">⭐ 4.8 (98 รีวิว)</div>
+        <div class="astrologer-price">399 ฿ / 45 นาที</div>
+        <div class="astrologer-bio">วิเคราะห์จุดติดขัด หาทางออก พร้อมมอบไอเดียเชิงบวกที่จะช่วยบาลานซ์ทั้งเรื่องงาน ความสัมพันธ์ และพลังใจ ให้คุณก้าวไปข้างหน้าอย่างถูกจังหวะเวลา</div>
+        <button class="btn btn-coral" style="width: 100%;" onclick="selectAstrologer('อ. นัดสา (โหราศาสตร์ไทย ระบบลาหิรี)')">🗓️ จองคิว</button>
       </div>
     </div>
   </div>
@@ -709,6 +714,26 @@ main{max-width:1360px;margin:0 auto 0 0;padding:1.2rem 1.2rem 3rem 1.2rem}
 
 <!-- BOOKING TAB -->
 <div id="booking-tab" class="tab-content hidden">
+  <!-- Queue Status Card (placed at the top) -->
+  <div class="card" style="max-width: 800px; margin: 0 auto 1.5rem auto;">
+    <div class="card-title">📌 สถานะคิวดูดวงของฉัน</div>
+    <div style="font-size: 0.88rem; color: var(--dim); margin-bottom: 1rem;">คิวที่คุณลงทะเบียนไว้ทั้งหมด รายละเอียด และประวัติตรวจดวง</div>
+    
+    <!-- Filter Toggle Buttons -->
+    <div style="display: flex; gap: 8px; margin-bottom: 1.2rem; flex-wrap: wrap;">
+      <button type="button" class="tog tog-n" id="filterTogActive" onclick="toggleBookingFilter('active')">
+        คิวของฉัน
+      </button>
+      <button type="button" class="tog tog-t" id="filterTogCompleted" onclick="toggleBookingFilter('completed')">
+        ตรวจดวงแล้ว
+      </button>
+    </div>
+
+    <div class="booking-list" id="bookingsList">
+      <!-- Dynamic list will be populated by renderBookings() -->
+    </div>
+  </div>
+
   <div class="card booking-container">
     <div class="card-title">🗓️ ระบบจองคิวตรวจดวงชะตา</div>
     <div style="font-size: 0.88rem; color: var(--dim); margin-bottom: 1.5rem;">ระบุรายละเอียดเพื่อยืนยันนัดหมายของคุณกับหมอดู</div>
@@ -719,16 +744,15 @@ main{max-width:1360px;margin:0 auto 0 0;padding:1.2rem 1.2rem 3rem 1.2rem}
           <label>เลือกนักพยากรณ์</label>
           <select id="bookAstrologer" style="width: 100%;" required>
             <option value="">-- เลือกนักพยากรณ์ --</option>
-            <option value="อ.ศิลา โหราจารย์">อ.ศิลา โหราจารย์ (500฿/ชม.)</option>
-            <option value="หมอแพรว ยิปซีจิตสัมผัส">หมอแพรว ยิปซีจิตสัมผัส (390฿/45นาที)</option>
-            <option value="อ.เชน ฮวงจุ้ยเปลี่ยนชีวิต">อ.เชน ฮวงจุ้ยเปลี่ยนชีวิต (800฿/ชม.)</option>
-            <option value="แม่หมอแก้ว เลขะมงคล">แม่หมอแก้ว เลขะมงคล (290฿/เคส)</option>
+            <option value="อ. โกโก้ (โหราศาสตร์ไทย ระบบลาหิรี)">อ. โกโก้ (โหราศาสตร์ไทย ระบบลาหิรี) (399฿/45นาที)</option>
+            <option value="อ. โกโก้ (วิเคราะห์เบอร์มงคล/ชื่อ)">อ. โกโก้ (วิเคราะห์เบอร์มงคล/ชื่อ) (399฿/30นาที)</option>
+            <option value="อ. นัดสา (โหราศาสตร์ไทย ระบบลาหิรี)">อ. นัดสา (โหราศาสตร์ไทย ระบบลาหิรี) (399฿/45นาที)</option>
           </select>
         </div>
         <div class="field">
           <label>รูปแบบบริการ</label>
           <select id="bookService" style="width: 100%;" required>
-            <option value="โทรเสียง / วิดีโอคอล">โทรเสียง / วิดีโอคอลออนไลน์</option>
+            <option value="โทรด้วยเสียง ผ่านไลน์">โทรด้วยเสียง ผ่านไลน์</option>
             <option value="พิมพ์แชทถามตอบ">พิมพ์แชทถามตอบออนไลน์</option>
             <option value="ส่งสรุปเอกสาร PDF">สรุปวิเคราะห์เอกสาร PDF</option>
           </select>
@@ -748,22 +772,56 @@ main{max-width:1360px;margin:0 auto 0 0;padding:1.2rem 1.2rem 3rem 1.2rem}
           <span style="font-size: 0.9rem; font-weight: 700; color: var(--text);">📝 ข้อมูลวันเกิดสำหรับทำนายดวง</span>
           <button type="button" class="btn btn-ghost" style="padding: 2px 10px; font-size: 0.78rem;" onclick="autoFillBooking()">📥 ดึงข้อมูลจากการคำนวณล่าสุด</button>
         </div>
-        <div class="booking-grid">
-          <div class="field">
-            <label>ชื่อผู้รับทำนาย</label>
-            <input type="text" id="bookName" style="width: 100%;" placeholder="ชื่อเล่น หรือชื่อจริง" required>
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+          <!-- Name and Line ID row -->
+          <div style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
+            <div class="field" style="display: flex; flex-direction: column; gap: 0.2rem; flex: 1; min-width: 200px; max-width: 320px;">
+              <label style="font-size: .72rem; font-weight: 700; color: var(--dim); letter-spacing: .04em;">ชื่อผู้รับทำนาย</label>
+              <input type="text" id="bookName" style="width: 100%;" placeholder="ชื่อเล่น หรือชื่อจริง" required>
+            </div>
+            <div class="field" style="display: flex; flex-direction: column; gap: 0.2rem; flex: 1; min-width: 200px; max-width: 320px;">
+              <label style="font-size: .72rem; font-weight: 700; color: var(--dim); letter-spacing: .04em;">Line ID ของคุณ</label>
+              <input type="text" id="bookLineId" style="width: 100%;" placeholder="Line ID (สำหรับติดต่อดูดวง)" required>
+            </div>
           </div>
-          <div class="field">
-            <label>วันเกิด</label>
-            <input type="date" id="bookBirthdate" style="width: 100%;" required>
-          </div>
-          <div class="field">
-            <label>เวลาเกิด</label>
-            <input type="time" id="bookTime" style="width: 100%;" required>
-          </div>
-          <div class="field">
-            <label>สถานที่เกิด (จังหวัด/ประเทศ)</label>
-            <input type="text" id="bookPlace" style="width: 100%;" placeholder="กรุงเทพมหานคร / ประเทศไทย" required>
+          <!-- Birth details row in bar-row format -->
+          <div class="bar-row" style="border: none; background: transparent; padding: 0; box-shadow: none; margin: 0; display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: flex-end; width: 100%;">
+            <div class="field field-date">
+              <label>วันเกิด (พ.ศ.)</label>
+              <div style="display: flex; gap: 4px;">
+                <select id="bookDay" style="width: 60px;"></select>
+                <select id="bookMonth" style="width: 115px;"></select>
+                <input type="number" id="bookYear" value="2533" min="2443" max="2743" style="width: 80px;" required>
+              </div>
+            </div>
+            <div class="field field-time">
+              <label>เวลาเกิด</label>
+              <div style="display: flex; gap: 4px; align-items: center;">
+                <input type="number" id="bookHour" value="08" min="0" max="23" style="width: 55px;" placeholder="ชม." required>
+                <span style="font-weight: bold; color: var(--dim);">:</span>
+                <input type="number" id="bookMin" value="00" min="0" max="59" style="width: 55px;" placeholder="นาที" required>
+              </div>
+            </div>
+            <div class="field field-country">
+              <label>ประเทศ</label>
+              <select id="bookCountry" onchange="onCountryChange('book')" required>
+                <!-- Populated dynamically -->
+              </select>
+            </div>
+            <div class="field field-city">
+              <label>เมือง/จังหวัด</label>
+              <select id="bookCity" onchange="onCityChange('book')" required>
+                <!-- Populated dynamically -->
+              </select>
+            </div>
+            <div class="field field-coord" id="bookLatField" style="display: none;">
+              <label>ละติจูด</label>
+              <input type="number" id="bookLat" value="13.7563" step="0.0001" style="width: 90px;">
+            </div>
+            <div class="field field-coord" id="bookLonField" style="display: none;">
+              <label>ลองจิจูด</label>
+              <input type="number" id="bookLon" value="100.5018" step="0.0001" style="width: 90px;">
+            </div>
           </div>
         </div>
       </div>
@@ -775,15 +833,9 @@ main{max-width:1360px;margin:0 auto 0 0;padding:1.2rem 1.2rem 3rem 1.2rem}
   </div>
 </div>
 
-<!-- MY BOOKINGS TAB -->
+<!-- MY BOOKINGS TAB (changed to FREE HOROSCOPE "ดูดวงฟรี") -->
 <div id="my-bookings-tab" class="tab-content hidden">
-  <div class="card" style="max-width: 800px; margin: 0 auto;">
-    <div class="card-title">📌 สถานะคิวดูดวงของฉัน</div>
-    <div style="font-size: 0.88rem; color: var(--dim); margin-bottom: 1rem;">คิวที่คุณลงทะเบียนไว้ทั้งหมด รายละเอียด และประวัติตรวจดวง</div>
-    <div class="booking-list" id="bookingsList">
-      <!-- Dynamic list -->
-    </div>
-  </div>
+  <!-- เนื้อหาดูดวงฟรีเว้นว่างไว้ก่อน -->
 </div>
 
 <!-- MU SHOP TAB -->
@@ -815,6 +867,14 @@ main{max-width:1360px;margin:0 auto 0 0;padding:1.2rem 1.2rem 3rem 1.2rem}
         <div class="shop-price">499 ฿</div>
         <div class="shop-desc">สร้อยข้อมือหินแท้ธรรมชาติ คัดสรรประเภทหินตามธาตุราศีลัคนาของดวงชะตา ช่วยปรับความสมดุลพลังงานและดึงดูดกระแสทรัพย์สินเงินทอง</div>
         <button class="btn btn-coral" onclick="openShopModal('สร้อยข้อมือหินมงคลหนุนธาตุชะตา', 499, 'bracelet')">🛒 สั่งบูชาสินค้า</button>
+      </div>
+      <!-- Item 4 -->
+      <div class="shop-card">
+        <div class="shop-img-holder">📜</div>
+        <div class="shop-title">ยันต์ดวงพิชัยสงคราม</div>
+        <div class="shop-price">999 ฿</div>
+        <div class="shop-desc">แผ่นทองจารึกดวงชะตากำเนิดล้อมด้วยยันต์พระคาถาพิชัยสงครามโบราณ ปรับแต่งตามตำแหน่งดวงชะตาและลัคนาของคุณโดยเฉพาะ ช่วยปกป้องคุ้มครองและหนุนนำโชคลาภความเจริญรุ่งเรืองสูงสุด</div>
+        <button class="btn btn-coral" onclick="openShopModal('ยันต์ดวงพิชัยสงคราม', 999, 'yantra')">🛒 สั่งบูชาสินค้า</button>
       </div>
     </div>
   </div>
@@ -5975,10 +6035,12 @@ const LOCATION_DATABASE = {
 function populateCountryDropdowns() {
   const bCountry = document.getElementById('bCountry');
   const tCountry = document.getElementById('tCountry');
+  const bookCountry = document.getElementById('bookCountry');
   if (!bCountry || !tCountry) return;
 
   const prevBVal = bCountry.value || 'TH';
   const prevTVal = tCountry.value || 'TH';
+  const prevBookVal = bookCountry ? (bookCountry.value || 'TH') : 'TH';
 
   // Sort countries alphabetically by Thai name
   let countries = Object.entries(LOCATION_DATABASE).map(([code, data]) => ({
@@ -6002,9 +6064,11 @@ function populateCountryDropdowns() {
 
   bCountry.innerHTML = html;
   tCountry.innerHTML = html;
+  if (bookCountry) bookCountry.innerHTML = html;
 
   bCountry.value = prevBVal;
   tCountry.value = prevTVal;
+  if (bookCountry) bookCountry.value = prevBookVal;
 
   // Repopulate cities
   const bCitySelect = document.getElementById('bCity');
@@ -6014,6 +6078,10 @@ function populateCountryDropdowns() {
   const tCitySelect = document.getElementById('tCity');
   const prevTCityVal = tCitySelect ? tCitySelect.value : null;
   populateCities('t', prevTCityVal);
+
+  const bookCitySelect = document.getElementById('bookCity');
+  const prevBookCityVal = bookCitySelect ? bookCitySelect.value : null;
+  if (bookCitySelect) populateCities('book', prevBookCityVal);
 }
 
 const MONTHS_TH = [
@@ -6529,7 +6597,7 @@ function drawWheel(){
   // 5. Zodiac Sign Labels
   for(let i=0;i<12;i++){
     const isAxis = (i % 3 === 0);
-    const rLabel = isAxis ? 178 : 186;
+    const rLabel = isAxis ? 190 : 196;
     const a = toRad(90 + i * 30);
     const lx = CX + rLabel * Math.cos(a);
     const ly = CY - rLabel * Math.sin(a);
@@ -6552,37 +6620,20 @@ function drawWheel(){
     }
   }
 
-  const SECTOR_CENTERS = [
-    { x: 260, y: 130 }, // 0: Aries (เมษ)
-    { x: 175, y: 118 }, // 1: Taurus (พฤษภ)
-    { x: 118, y: 175 }, // 2: Gemini (มิถุน)
-    { x: 130, y: 260 }, // 3: Cancer (กรกฎ)
-    { x: 118, y: 345 }, // 4: Leo (สิงห์)
-    { x: 175, y: 402 }, // 5: Virgo (กันย์)
-    { x: 260, y: 390 }, // 6: Libra (ตุลย์)
-    { x: 345, y: 402 }, // 7: Scorpio (พิจิก)
-    { x: 402, y: 345 }, // 8: Sagittarius (ธนู)
-    { x: 390, y: 260 }, // 9: Capricorn (มกร)
-    { x: 402, y: 175 }, // 10: Aquarius (กุมภ์)
-    { x: 345, y: 118 }  // 11: Pisces (มีน)
-  ];
-
   for(let i=0;i<12;i++){
     const grp = natalGroups[i];
     const N = grp.length;
     if (N === 0) continue;
 
-    const cx = SECTOR_CENTERS[i].x;
-    const cy = SECTOR_CENTERS[i].y;
+    const a = toRad(90 + i * 30);
+    const rCenter = (i % 3 === 0) ? 130 : 135;
+    const spacing = 28;
 
     grp.forEach((p, k) => {
-      let px = cx, py = cy;
-      if (N > 1) {
-        const angle = k * (2 * Math.PI / N) - Math.PI / 2;
-        const rOffset = 15;
-        px = cx + rOffset * Math.cos(angle);
-        py = cy + rOffset * Math.sin(angle);
-      }
+      // Align along the radial line (bisector) of each sector
+      const r = rCenter + (k - (N - 1) / 2) * spacing;
+      const px = CX + r * Math.cos(a);
+      const py = CY - r * Math.sin(a);
 
       if (p.id === 'lagna') {
         // Highlighted circular badge for natal Lagna (ล) - slightly larger
@@ -6632,89 +6683,50 @@ function drawWheel(){
       });
     }
 
-    // Sort by longitude
-    transitPlanets.sort((a, b) => a.lon - b.lon);
-
-    // Group into clusters where each planet is within 8.5 degrees of the next
-    const clusters = [];
-    if (transitPlanets.length > 0) {
-      let tempClusters = [];
-      let currentCluster = [transitPlanets[0]];
-      for (let i = 1; i < transitPlanets.length; i++) {
-        const p = transitPlanets[i];
-        const prev = transitPlanets[i - 1];
-        if (p.lon - prev.lon < 8.5) {
-          currentCluster.push(p);
-        } else {
-          tempClusters.push(currentCluster);
-          currentCluster = [p];
+    // Iterative push-apart to prevent any overlaps globally on the outer circle
+    const MIN_GAP = 12.0; // degrees of gap to prevent overlaps
+    for (let iter = 0; iter < 15; iter++) {
+      // Re-sort in each iteration to ensure we always compare adjacent neighbors in coordinate space
+      transitPlanets.sort((a, b) => a.lon - b.lon);
+      
+      for (let i = 0; i < transitPlanets.length; i++) {
+        const p1 = transitPlanets[i];
+        const p2 = transitPlanets[(i + 1) % transitPlanets.length];
+        
+        let diff = p2.lon - p1.lon;
+        if (diff < 0) diff += 360; // handle wrap-around
+        
+        if (diff < MIN_GAP) {
+          const overlap = MIN_GAP - diff;
+          p1.lon = mod360(p1.lon - overlap / 2);
+          p2.lon = mod360(p2.lon + overlap / 2);
         }
       }
-      tempClusters.push(currentCluster);
-
-      // Check wrap-around between last and first cluster
-      if (tempClusters.length > 1) {
-        const firstCluster = tempClusters[0];
-        const lastCluster = tempClusters[tempClusters.length - 1];
-        const firstPl = firstCluster[0];
-        const lastPl = lastCluster[lastCluster.length - 1];
-        if ((firstPl.lon + 360) - lastPl.lon < 8.5) {
-          tempClusters[0] = lastCluster.concat(firstCluster);
-          tempClusters.pop();
-        }
-      }
-      clusters.push(...tempClusters);
-    }
-
-    // Adjust longitudes within each cluster to distribute them angularly
-    const MIN_GAP = 8.5; // degrees of gap to prevent overlaps
-    for (const grp of clusters) {
-      const n = grp.length;
-      if (n === 1) continue;
-
-      // Calculate mean longitude, handling wrap-around
-      let sumLon = 0;
-      const baseLon = grp[0].lon;
-      grp.forEach(p => {
-        let diff = p.lon - baseLon;
-        if (diff < -180) diff += 360;
-        if (diff > 180) diff -= 360;
-        sumLon += baseLon + diff;
-      });
-      const meanLon = mod360(sumLon / n);
-
-      // Distribute centered around meanLon
-      const startLon = meanLon - ((n - 1) * MIN_GAP) / 2;
-      grp.forEach((p, idx) => {
-        p.lon = mod360(startLon + idx * MIN_GAP);
-      });
     }
 
     // Draw all transit planets at a fixed radius centered inside the outer band (r = 233)
     const fixedR = 233;
-    for (const grp of clusters) {
-      grp.forEach(p => {
-        const [tx, ty] = toXY(fixedR, p.lon);
-        const lbl = p.numAR;
-        const isR = p.retro;
+    transitPlanets.forEach(p => {
+      const [tx, ty] = toXY(fixedR, p.lon);
+      const lbl = p.numAR;
+      const isR = p.retro;
 
-        if (p.isAgeLagna) {
-          // Draw a green star symbol directly (without a circle)
-          s += `<text x="${f(tx)}" y="${f(ty)}" text-anchor="middle" dominant-baseline="central"
-               font-size="26" fill="#2E7D32" font-family="Sarabun,sans-serif" font-weight="900">★</text>`;
-        } else {
-          s += `<text x="${f(tx)}" y="${f(ty)}" text-anchor="middle" dominant-baseline="central"
-               font-size="16" fill="${C_TRN_T}" font-family="Sarabun,sans-serif" font-weight="700">${lbl}</text>`;
-          if (isR === "พักร์" || isR === true) {
-            s += `<text x="${f(tx+3.2)}" y="${f(ty-3.0)}" font-size="10" fill="#4a148c" font-family="Sarabun,sans-serif" font-weight="bold">พ</text>`;
-          } else if (isR === "มนต์") {
-            s += `<text x="${f(tx+3.2)}" y="${f(ty-3.0)}" font-size="10" fill="#2E7D32" font-family="Sarabun,sans-serif" font-weight="bold">ม</text>`;
-          } else if (isR === "เสริด") {
-            s += `<text x="${f(tx+3.2)}" y="${f(ty-3.0)}" font-size="10" fill="#1976D2" font-family="Sarabun,sans-serif" font-weight="bold">ส</text>`;
-          }
+      if (p.isAgeLagna) {
+        // Draw a green star symbol directly (without a circle)
+        s += `<text x="${f(tx)}" y="${f(ty)}" text-anchor="middle" dominant-baseline="central"
+             font-size="26" fill="#2E7D32" font-family="Sarabun,sans-serif" font-weight="900">★</text>`;
+      } else {
+        s += `<text x="${f(tx)}" y="${f(ty)}" text-anchor="middle" dominant-baseline="central"
+             font-size="16" fill="${C_TRN_T}" font-family="Sarabun,sans-serif" font-weight="700">${lbl}</text>`;
+        if (isR === "พักร์" || isR === true) {
+          s += `<text x="${f(tx+3.2)}" y="${f(ty-3.0)}" font-size="10" fill="#4a148c" font-family="Sarabun,sans-serif" font-weight="bold">พ</text>`;
+        } else if (isR === "มนต์") {
+          s += `<text x="${f(tx+3.2)}" y="${f(ty-3.0)}" font-size="10" fill="#2E7D32" font-family="Sarabun,sans-serif" font-weight="bold">ม</text>`;
+        } else if (isR === "เสริด") {
+          s += `<text x="${f(tx+3.2)}" y="${f(ty-3.0)}" font-size="10" fill="#1976D2" font-family="Sarabun,sans-serif" font-weight="bold">ส</text>`;
         }
-      });
-    }
+      }
+    });
   }
 
   // 8. Center circle content (now a circle containing the logo and Sun degree)
@@ -6922,10 +6934,11 @@ const MOCK_SLOTS = [
 const MY_BOOKINGS = [
   {
     id: 'Q-9812',
-    astrologer: 'อ.ศิลา โหราจารย์',
-    service: 'โทรเสียง / วิดีโอคอล',
-    time: '2026-06-20 (14:00 - 15:00)',
+    astrologer: 'อ. โกโก้ (โหราศาสตร์ไทย ระบบลาหิรี)',
+    service: 'โทรด้วยเสียง ผ่านไลน์',
+    time: '2026-06-20 (14:00 - 14:45)',
     name: 'ส้มส้ม',
+    lineId: 'somsom_line',
     status: 'completed',
     statusText: 'ตรวจดวงแล้ว'
   }
@@ -6967,27 +6980,41 @@ window.autoFillBooking = function() {
   const calcName = document.getElementById('bName').value || 'เจ้าชะตา';
   document.getElementById('bookName').value = calcName;
   
-  // Grab date from calculator dropdowns
-  const day = document.getElementById('bDay').value;
-  const month = document.getElementById('bMonth').value;
-  const yearBE = document.getElementById('bYear').value;
+  // Grab Line ID from calculator header
+  const calcLineId = document.getElementById('bLineId').value || '';
+  document.getElementById('bookLineId').value = calcLineId;
   
-  if (day && month && yearBE) {
-    const yearAD = parseInt(yearBE) - 543;
-    // Format YYYY-MM-DD
-    const dateStr = `${yearAD}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-    document.getElementById('bookBirthdate').value = dateStr;
-  }
+  // Grab date from calculator dropdowns
+  document.getElementById('bookDay').value = document.getElementById('bDay').value;
+  document.getElementById('bookMonth').value = document.getElementById('bMonth').value;
+  document.getElementById('bookYear').value = document.getElementById('bYear').value;
   
   // Grab birth time
-  const hr = document.getElementById('bHour').value || '00';
-  const mn = document.getElementById('bMin').value || '00';
-  document.getElementById('bookTime').value = `${hr}:${mn}`;
+  document.getElementById('bookHour').value = document.getElementById('bHour').value;
+  document.getElementById('bookMin').value = document.getElementById('bMin').value;
   
   // Grab birth location
-  const citySelect = document.getElementById('bCity');
-  const cityText = citySelect ? citySelect.options[citySelect.selectedIndex].text : 'กรุงเทพมหานคร';
-  document.getElementById('bookPlace').value = cityText;
+  const countryVal = document.getElementById('bCountry').value;
+  document.getElementById('bookCountry').value = countryVal;
+  
+  // Repopulate cities for booking form and select correct city
+  const cityVal = document.getElementById('bCity').value;
+  populateCities('book', cityVal);
+  
+  // Custom coordinates
+  document.getElementById('bookLat').value = document.getElementById('bLat').value;
+  document.getElementById('bookLon').value = document.getElementById('bLon').value;
+  
+  // Display coordinate fields if country is custom
+  const latField = document.getElementById('bookLatField');
+  const lonField = document.getElementById('bookLonField');
+  if (countryVal === 'custom') {
+    latField.style.display = 'flex';
+    lonField.style.display = 'flex';
+  } else {
+    latField.style.display = 'none';
+    lonField.style.display = 'none';
+  }
   
   alert('📥 ดึงข้อมูลดวงกำเนิดล่าสุดเสร็จสิ้น!');
 };
@@ -6999,7 +7026,12 @@ window.submitBooking = function(event) {
   const service = document.getElementById('bookService').value;
   const slot = document.getElementById('selectedTime').value;
   const name = document.getElementById('bookName').value;
-  const dateVal = document.getElementById('bookBirthdate').value;
+  const lineId = document.getElementById('bookLineId').value;
+  
+  const day = document.getElementById('bookDay').value;
+  const month = document.getElementById('bookMonth').value;
+  const yearBE = document.getElementById('bookYear').value;
+  const dateVal = `${day} ${MONTHS_TH[parseInt(month)-1]} พ.ศ. ${yearBE}`;
   
   if (!slot) {
     alert('⚠️ กรุณาเลือกช่วงเวลาที่ต้องการดูดวง');
@@ -7015,6 +7047,7 @@ window.submitBooking = function(event) {
     service: service,
     time: `${dateVal} (${slot})`,
     name: name,
+    lineId: lineId,
     status: 'confirmed',
     statusText: 'รอรับคิวดูดวง'
   };
@@ -7024,24 +7057,54 @@ window.submitBooking = function(event) {
   
   // Reset form
   document.getElementById('bookingForm').reset();
+  document.getElementById('bookDay').value = "13";
+  document.getElementById('bookMonth').value = "4";
+  document.getElementById('bookYear').value = "2533";
+  document.getElementById('bookHour').value = "08";
+  document.getElementById('bookMin').value = "00";
+  document.getElementById('bookCountry').value = "TH";
+  populateCities('book', 'bangkok');
+  
   document.querySelectorAll('.slot-btn').forEach(el => el.classList.remove('active'));
   document.getElementById('selectedTime').value = '';
   
   alert(`✅ ลงทะเบียนจองคิวดูดวงสำเร็จ! หมายเลขคิวของคุณคือ: ${queueId}`);
-  switchTab('my-bookings-tab');
+  switchTab('booking-tab');
+};
+
+let showActiveBookings = true;
+let showCompletedBookings = true;
+
+window.toggleBookingFilter = function(type) {
+  if (type === 'active') {
+    showActiveBookings = !showActiveBookings;
+    document.getElementById('filterTogActive').classList.toggle('off', !showActiveBookings);
+  } else {
+    showCompletedBookings = !showCompletedBookings;
+    document.getElementById('filterTogCompleted').classList.toggle('off', !showCompletedBookings);
+  }
+  renderBookings();
 };
 
 function renderBookings() {
   const container = document.getElementById('bookingsList');
   if (!container) return;
   
-  if (MY_BOOKINGS.length === 0) {
-    container.innerHTML = '<div style="text-align:center;color:var(--dim);padding:2rem;">ยังไม่มีคิวจองประวัติของคุณ</div>';
+  const filtered = MY_BOOKINGS.filter(b => {
+    if (b.status === 'completed') {
+      return showCompletedBookings;
+    } else {
+      return showActiveBookings;
+    }
+  });
+
+  if (filtered.length === 0) {
+    container.innerHTML = '<div style="text-align:center;color:var(--dim);padding:2rem;">ไม่พบคิวตรงตามตัวเลือกการกรอง</div>';
     return;
   }
   
   container.innerHTML = '';
-  MY_BOOKINGS.forEach(b => {
+  filtered.forEach(b => {
     let badgeClass = 'status-pending';
     if (b.status === 'confirmed') badgeClass = 'status-confirmed';
     if (b.status === 'completed') badgeClass = 'status-completed';
@@ -7050,7 +7113,7 @@ function renderBookings() {
       <div class="booking-item">
         <div class="booking-meta">
           <div style="font-weight:700;color:var(--text);font-size:1.05rem;">${b.astrologer}</div>
-          <div style="font-size:0.85rem;color:var(--dim);"><span style="font-weight:600;">คิว ID:</span> ${b.id} — คุณ ${b.name}</div>
+          <div style="font-size:0.85rem;color:var(--dim);"><span style="font-weight:600;">คิว ID:</span> ${b.id} — คุณ ${b.name} ${b.lineId ? `(Line: ${b.lineId})` : ''}</div>
           <div style="font-size:0.82rem;color:var(--dim);"><span style="font-weight:600;">บริการ:</span> ${b.service}</div>
           <div style="font-size:0.82rem;color:var(--text);font-weight:500;margin-top:4px;"><span style="font-size:1.1rem;vertical-align:-1px;">🕒</span> ${b.time}</div>
         </div>
@@ -7096,6 +7159,11 @@ window.openShopModal = function(name, price, type) {
       <input type="email" id="shopEmail" style="width:100%;margin-bottom:0.4rem;padding:0.4rem;border-radius:4px;border:1px solid #ddd;" placeholder="example@gmail.com" required>
       <div style="font-size:0.75rem;color:var(--dim);">* ระบบจะจัดส่งสมุดสรุปชะตารายปีเป็นไฟล์ PDF ภายใน 10 นาทีหลังจากชำระเงิน</div>
     `;
+  } else if (type === 'yantra') {
+    formArea.innerHTML = `
+      <div style="font-size:0.8rem;font-weight:700;margin-bottom:0.4rem;">ระบุที่อยู่จัดส่งแผ่นยันต์:</div>
+      <textarea id="shopAddress" style="width:100%;height:80px;padding:0.4rem;border-radius:4px;border:1px solid #ddd;" placeholder="ที่อยู่ในการจัดส่งไปรษณีย์แบบละเอียด" required></textarea>
+    `;
   } else {
     formArea.innerHTML = `
       <div style="font-size:0.8rem;font-weight:700;margin-bottom:0.4rem;">ระบุขนาดข้อมือและที่อยู่จัดส่ง:</div>
@@ -7115,6 +7183,9 @@ window.simulatePurchase = function() {
   if (currentItemType === 'report') {
     const email = document.getElementById('shopEmail').value;
     if (!email) { alert('กรุณากรอกอีเมลเพื่อรับรายงาน'); return; }
+  } else if (currentItemType === 'yantra') {
+    const addr = document.getElementById('shopAddress').value;
+    if (!addr) { alert('กรุณาระบุที่อยู่จัดส่งแผ่นยันต์'); return; }
   } else if (currentItemType === 'bracelet') {
     const size = document.getElementById('shopSize').value;
     const addr = document.getElementById('shopAddress').value;
@@ -7148,6 +7219,10 @@ populateDateDropdowns('b', '1990-04-13');
 document.getElementById('bHour').value = "08";
 document.getElementById('bMin').value = "00";
 populateCities('b', 'bangkok');
+
+populateDateDropdowns('book', '1990-04-13');
+document.getElementById('bookHour').value = "08";
+document.getElementById('bookMin').value = "00";
 
 // Initialize transit date/month matching birth date, with year adjusted relative to current date
 const bDayVal = parseInt(document.getElementById('bDay').value) || 13;
