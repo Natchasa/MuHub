@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MuHub — ผูกดวงโหราศาสตร์ไทย</title>
+<script src="astronomy.browser.min.js"></script>
+<style>@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');</style>
+<style>
+:root{
+  --coral:#F07060; --coral-l:#F59080; --coral-d:#B03828;
+  --gold:#F5C840;  --gold-l:#FFE070;  --gold-d:#7A5510;
+  --cream:#FFF8F0; --cream2:#FFF0DC;
+  --text:#2B1505;  --dim:#8B6030;
+  --blue:#2A6BAD;  --blue-l:#4488CC;  --blue-d:#1A3A60;
+  --white:#F8F4EE;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Sarabun','TH Sarabun New',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;font-size:15px}
+
+/* ── HEADER ─────────────────────────── */
+header{
+  background:linear-gradient(135deg,#F07060 0%,#F5C840 100%);
+  padding:.7rem 1.2rem;
+  display:flex;align-items:center;gap:.8rem;
+  box-shadow:0 2px 10px rgba(200,80,40,.22);
+}
+.logo-mu{font-size:1.7rem;font-weight:800;color:#fff;text-shadow:2px 2px 0 var(--coral-d);line-height:1}
+.logo-hub{font-size:1.7rem;font-weight:800;color:#FFF8D0;text-shadow:2px 2px 0 var(--gold-d);line-height:1}
+.header-tag{color:rgba(255,255,255,.88);font-size:.85rem;font-weight:500;letter-spacing:.04em;margin-left:.2rem}
+.header-logo-container {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 1.2rem;
+  background: #ffffff;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  z-index: 10;
+  overflow: hidden;
+}
+.header-logo-container img {
+  height: 76px;
+  width: 76px;
+  object-fit: contain;
+  display: block;
+}
+
+.bar-row {
+  padding: .8rem 1.2rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: .6rem .8rem;
+}
+.name-bar {
+  background: #fff;
+  border-bottom: 1px solid #E8D0A0;
+}
+.birth-bar {
+  background: #fff;
+  border-bottom: 1.5px solid #E8D0A0;
+}
+.transit-bar {
+  background: var(--cream2);
+  border-bottom: 1.5px solid #E0C090;
+}
+.bar-row .field {
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
+  min-width: 0;
+}
+.bar-row label {
+  font-size: .72rem;
+  font-weight: 700;
+  color: var(--dim);
+  letter-spacing: .04em;
+  white-space: nowrap;
+}
+.bar-row input, .bar-row select {
+  background: var(--cream);
+  border: 1.5px solid #D4A84066;
+  border-radius: 6px;
+  padding: .38rem .65rem;
+  color: var(--text);
+  font-family: inherit;
+  font-size: .88rem;
+  transition: border-color .15s;
+  height: 2.1rem;
+}
+.bar-row input[type="number"] {
+  padding: .38rem .3rem .38rem .5rem;
+}
+.bar-row input:focus, .bar-row select:focus {
+  outline: none;
+  border-color: var(--coral);
+  box-shadow: 0 0 0 2px rgba(240, 112, 96, .12);
+}
+.bar-row select option {
+  background: #fff;
+}
+.bar-row .field-name { flex: 0 1 320px; }
+.bar-row .field-date { flex: 0 0 280px; }
+.bar-row .field-time { flex: 0 0 145px; }
+.bar-row .field-country { flex: 0 0 170px; }
+.bar-row .field-city { flex: 0 0 200px; }
+.bar-row .field-coord { flex: 0 0 100px; }
+
+/* ── CONTROLS BAR ───────────────────── */
+.tog {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .35rem;
+  padding: .3rem .85rem;
+  border-radius: 16px;
+  border: 2px solid transparent;
+  font-family: inherit;
+  font-size: .82rem;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  transition: all .12s;
+  height: 2.1rem;
+  width: 110px;
+  align-self: flex-end;
+}
+.tog-n{background:var(--blue);color:#fff;border-color:var(--blue-d)}
+.tog-n.off{background:transparent;color:var(--blue);border-color:var(--blue)}
+.tog-t{background:var(--blue);color:#fff;border-color:var(--blue-d)}
+.tog-t.off{background:transparent;color:var(--blue);border-color:var(--blue)}
+.tog-dot{width:8px;height:8px;border-radius:50%;background:currentColor}
+.btn {
+  padding: .32rem .75rem;
+  border-radius: 6px;
+  border: none;
+  font-family: inherit;
+  font-size: .82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .12s;
+  height: 2.1rem;
+  width: 110px;
+  align-self: flex-end;
+}
+.btn:hover{filter:brightness(1.07);transform:translateY(-1px)}
+.btn:active{transform:translateY(0)}
+.btn-coral{background:var(--coral);color:#fff}
+.btn-gold{background:var(--gold);color:var(--text)}
+.btn-ghost{background:var(--cream2);color:var(--dim);border:1px solid #D4A840}
+
+/* ── MAIN ───────────────────────────── */
+main{max-width:1360px;margin:0 auto 0 0;padding:1.2rem 1.2rem 3rem 1.2rem}
+.layout{display:grid;grid-template-columns:520px 1.2fr 320px;gap:1.4rem;align-items:start}
+@media(max-width:1200px){
+  .layout{grid-template-columns:1fr 1fr;gap:1.2rem}
+}
+@media(max-width:800px){
+  .layout{grid-template-columns:1fr}
+}
+
+/* ── WHEEL ──────────────────────────── */
+.wheel-wrap{display:flex;flex-direction:column;align-items:flex-start;gap:.7rem}
+#wheel-svg{width:100%;max-width:520px;height:auto;filter:drop-shadow(0 3px 14px rgba(40,80,160,.18))}
+.legend{display:flex;gap:.8rem;flex-wrap:wrap;font-size:.78rem;color:var(--dim)}
+.legend-item{display:flex;align-items:center;gap:.28rem}
+.lc{width:9px;height:9px;border-radius:50%;display:inline-block}
+
+/* ── CARD ───────────────────────────── */
+.card{background:#ffffff;border:1px solid #E8D0A0;border-radius:14px;padding:1.3rem;box-shadow:0 4px 15px rgba(0,0,0,0.05)}
+.card-title{font-size:1.02rem;font-weight:700;color:var(--text);margin-bottom:1rem;padding-bottom:.55rem;border-bottom:1.5px solid #E8D0A0;display:flex;align-items:center;gap:0.4rem}
+
+/* ── PLANET TABLE ───────────────────── */
+.ptable{width:100%;border-collapse:collapse;font-size:.9rem;color:var(--text)}
+.ptable thead th{background:var(--cream2);color:var(--text);padding:.65rem .8rem;text-align:left;font-weight:600;border-bottom:2px solid #E8D0A0;text-transform:uppercase;font-size:0.75rem;letter-spacing:0.05em}
+.ptable thead th:first-child{border-top-left-radius:6px;border-bottom-left-radius:6px}
+.ptable thead th:last-child{border-top-right-radius:6px;border-bottom-right-radius:6px}
+.ptable tbody td{padding:.65rem .8rem;border-bottom:1px solid #E8D0A066;vertical-align:middle}
+.ptable tbody tr:hover td{background:rgba(212,175,55,0.04)}
+.ptable .transit-row td { background: #FFF9E6; color: var(--text); }
+.pname{font-weight:700}
+.retro{font-size:.68em;color:var(--coral);margin-left:2px}
+.group-head td{padding:.4rem .8rem;font-size:.78rem;font-weight:700;border-bottom:none}
+</style>
+</head>
+<body>
+
+<!-- HEADER + NAME ROW WRAPPER -->
+<div style="position: relative;">
+  <!-- HEADER -->
+  <header style="padding-right: 120px;">
+    <span class="header-tag">ผูกดวงโหราศาสตร์ไทย ปฏิทินลาหิรี (นิรายนะ)</span>
+  </header>
+  <div class="name-bar bar-row" style="padding-right: 120px;">
+    <div class="field field-name">
+      <label>ชื่อ</label>
+      <input type="text" id="bName" placeholder="ชื่อ (ไม่บังคับ)">
+    </div>
+  </div>
+  <!-- LARGE FLOATING LOGO -->
+  <div class="header-logo-container">
+    <img src="logo.png" alt="MuHub Logo">
+  </div>
+</div>
+
+<div class="birth-bar bar-row">
+  <button class="tog tog-n" id="togN" onclick="toggleLayer('n')"><span class="tog-dot"></span>ดวงกำเนิด</button>
+  <div class="field field-date">
+    <label>วันเกิด (พ.ศ.)</label>
+    <div style="display: flex; gap: 4px;">
+      <select id="bDay" style="width: 60px;"></select>
+      <select id="bMonth" style="width: 115px;"></select>
+      <input type="number" id="bYear" value="2533" min="2443" max="2743" style="width: 80px;">
+    </div>
+  </div>
+  <div class="field field-time">
+    <label>เวลาเกิด</label>
+    <div style="display: flex; gap: 4px; align-items: center;">
+      <input type="number" id="bHour" value="08" min="0" max="23" style="width: 55px;" placeholder="ชม.">
+      <span style="font-weight: bold; color: var(--dim);">:</span>
+      <input type="number" id="bMin" value="00" min="0" max="59" style="width: 55px;" placeholder="นาที">
+    </div>
+  </div>
+  <div class="field field-country">
+    <label>ประเทศ</label>
+    <select id="bCountry" onchange="onCountryChange('b')">
+      <option value="TH" selected>ประเทศไทย</option>
+      <option value="IN">อินเดีย</option>
+      <option value="SG">สิงคโปร์</option>
+      <option value="CN">จีน</option>
+      <option value="MM">พม่า</option>
+      <option value="custom">กำหนดเอง</option>
+    </select>
+  </div>
+  <div class="field field-city">
+    <label>เมือง/จังหวัด</label>
+    <select id="bCity" onchange="onCityChange('b')">
+      <!-- Populated dynamically -->
+    </select>
+  </div>
+  <div class="field field-coord" id="bLatField" style="display: none;">
+    <label>ละติจูด</label>
+    <input type="number" id="bLat" value="13.7563" step="0.0001" style="width: 90px;">
+  </div>
+  <div class="field field-coord" id="bLonField" style="display: none;">
+    <label>ลองจิจูด</label>
+    <input type="number" id="bLon" value="100.5018" step="0.0001" style="width: 90px;">
+  </div>
+  <button class="btn btn-ghost" id="btnUnknownTime" onclick="toggleUnknownTime()">ไม่ทราบเวลา</button>
+  <div id="lagnaBadge" style="display: none; height: 2.1rem; padding: 0 .85rem; border-radius: 6px; font-family: inherit; font-size: .82rem; font-weight: 700; background: var(--blue); color: #ffffff; border: 1px solid var(--blue-d); align-self: flex-end; align-items: center; justify-content: center; white-space: nowrap;">ลัคนาราศี...</div>
+</div>
+
+<!-- CONTROLS + TRANSIT INPUT -->
+<div class="transit-bar bar-row">
+  <button class="tog tog-t" id="togT" onclick="toggleLayer('t')"><span class="tog-dot"></span>ดวงจร</button>
+  <div class="field field-date">
+    <label>วันดวงจร (พ.ศ.)</label>
+    <div style="display: flex; gap: 4px;">
+      <select id="tDay" style="width: 60px;"></select>
+      <select id="tMonth" style="width: 115px;"></select>
+      <input type="number" id="tYear" min="2443" max="2743" style="width: 80px;">
+    </div>
+  </div>
+  <div class="field field-time">
+    <label>เวลา</label>
+    <div style="display: flex; gap: 4px; align-items: center;">
+      <input type="number" id="tHour" min="0" max="23" style="width: 55px;" placeholder="ชม.">
+      <span style="font-weight: bold; color: var(--dim);">:</span>
+      <input type="number" id="tMin" min="0" max="59" style="width: 55px;" placeholder="นาที">
+    </div>
+  </div>
+  <div class="field field-country">
+    <label>ประเทศ</label>
+    <select id="tCountry" onchange="onCountryChange('t')">
+      <option value="TH" selected>ประเทศไทย</option>
+      <option value="IN">อินเดีย</option>
+      <option value="SG">สิงคโปร์</option>
+      <option value="CN">จีน</option>
+      <option value="MM">พม่า</option>
+      <option value="custom">กำหนดเอง</option>
+    </select>
+  </div>
+  <div class="field field-city">
+    <label>เมือง/จังหวัด</label>
+    <select id="tCity" onchange="onCityChange('t')">
+      <!-- Populated dynamically -->
+    </select>
+  </div>
+  <div class="field field-coord" id="tLatField" style="display: none;">
+    <label>ละติจูด</label>
+    <input type="number" id="tLat" value="13.7563" step="0.0001" style="width: 80px;">
+  </div>
+  <div class="field field-coord" id="tLonField" style="display: none;">
+    <label>ลองจิจูด</label>
+    <input type="number" id="tLon" value="100.5018" step="0.0001" style="width: 80px;">
+  </div>
+  <button class="btn btn-ghost" onclick="setTransitNow()">ตอนนี้</button>
+  <button class="btn btn-coral" onclick="runCalc()">✦ ผูกดวง</button>
+</div>
+
+<!-- MAIN CONTENT -->
+<main>
+  <div class="layout">
+    <!-- WHEEL -->
+    <div class="wheel-wrap">
+      <svg id="wheel-svg" viewBox="0 0 520 520" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div class="legend">
+        <div class="legend-item"><div class="lc" style="background:var(--blue-l)"></div> ดวงกำเนิด (วงใน) — เลขไทย</div>
+        <div class="legend-item"><div class="lc" style="background:var(--white);border:1px solid #bbb"></div> ดวงจร (วงนอก) — เลขอารบิก</div>
+        <div class="legend-item"><span style="font-size:.85rem;color:var(--coral-d)">*</span> ถอยหลัง</div>
+      </div>
+    </div>
+ 
+    <!-- TABLE -->
+    <div style="display: flex; flex-direction: column; gap: 1.4rem;">
+      <div class="card">
+        <div class="card-title">📊 ตารางสมผุสดาว</div>
+        <table class="ptable">
+          <thead>
+            <tr>
+              <th style="text-align:center; width: 12%;">สัญลักษณ์</th>
+              <th style="width: 28%;">ดาว/ปัจจัย</th>
+              <th style="width: 25%;">ราศี</th>
+              <th style="width: 35%;">ค่าองศา / ลิปดา</th>
+            </tr>
+          </thead>
+          <tbody id="tableTbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- THAKSA CHART -->
+    <div style="display: flex; flex-direction: column; gap: 1.4rem; width: 320px;">
+      <div class="card">
+        <div class="card-title" style="flex-direction: column; align-items: flex-start; gap: 0.25rem;">
+          <div style="display: flex; align-items: center; gap: 0.4rem;">☸️ ตารางทักษา</div>
+          <div id="thaksa-subtitle" style="font-size: 0.82rem; font-weight: 500; color: var(--dim); margin-top: 2px;">เกิดวัน...</div>
+        </div>
+        <div id="thaksa-container" style="display: flex; justify-content: center; align-items: center; padding: 0.5rem 0;">
+          <!-- Populated dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+'use strict';
+
+// ── CONSTANTS ──────────────────────────────────────────────────────────
+const SIGNS_TH = ['เมษ','พฤษภ','มิถุน','กรกฎ','สิงห์','กันย์',
+                  'ตุลย์','พิจิก','ธนู','มกร','กุมภ์','มีน'];
+const NAKSHATRA = [
+  'อัศวินี','ภรณี','กฤตติกา','โรหิณี','มฤคศิรา','อาร์ทรา',
+  'ปุนรวสุ','ปุษยะ','อาศเลษา','มฆา','ปูรวผลคุณี','อุตรผลคุณี',
+  'หัสตะ','จิตรา','สวาติ','วิศาขา','อนุราธา','เชยษฐา',
+  'มูลา','ปูรวาษาฑา','อุตราษาฑา','ศรวณะ','ธนิษฐา','ศตภิษา',
+  'ปูรวภัทรปทา','อุตรภัทรปทา','เรวดี'
+];
+
+// Planet definitions — index order matters for numbering
+const PLANETS = [
+  {id:'lagna',   th:'ลัคนา',      numTH:'ล', numAR:'ล'},
+  {id:'sun',     th:'อาทิตย์',    numTH:'๑', numAR:'1'},
+  {id:'moon',    th:'จันทร์',     numTH:'๒', numAR:'2'},
+  {id:'mars',    th:'อังคาร',     numTH:'๓', numAR:'3'},
+  {id:'mercury', th:'พุธ',        numTH:'๔', numAR:'4'},
+  {id:'jupiter', th:'พฤหัสบดี',   numTH:'๕', numAR:'5'},
+  {id:'venus',   th:'ศุกร์',      numTH:'๖', numAR:'6'},
+  {id:'saturn',  th:'เสาร์',      numTH:'๗', numAR:'7'},
+  {id:'rahu',    th:'ราหู',       numTH:'๘', numAR:'8'},
+  {id:'thai_ketu', th:'เกตุ (ไทย)', numTH:'๙', numAR:'9'},
+  {id:'uranus',   th:'มฤตยู',      numTH:'๐', numAR:'0'},
+  {id:'neptune',  th:'เนปจูน',     numTH:'น', numAR:'น'},
+  {id:'pluto',    th:'พลูโต',      numTH:'พ', numAR:'พ'},
+];
+
+// ── MATH ───────────────────────────────────────────────────────────────
+const mod360 = x => ((x%360)+360)%360;
+const toRad = d => d*Math.PI/180;
+const toDeg = r => r*180/Math.PI;
+function signPos(lon){
+  let si = Math.floor(lon / 30) % 12;
+  let rem = lon - si * 30;
+  let deg = Math.floor(rem);
+  let min = Math.round((rem - deg) * 60);
+  if (min >= 60) {
+    min -= 60;
+    deg += 1;
+  }
+  if (deg >= 30) {
+    deg -= 30;
+    si = (si + 1) % 12;
+  }
+  return { si, deg, min };
+}
+function nak(lon){return NAKSHATRA[Math.floor(lon/(360/27))%27];}
+
+// ── JULIAN DAY ─────────────────────────────────────────────────────────
+function toJD(y,m,d,h,mn){
+  if(m<=2){y--;m+=12;}
+  const A=Math.floor(y/100),B=2-A+Math.floor(A/4);
+  return Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+d+B-1524.5+(h+mn/60)/24;
+}
+
+// ── AYANAMSA / SIDEREAL TIME ───────────────────────────────────────────
+function lahiri(jd){return 23.853722+(jd-2451545)/36525*1.39723;}
+function gmst(jd){const T=(jd-2451545)/36525;return mod360(280.46061837+360.98564736629*(jd-2451545)+0.000387933*T*T-T*T*T/38710000);}
+function obliq(jd){return 23.439291111-0.013004167*(jd-2451545)/36525;}
+function ascendant(jd,lat,lon){
+  const ramc=mod360(gmst(jd)+lon),e=toRad(obliq(jd)),r=toRad(ramc),l=toRad(lat);
+  // atan2 formula yields the Descendant; add 180° to get the Ascendant (Eastern horizon)
+  return mod360(toDeg(Math.atan2(-Math.cos(r),Math.sin(r)*Math.cos(e)+Math.tan(l)*Math.sin(e)))+180);
+}
+function meanRahu(jd){const T=(jd-2451545)/36525;return mod360(125.04452-1934.136261*T+0.0020708*T*T+T*T*T/450000);}
+
+// ── RETROGRADE ──────────────────────────────────────────────────────────
+function isRetro(body,ms){
+  if(body==='Sun'||body==='Moon') return false;
+  try{
+    const eLon=(b,t)=>Astronomy.Ecliptic(Astronomy.GeoVector(b,new Date(t),true)).elon;
+    let d=eLon(body,ms+43200000)-eLon(body,ms-43200000);
+    if(d>180)d-=360;if(d<-180)d+=360;return d<0;
+  }catch(e){return false;}
+}
+
+// ── APPROX FALLBACK ────────────────────────────────────────────────────
+function approxPos(jd,ay){
+  const T=(jd-2451545)/36525,d=jd-2451545;
+  const L0=mod360(280.46646+36000.76983*T),M=mod360(357.52911+35999.05029*T),Mr=toRad(M);
+  const C=(1.914602-0.004817*T)*Math.sin(Mr)+(0.019993-0.000101*T)*Math.sin(2*Mr)+0.000289*Math.sin(3*Mr);
+  const sun=mod360(L0+C);
+  const Lm=mod360(218.3165+481267.8813*T),Mm=mod360(134.9634+477198.8676*T),D=mod360(297.8502+445267.1115*T);
+  const moon=mod360(Lm+6.289*Math.sin(toRad(Mm))-1.274*Math.sin(toRad(2*D-Mm))+0.658*Math.sin(toRad(2*D))-0.186*Math.sin(Mr));
+  const ap=l=>mod360(l-ay);
+  return{sun:ap(sun),moon:ap(moon),mercury:ap(mod360(252.2503+4.09233445*d)),
+    venus:ap(mod360(181.9799+1.60213034*d)),mars:ap(mod360(355.4330+0.52402068*d)),
+    jupiter:ap(mod360(34.3515+0.08308533*d)),saturn:ap(mod360(50.0774+0.03346062*d))};
+}
+
+// ── COMPUTE CHART ──────────────────────────────────────────────────────
+function compute(y,mo,d,h,mn,tz,lat,lon){
+  // Use Date.UTC() to avoid double-timezone offset when browser is in UTC+7
+  const utcMs=Date.UTC(y,mo-1,d,h,mn,0)-tz*3600000;
+  const ut=new Date(utcMs);
+  const jd=toJD(ut.getUTCFullYear(),ut.getUTCMonth()+1,ut.getUTCDate(),ut.getUTCHours(),ut.getUTCMinutes());
+  const ay=lahiri(jd);
+  const pos={},retro={};
+  try{
+    if(typeof Astronomy==='undefined') throw 0;
+    pos.sun=mod360(Astronomy.SunPosition(ut).elon-ay);
+    for(const[B,k] of[
+      ['Moon','moon'],['Mercury','mercury'],['Venus','venus'],['Mars','mars'],
+      ['Jupiter','jupiter'],['Saturn','saturn'],['Uranus','uranus'],
+      ['Neptune','neptune'],['Pluto','pluto']
+    ]){
+      pos[k]=mod360(Astronomy.Ecliptic(Astronomy.GeoVector(B,ut,true)).elon-ay);
+      retro[k]=isRetro(B,utcMs);
+    }
+  }catch(e){Object.assign(pos,approxPos(jd,ay));}
+  pos.rahu=mod360(meanRahu(jd)-ay);
+  pos.ketu=mod360(pos.rahu+180);
+  pos.lagna=mod360(ascendant(jd,lat,lon)-ay);
+
+  // Calculate Thai Ketu (constant rate retrograde motion)
+  const n = jd - 0.050730381 - 588465.0;
+  pos.thai_ketu = mod360(360.0 - (n * 0.530191458 % 360.0) - 54.1);
+
+  // Set retro flags for node-based planets
+  retro.rahu = true;
+  retro.ketu = true;
+  retro.thai_ketu = true;
+  return{pos,retro,ay,jd};
+}
+
+// ── APP STATE ───────────────────────────────────────────────────────────
+let nData=null,tData=null,showN=true,showT=true,age=1;
+let birthYear=1990, birthMonth=4, birthDay=13, birthHour=8, birthMin=0;
+
+// ── TOGGLES ────────────────────────────────────────────────────────────
+function toggleLayer(l){
+  if(l==='n'){showN=!showN;document.getElementById('togN').classList.toggle('off',!showN);}
+  else{showT=!showT;document.getElementById('togT').classList.toggle('off',!showT);}
+  renderThaksa(birthYear, birthMonth, birthDay, birthHour, birthMin);drawWheel();renderTable();
+}
+
+// ── LOCATION DATABASE ──────────────────────────────────────────────────
+const LOCATION_DATABASE = {
+  "TH": {
+    "name": "ประเทศไทย",
+    "cities": [
+      { id: "bangkok", name: "กรุงเทพมหานคร", lat: 13.7563, lon: 100.5018, tz: 7.0 },
+      { id: "chiangmai", name: "เชียงใหม่", lat: 18.7883, lon: 98.9853, tz: 7.0 },
+      { id: "chiangrai", name: "เชียงราย", lat: 19.9105, lon: 99.8406, tz: 7.0 },
+      { id: "phitsanulok", name: "พิษณุโลก", lat: 16.8211, lon: 100.2659, tz: 7.0 },
+      { id: "korat", name: "นครราชสีมา", lat: 14.9799, lon: 102.0978, tz: 7.0 },
+      { id: "khonkaen", name: "ขอนแก่น", lat: 16.4419, lon: 102.8360, tz: 7.0 },
+      { id: "udon", name: "อุดรธานี", lat: 17.4138, lon: 102.7872, tz: 7.0 },
+      { id: "ubon", name: "อุบลราชธานี", lat: 15.2448, lon: 104.8473, tz: 7.0 },
+      { id: "surat", name: "สุราษฎร์ธานี", lat: 9.1382, lon: 99.3280, tz: 7.0 },
+      { id: "hatyai", name: "หาดใหญ่/สงขลา", lat: 7.0056, lon: 100.4769, tz: 7.0 },
+      { id: "phuket", name: "ภูเก็ต", lat: 7.8804, lon: 98.3923, tz: 7.0 },
+      { id: "chonburi", name: "ชลบุรี", lat: 13.3611, lon: 100.9847, tz: 7.0 },
+      { id: "nakhonsi", name: "นครศรีธรรมราช", lat: 8.4333, lon: 99.9667, tz: 7.0 }
+    ]
+  },
+  "IN": {
+    "name": "อินเดีย",
+    "cities": [
+      { id: "delhi", name: "นิวเดลี", lat: 28.6139, lon: 77.2090, tz: 5.5 },
+      { id: "mumbai", name: "มุมไบ", lat: 19.0760, lon: 72.8777, tz: 5.5 },
+      { id: "kolkata", name: "กัลกัตตา", lat: 22.5726, lon: 88.3639, tz: 5.5 }
+    ]
+  },
+  "SG": {
+    "name": "สิงคโปร์",
+    "cities": [
+      { id: "singapore", name: "สิงคโปร์", lat: 1.3521, lon: 103.8198, tz: 8.0 }
+    ]
+  },
+  "CN": {
+    "name": "จีน",
+    "cities": [
+      { id: "beijing", name: "ปักกิ่ง", lat: 39.9042, lon: 116.4074, tz: 8.0 },
+      { id: "shanghai", name: "เซี่ยงไฮ้", lat: 31.2304, lon: 121.4737, tz: 8.0 }
+    ]
+  },
+  "MM": {
+    "name": "พม่า",
+    "cities": [
+      { id: "yangon", name: "ย่างกุ้ง", lat: 16.8409, lon: 96.1735, tz: 6.5 }
+    ]
+  }
+};
+
+const MONTHS_TH = [
+  'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน',
+  'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
+];
+
+function populateDateDropdowns(prefix, defaultDate = null) {
+  const daySel = document.getElementById(prefix + 'Day');
+  const monthSel = document.getElementById(prefix + 'Month');
+  
+  // Day select
+  daySel.innerHTML = '';
+  for (let i = 1; i <= 31; i++) {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.text = i;
+    daySel.appendChild(opt);
+  }
+  
+  // Month select
+  monthSel.innerHTML = '';
+  MONTHS_TH.forEach((m, idx) => {
+    const opt = document.createElement('option');
+    opt.value = idx + 1;
+    opt.text = m;
+    monthSel.appendChild(opt);
+  });
+  
+  const d = defaultDate ? new Date(defaultDate) : new Date();
+  daySel.value = d.getDate();
+  monthSel.value = d.getMonth() + 1;
+  document.getElementById(prefix + 'Year').value = d.getFullYear() + 543;
+  
+  // Set default hours and minutes
+  document.getElementById(prefix + 'Hour').value = String(d.getHours()).padStart(2, '0');
+  document.getElementById(prefix + 'Min').value = String(d.getMinutes()).padStart(2, '0');
+}
+
+function populateCities(prefix, selectCityId = null) {
+  const countryVal = document.getElementById(prefix + 'Country').value;
+  const citySelect = document.getElementById(prefix + 'City');
+  citySelect.innerHTML = '';
+  
+  const latField = document.getElementById(prefix + 'LatField');
+  const lonField = document.getElementById(prefix + 'LonField');
+  
+  if (countryVal === 'custom') {
+    latField.style.display = 'flex';
+    lonField.style.display = 'flex';
+    const opt = document.createElement('option');
+    opt.value = 'custom';
+    opt.text = 'กำหนดพิกัดเอง';
+    citySelect.appendChild(opt);
+    citySelect.disabled = true;
+  } else {
+    latField.style.display = 'none';
+    lonField.style.display = 'none';
+    citySelect.disabled = false;
+    
+    const countryData = LOCATION_DATABASE[countryVal];
+    if (countryData) {
+      countryData.cities.forEach(city => {
+        const opt = document.createElement('option');
+        opt.value = city.id;
+        opt.text = city.name;
+        citySelect.appendChild(opt);
+      });
+    }
+    
+    if (selectCityId) {
+      citySelect.value = selectCityId;
+    } else if (citySelect.options.length > 0) {
+      citySelect.selectedIndex = 0;
+    }
+    
+    onCityChange(prefix);
+  }
+}
+
+function onCountryChange(prefix) {
+  populateCities(prefix);
+}
+
+function onCityChange(prefix) {
+  const countryVal = document.getElementById(prefix + 'Country').value;
+  if (countryVal === 'custom') return;
+  
+  const cityId = document.getElementById(prefix + 'City').value;
+  const countryData = LOCATION_DATABASE[countryVal];
+  if (!countryData) return;
+  
+  const city = countryData.cities.find(c => c.id === cityId);
+  if (city) {
+    document.getElementById(prefix + 'Lat').value = city.lat;
+    document.getElementById(prefix + 'Lon').value = city.lon;
+  }
+}
+
+// ── TRANSIT NOW ────────────────────────────────────────────────────────
+function setTransitNow(){
+  const n = new Date();
+  document.getElementById('tDay').value = n.getDate();
+  document.getElementById('tMonth').value = n.getMonth() + 1;
+  document.getElementById('tYear').value = n.getFullYear() + 543;
+  document.getElementById('tHour').value = String(n.getHours()).padStart(2, '0');
+  document.getElementById('tMin').value = String(n.getMinutes()).padStart(2, '0');
+}
+
+let isUnknownTime = false;
+function toggleUnknownTime(){
+  const bHour = document.getElementById('bHour');
+  const bMin = document.getElementById('bMin');
+  const btn = document.getElementById('btnUnknownTime');
+  isUnknownTime = !isUnknownTime;
+  if(isUnknownTime){
+    bHour.dataset.prevVal = bHour.value;
+    bMin.dataset.prevVal = bMin.value;
+    bHour.value = "06";
+    bMin.value = "00";
+    bHour.disabled = true;
+    bMin.disabled = true;
+    btn.innerHTML = '✓ ไม่ทราบเวลา';
+    btn.className = 'btn btn-gold';
+  } else {
+    bHour.value = bHour.dataset.prevVal || "08";
+    bMin.value = bMin.dataset.prevVal || "00";
+    bHour.disabled = false;
+    bMin.disabled = false;
+    btn.innerHTML = 'ไม่ทราบเวลา';
+    btn.className = 'btn btn-ghost';
+  }
+}
+
+// ── ASYNC COMPUTE CHART ────────────────────────────────────────────────
+async function computeChart(y, mo, d, h, mn, tz, lat, lon) {
+  const dateStr = `${y}-${String(mo).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+  const timeStr = `${String(h).padStart(2, '0')}:${String(mn).padStart(2, '0')}`;
+
+  if (y >= 1900 && y <= 2200) {
+    try {
+      const url = `/api/calculate?date=${dateStr}&time=${timeStr}&lat=${lat}&lon=${lon}&tz=${tz}`;
+      const response = await fetch(url);
+      if (response.ok) {
+        const data = await response.json();
+        return {
+          pos: data.pos,
+          retro: data.retro,
+          ay: data.ayanamsa,
+          jd: data.julian_day,
+          source: 'db'
+        };
+      }
+    } catch (e) {
+      console.warn("API error, falling back to client-side calculation:", e);
+    }
+  }
+
+  const res = compute(y, mo, d, h, mn, tz, lat, lon);
+  res.source = 'browser';
+  return res;
+}
+
+// ── RUN CALC ────────────────────────────────────────────────────────────
+async function runCalc(){
+  const bDay = parseInt(document.getElementById('bDay').value);
+  const bMonth = parseInt(document.getElementById('bMonth').value);
+  const bYearBE = parseInt(document.getElementById('bYear').value);
+  const bHour = parseInt(document.getElementById('bHour').value);
+  const bMin = parseInt(document.getElementById('bMin').value);
+  
+  if (isNaN(bDay) || isNaN(bMonth) || isNaN(bYearBE) || isNaN(bHour) || isNaN(bMin)) {
+    alert('กรุณากรอกวันเกิดและเวลาเกิดให้ถูกต้อง');
+    return;
+  }
+  
+  const by = bYearBE - 543;
+  const bmo = bMonth;
+  const bd = bDay;
+  const bh = bHour;
+  const bmn = bMin;
+
+  birthYear = by;
+  birthMonth = bmo;
+  birthDay = bd;
+  birthHour = bh;
+  birthMin = bmn;
+
+  const bCountry = document.getElementById('bCountry').value;
+  let bLat = parseFloat(document.getElementById('bLat').value);
+  let bLon = parseFloat(document.getElementById('bLon').value);
+  let bTZ = 7.0;
+  
+  if (bCountry !== 'custom') {
+    const cityId = document.getElementById('bCity').value;
+    const city = LOCATION_DATABASE[bCountry].cities.find(c => c.id === cityId);
+    if (city) {
+      bLat = city.lat;
+      bLon = city.lon;
+      bTZ = city.tz;
+    }
+  } else {
+    bTZ = Math.round(bLon / 15.0);
+  }
+
+  nData = await computeChart(by, bmo, bd, bh, bmn, bTZ, bLat, bLon);
+  nData.name = document.getElementById('bName').value || 'ดวงชาตา';
+  nData.dateStr = `${bDay} ${MONTHS_TH[bMonth-1]} พ.ศ. ${bYearBE}`;
+  nData.timeStr = `${String(bHour).padStart(2,'0')}:${String(bMin).padStart(2,'0')} น.`;
+
+  const tYearBE = parseInt(document.getElementById('tYear').value);
+  const tMonth = parseInt(document.getElementById('tMonth').value);
+  const tDay = parseInt(document.getElementById('tDay').value);
+  const tHour = parseInt(document.getElementById('tHour').value);
+  const tMin = parseInt(document.getElementById('tMin').value);
+  
+  if (!isNaN(tYearBE) && !isNaN(tMonth) && !isNaN(tDay) && !isNaN(tHour) && !isNaN(tMin)) {
+    const ty = tYearBE - 543;
+    const tmo = tMonth;
+    const td = tDay;
+    const th = tHour;
+    const tmn = tMin;
+    
+    const tCountry = document.getElementById('tCountry').value;
+    let tLat = parseFloat(document.getElementById('tLat').value);
+    let tLon = parseFloat(document.getElementById('tLon').value);
+    let tTZ = 7.0;
+    
+    if (tCountry !== 'custom') {
+      const cityId = document.getElementById('tCity').value;
+      const city = LOCATION_DATABASE[tCountry].cities.find(c => c.id === cityId);
+      if (city) {
+        tLat = city.lat;
+        tLon = city.lon;
+        tTZ = city.tz;
+      }
+    } else {
+      tTZ = Math.round(tLon / 15.0);
+    }
+    
+    tData = await computeChart(ty, tmo, td, th, tmn, tTZ, tLat, tLon);
+    tData.dateStr = `${tDay} ${MONTHS_TH[tMonth-1]} พ.ศ. ${tYearBE}`;
+    tData.timeStr = `${String(tHour).padStart(2,'0')}:${String(tMin).padStart(2,'0')} น.`;
+  } else {
+    tData = null;
+  }
+  
+  renderThaksa(by, bmo, bd, bh, bmn);drawWheel();renderTable();
+  
+  if (nData) {
+    const lagnaSp = signPos(nData.pos.lagna);
+    const badge = document.getElementById('lagnaBadge');
+    badge.innerHTML = `ลัคนาราศี${SIGNS_TH[lagnaSp.si]}`;
+    badge.style.display = 'inline-flex';
+  }
+}
+
+// ── THAKSA CHART ───────────────────────────────────────────────────────
+function renderThaksa(by, bmo, bd, bh, bmn) {
+  const container = document.getElementById('thaksa-container');
+  if (!container) return;
+
+  // 1. Determine Astrological Weekday of Birth
+  const calendarDate = new Date(by, bmo - 1, bd);
+  const calWeekday = calendarDate.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+
+  let astroDay = calWeekday;
+  if (bh < 6) {
+    astroDay = (calWeekday + 6) % 7;
+  }
+
+  let thaksaDay = astroDay;
+  if (astroDay === 3) {
+    if (bh < 6 || bh >= 18) {
+      thaksaDay = 7; // Wednesday Night (Rahu)
+    }
+  }
+
+  // Birth starting planet index in THAKSA_PLANETS
+  const THAKSA_PLANETS = ['๑', '๒', '๓', '๔', '๗', '๕', '๘', '๖'];
+  const weekdayToStartIndex = [0, 1, 2, 3, 5, 7, 4, 6];
+  const birthStartIndex = weekdayToStartIndex[thaksaDay];
+
+  // 2. Determine if Transit is active
+  const isTransitActive = showT && tData;
+  age = 1;
+  let isTokaLang = false;
+  let transitStartIndex = birthStartIndex;
+  let transitPlanet = '';
+
+  if (isTransitActive) {
+    let ty = by, tmo = bmo, td = bd, th = bh, tmn = bmn;
+    const tYearBE = parseInt(document.getElementById('tYear').value);
+    ty = tYearBE - 543;
+    tmo = parseInt(document.getElementById('tMonth').value);
+    td = parseInt(document.getElementById('tDay').value);
+    
+    const tHourVal = parseInt(document.getElementById('tHour').value);
+    const tMinVal = parseInt(document.getElementById('tMin').value);
+    if (!isNaN(tHourVal)) th = tHourVal;
+    if (!isNaN(tMinVal)) tmn = tMinVal;
+
+    age = ty - by;
+    const birthInTransitYear = new Date(ty, bmo - 1, bd, bh, bmn);
+    const transitDateTime = new Date(ty, tmo - 1, td, th, tmn);
+    
+    if (transitDateTime > birthInTransitYear) {
+      age += 1;
+    }
+    age = Math.max(1, age);
+
+    // Update card subtitle to display Birth Date and Age Yang
+    const WEEKDAYS_TH = ['วันอาทิตย์', 'วันจันทร์', 'วันอังคาร', 'วันพุธกลางวัน', 'วันพฤหัสบดี', 'วันศุกร์', 'วันเสาร์', 'วันพุธกลางคืน'];
+    const birthDayName = WEEKDAYS_TH[thaksaDay];
+    const subtitleEl = document.getElementById('thaksa-subtitle');
+    if (subtitleEl) {
+      subtitleEl.innerHTML = `เกิด${birthDayName} อายุย่าง ${age} ปี`;
+    }
+
+    // Determine Transit starting planet index (บริวารจร) by counting modulo 8 clockwise (excluding center)
+    transitStartIndex = (birthStartIndex + (age - 1)) % 8;
+    isTokaLang = false;
+  } else {
+    // Update card subtitle to default
+    const WEEKDAYS_TH = ['วันอาทิตย์', 'วันจันทร์', 'วันอังคาร', 'วันพุธกลางวัน', 'วันพฤหัสบดี', 'วันศุกร์', 'วันเสาร์', 'วันพุธกลางคืน'];
+    const birthDayName = WEEKDAYS_TH[thaksaDay];
+    const subtitleEl = document.getElementById('thaksa-subtitle');
+    if (subtitleEl) {
+      subtitleEl.innerHTML = `เกิด${birthDayName}`;
+    }
+  }
+
+  // 3. Map cell positions in 3x3 grid
+  const cellPositions = [
+    { r: 0, c: 0 }, // ๑
+    { r: 0, c: 1 }, // ๒
+    { r: 0, c: 2 }, // ๓
+    { r: 1, c: 2 }, // ๔
+    { r: 2, c: 2 }, // ๗
+    { r: 2, c: 1 }, // ๕
+    { r: 2, c: 0 }, // ๘
+    { r: 1, c: 0 }  // ๖
+  ];
+
+  const THAKSA_HOUSES = ['บริวาร', 'อายุ', 'เดช', 'ศรี', 'มูละ', 'อุตสาหะ', 'มนตรี', 'กาลกิณี'];
+
+  let gridHTML = '<div style="display: grid; grid-template-columns: repeat(3, 85px); grid-template-rows: repeat(3, 85px); gap: 0; position: relative;">';
+
+  const cells = Array.from({ length: 3 }, () => Array(3).fill(null));
+
+  // Populate the 8 planet cells
+  for (let i = 0; i < 8; i++) {
+    const pos = cellPositions[i];
+    const planetNum = THAKSA_PLANETS[i];
+    
+    // Natal house
+    const natalLabelIndex = (i - birthStartIndex + 8) % 8;
+    const natalLabel = THAKSA_HOUSES[natalLabelIndex];
+    
+    // Transit house
+    let transitLabel = '';
+    let transitLabelIndex = -1;
+    if (isTransitActive && !isTokaLang) {
+      transitLabelIndex = (i - transitStartIndex + 8) % 8;
+      transitLabel = THAKSA_HOUSES[transitLabelIndex];
+    }
+    
+    cells[pos.r][pos.c] = {
+      planetNum,
+      natalLabel,
+      natalIndex: natalLabelIndex,
+      transitLabel,
+      transitIndex: transitLabelIndex,
+      planetIndex: i
+    };
+  }
+
+  for (let r = 0; r < 3; r++) {
+    for (let c = 0; c < 3; c++) {
+      const cell = cells[r][c];
+      
+      let borderStyle = '';
+      if (r < 2) borderStyle += 'border-bottom: 2px solid #D4AF37; ';
+      if (c < 2) borderStyle += 'border-right: 2px solid #D4AF37; ';
+
+      if (cell) {
+        // Circle around the planet number
+        const isBirthPlanet = (cell.planetIndex === birthStartIndex);
+        const isTransitPlanet = (isTransitActive && cell.planetIndex === transitStartIndex);
+
+        let numWrapperStart = '';
+        let numWrapperEnd = '';
+        if (isBirthPlanet) {
+          numWrapperStart = '<div style="display: inline-flex; justify-content: center; align-items: center; width: 42px; height: 42px; border-radius: 50%; border: 2.5px solid #D4AF37; background: rgba(212, 175, 55, 0.08); position: relative;">';
+          numWrapperEnd = '</div>';
+        } else {
+          numWrapperStart = '<div style="display: inline-flex; justify-content: center; align-items: center; width: 42px; height: 42px; position: relative;">';
+          numWrapperEnd = '</div>';
+        }
+
+        let plusTag = '';
+        if (isTransitPlanet) {
+          plusTag = '<span style="position: absolute; top: -1px; right: -1px; font-size: 0.95rem; font-weight: 800; color: #4a148c; line-height: 1;">+</span>';
+        }
+
+        gridHTML += `<div style="display: flex; justify-content: center; align-items: center; height: 85px; width: 85px; ${borderStyle} box-sizing: border-box;">`;
+        gridHTML += `${numWrapperStart}<span style="font-size: 1.6rem; font-weight: 700; color: #222222; font-family: 'Sarabun', sans-serif; line-height: 1;">${cell.planetNum}</span>${plusTag}${numWrapperEnd}`;
+        gridHTML += '</div>';
+      } else {
+        // Center cell (Row 1, Col 1)
+        gridHTML += `<div style="display: flex; justify-content: center; align-items: center; height: 85px; width: 85px; ${borderStyle} box-sizing: border-box;">`;
+        if (isTransitActive && isTokaLang) {
+          gridHTML += `<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; border: 1.5px dashed #FF6666; background: rgba(255, 102, 102, 0.08); border-radius: 8px; padding: 4px; text-align: center; width: 70px; height: 70px; box-sizing: border-box;">`;
+          gridHTML += `<span style="font-size: 0.58rem; font-weight: 700; color: #FF8888; text-transform: uppercase;">ปีจร</span>`;
+          gridHTML += `<span style="font-size: 0.72rem; font-weight: 700; color: #FF4444; margin-top: 1px;">ตกตากลาง</span>`;
+          gridHTML += `</div>`;
+        }
+        gridHTML += '</div>';
+      }
+    }
+  }
+
+  gridHTML += '</div>';
+  container.innerHTML = gridHTML;
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+//  SVG WHEEL
+// ═══════════════════════════════════════════════════════════════════════
+const CX=260,CY=260;
+// Radii
+const RO=252,  // zodiac outer
+      RZ=194,  // zodiac inner / transit outer band
+      RT=174,  // transit planet mid
+      RD=157,  // divider
+      RN=140,  // natal planet mid
+      RC=118;  // center
+
+// Colors
+const C_BG='#ffffff';          // white
+const C_ZOD_W='#F0EDE6';       // zodiac white sector
+const C_ZOD_B='#4477AA';       // zodiac blue sector
+const C_ZOD_WT='#1A2840';      // text on white sector
+const C_ZOD_BT='#F0EDE6';      // text on blue sector
+const C_NAT='#2A6BAD';         // natal dot fill (blue)
+const C_NAT_T='#1A3A60';       // natal text (dark blue)
+const C_TRN='#F8F5EE';         // transit dot fill (white/cream)
+const C_TRN_T='#1A3050';       // transit text
+const C_DIV='#6688AA';         // divider ring
+
+function f(n){return Math.round(n*10)/10;}
+
+// Aries center (lon=15) at top (12 o'clock), counterclockwise
+// offset -15 so that midpoint of Aries sector is exactly at 12 o'clock
+function toXY(r,lon){
+  const a=toRad(90+lon-15);
+  return[CX+r*Math.cos(a), CY-r*Math.sin(a)];
+}
+
+// Donut arc sector from lon1 to lon2 (counterclockwise)
+function arcSector(r1,r2,lon1,lon2){
+  const[x1o,y1o]=toXY(r2,lon1),[x2o,y2o]=toXY(r2,lon2);
+  const[x1i,y1i]=toXY(r1,lon1),[x2i,y2i]=toXY(r1,lon2);
+  const la=(lon2-lon1>180)?1:0;
+  return`M${f(x1o)},${f(y1o)} A${r2},${r2} 0 ${la},0 ${f(x2o)},${f(y2o)} L${f(x2i)},${f(y2i)} A${r1},${r1} 0 ${la},1 ${f(x1i)},${f(y1i)} Z`;
+}
+
+function drawWheel(){
+  let s='';
+
+  // 1. Backgrounds
+  // Outer circle (transit background) - soft cream-gold
+  s+=`<circle cx="${CX}" cy="${CY}" r="255" fill="#FFF9E6"/>`;
+  // Inner circle (natal background) - white
+  s+=`<circle cx="${CX}" cy="${CY}" r="220" fill="#ffffff"/>`;
+
+  // 2. Outer boundary circle (gold)
+  s+=`<circle cx="${CX}" cy="${CY}" r="220" fill="none" stroke="#D4AF37" stroke-width="3.5"/>`;
+
+  // 3. House dividing lines (gold) - drawn continuously to avoid any gaps at intersections
+  // Vertical lines
+  s+=`<line x1="215" y1="44.7" x2="215" y2="475.3" stroke="#D4AF37" stroke-width="2"/>`;
+  s+=`<line x1="305" y1="44.7" x2="305" y2="475.3" stroke="#D4AF37" stroke-width="2"/>`;
+  // Horizontal lines
+  s+=`<line x1="44.7" y1="215" x2="475.3" y2="215" stroke="#D4AF37" stroke-width="2"/>`;
+  s+=`<line x1="44.7" y1="305" x2="475.3" y2="305" stroke="#D4AF37" stroke-width="2"/>`;
+  // Diagonal lines
+  s+=`<line x1="104.4" y1="104.4" x2="415.6" y2="415.6" stroke="#D4AF37" stroke-width="2"/>`;
+  s+=`<line x1="415.6" y1="104.4" x2="104.4" y2="415.6" stroke="#D4AF37" stroke-width="2"/>`;
+
+  // 4. Central circle (gold) - drawn ON TOP of dividing lines to cover the center area cleanly
+  s+=`<circle cx="${CX}" cy="${CY}" r="45" fill="#ffffff" stroke="#D4AF37" stroke-width="2.5"/>`;
+
+  // 5. Zodiac Sign Labels
+  for(let i=0;i<12;i++){
+    const isAxis = (i % 3 === 0);
+    const rLabel = isAxis ? 188 : 196;
+    const a = toRad(90 + i * 30);
+    const lx = CX + rLabel * Math.cos(a);
+    const ly = CY - rLabel * Math.sin(a);
+    s += `<text x="${f(lx)}" y="${f(ly)}" text-anchor="middle" dominant-baseline="middle"
+          font-size="12" fill="#7A5510" font-family="Sarabun,sans-serif" font-weight="700" opacity="0.85">${SIGNS_TH[i]}</text>`;
+  }
+
+  // 6. Draw Natal Planets (inside the sectors, using Thai numerals)
+  const natalGroups = Array.from({length: 12}, () => []);
+  if (showN && nData) {
+    for (const p of PLANETS) {
+      if (nData.pos[p.id] !== undefined) {
+        const si = Math.floor(nData.pos[p.id] / 30) % 12;
+        natalGroups[si].push({
+          ...p,
+          lon: nData.pos[p.id],
+          retro: nData.retro && nData.retro[p.id]
+        });
+      }
+    }
+  }
+
+  for(let i=0;i<12;i++){
+    const grp = natalGroups[i];
+    const N = grp.length;
+    if (N === 0) continue;
+
+    const isAxis = (i % 3 === 0);
+    const rCluster = isAxis ? 122 : 152;
+    const a = toRad(90 + i * 30);
+    const cx = CX + rCluster * Math.cos(a);
+    const cy = CY - rCluster * Math.sin(a);
+
+    grp.forEach((p, k) => {
+      let px = cx, py = cy;
+      if (N > 1) {
+        const angle = k * (2 * Math.PI / N) - Math.PI / 2;
+        const rOffset = 19;
+        px = cx + rOffset * Math.cos(angle);
+        py = cy + rOffset * Math.sin(angle);
+      }
+
+      if (p.id === 'lagna') {
+        // Highlighted circular badge for natal Lagna (ล)
+        s += `<circle cx="${f(px)}" cy="${f(py)}" r="12" fill="#FFE070" stroke="#7A5510" stroke-width="1.5" />`;
+        s += `<text x="${f(px)}" y="${f(py)}" text-anchor="middle" dominant-baseline="central"
+              font-size="15" fill="#2B1505" font-family="Sarabun,sans-serif" font-weight="800">${p.numTH}</text>`;
+      } else {
+        s += `<text x="${f(px)}" y="${f(py)}" text-anchor="middle" dominant-baseline="central"
+              font-size="17" fill="${C_NAT_T}" font-family="Sarabun,sans-serif" font-weight="700">${p.numTH}</text>`;
+      }
+      if (p.retro) {
+        s += `<text x="${f(px+10)}" y="${f(py-10)}" font-size="11" fill="#7A5510" font-weight="bold">*</text>`;
+      }
+    });
+  }
+
+  // 7. Draw Transit Planets (outside the circle, using Arabic numerals)
+  if (showT && tData) {
+    const transitPlanets = PLANETS.filter(p => tData.pos[p.id] !== undefined)
+                                  .map(p => ({
+                                    ...p,
+                                    lon: tData.pos[p.id],
+                                    retro: tData.retro && tData.retro[p.id]
+                                  }));
+
+    // Calculate Transit Age Lagna (ลัคนาอายุจร)
+    let ageLagnaLon = null;
+    if (nData) {
+      const natalLagnaSp = signPos(nData.pos.lagna);
+      const L = natalLagnaSp.si; // Natal Lagna sign index (0-11)
+      const C = Math.floor((age - 1) / 12);
+      const S = (age - 1) % 12;
+      const T_L = (L + C + S) % 12;
+      ageLagnaLon = T_L * 30 + 15; // Midpoint of the sign sector
+    }
+
+    if (ageLagnaLon !== null) {
+      transitPlanets.push({
+        id: 'age_lagna',
+        isAgeLagna: true,
+        lon: ageLagnaLon,
+        numAR: '★'
+      });
+    }
+
+    // Sort by longitude
+    transitPlanets.sort((a, b) => a.lon - b.lon);
+
+    // Group into clusters where each planet is within 7.5 degrees of the next
+    const clusters = [];
+    if (transitPlanets.length > 0) {
+      let tempClusters = [];
+      let currentCluster = [transitPlanets[0]];
+      for (let i = 1; i < transitPlanets.length; i++) {
+        const p = transitPlanets[i];
+        const prev = transitPlanets[i - 1];
+        if (p.lon - prev.lon < 7.5) {
+          currentCluster.push(p);
+        } else {
+          tempClusters.push(currentCluster);
+          currentCluster = [p];
+        }
+      }
+      tempClusters.push(currentCluster);
+
+      // Check wrap-around between last and first cluster
+      if (tempClusters.length > 1) {
+        const firstCluster = tempClusters[0];
+        const lastCluster = tempClusters[tempClusters.length - 1];
+        const firstPl = firstCluster[0];
+        const lastPl = lastCluster[lastCluster.length - 1];
+        if ((firstPl.lon + 360) - lastPl.lon < 7.5) {
+          tempClusters[0] = lastCluster.concat(firstCluster);
+          tempClusters.pop();
+        }
+      }
+      clusters.push(...tempClusters);
+    }
+
+    // Adjust longitudes within each cluster to distribute them angularly
+    const MIN_GAP = 7.5; // degrees of gap to prevent overlaps (29px at r=237.5 is ~7 degrees)
+    for (const grp of clusters) {
+      const n = grp.length;
+      if (n === 1) continue;
+
+      // Calculate mean longitude, handling wrap-around
+      let sumLon = 0;
+      const baseLon = grp[0].lon;
+      grp.forEach(p => {
+        let diff = p.lon - baseLon;
+        if (diff < -180) diff += 360;
+        if (diff > 180) diff -= 360;
+        sumLon += baseLon + diff;
+      });
+      const meanLon = mod360(sumLon / n);
+
+      // Distribute centered around meanLon
+      const startLon = meanLon - ((n - 1) * MIN_GAP) / 2;
+      grp.forEach((p, idx) => {
+        p.lon = mod360(startLon + idx * MIN_GAP);
+      });
+    }
+
+    // Draw all transit planets at a fixed radius centered inside the blue outer band (r = 237.5)
+    const fixedR = 237.5;
+    for (const grp of clusters) {
+      grp.forEach(p => {
+        const [tx, ty] = toXY(fixedR, p.lon);
+        const lbl = p.numAR;
+        const isR = p.retro;
+
+        if (p.isAgeLagna) {
+          // Draw a green star symbol directly (without a circle)
+          s += `<text x="${f(tx)}" y="${f(ty)}" text-anchor="middle" dominant-baseline="central"
+               font-size="33" fill="#2E7D32" font-family="Sarabun,sans-serif" font-weight="900">★</text>`;
+        } else {
+          s += `<circle cx="${f(tx)}" cy="${f(ty)}" r="14.5" fill="${C_TRN}" stroke="#8AAABB88" stroke-width="1" opacity=".95"/>`;
+          s += `<text x="${f(tx)}" y="${f(ty)}" text-anchor="middle" dominant-baseline="central"
+               font-size="17" fill="${C_TRN_T}" font-family="Sarabun,sans-serif" font-weight="700">${lbl}</text>`;
+          if (isR) {
+            s += `<text x="${f(tx+9)}" y="${f(ty-9)}" font-size="11" fill="#4a148c" font-weight="bold">*</text>`;
+          }
+        }
+      });
+    }
+  }
+
+  // 8. Center circle content (now a circle containing the logo and Sun degree)
+  if(nData){
+    const sunSp = signPos(nData.pos.sun);
+    
+    // Draw Logo image centered in the circle (gold-grad border)
+    s+=`<image href="logo.png" x="242" y="222" width="36" height="36"/>`;
+    
+    // Natal Sun degree: 29/08 (e.g. 29° 08')
+    const sunStr = `${sunSp.deg}/${String(sunSp.min).padStart(2,'0')}`;
+    s+=`<text x="${CX}" y="${CY+23}" text-anchor="middle" font-size="12" fill="#2B1505" font-family="Sarabun,sans-serif" font-weight="700">${sunStr}</text>`;
+  } else {
+    s+=`<text x="${CX}" y="${CY}" text-anchor="middle" dominant-baseline="middle" font-size="15" fill="#D4AF37" font-family="Sarabun,sans-serif">ผูกดวง</text>`;
+  }
+
+  document.getElementById('wheel-svg').innerHTML=s;
+}
+
+// ── DRAW PLANET RING ────────────────────────────────────────────────────
+function drawRing(pos,retro,rMid,dotFill,dotText,useThaiNum){
+  let s='';
+  const planets=PLANETS.filter(p=>pos[p.id]!==undefined);
+
+  // Pointer lines (behind dots)
+  for(const p of planets){
+    const[x1,y1]=toXY(rMid+14,pos[p.id]);
+    const[x2,y2]=toXY(RZ,pos[p.id]);
+    s+=`<line x1="${f(x1)}" y1="${f(y1)}" x2="${f(x2)}" y2="${f(y2)}" stroke="${dotFill}" stroke-width=".7" opacity=".45"/>`;
+  }
+
+  // Stagger overlapping planets (within same 6° bucket)
+  const buckets={};
+  for(const p of planets){
+    const k=Math.floor(pos[p.id]/6);
+    if(!buckets[k]) buckets[k]=[];
+    buckets[k].push({...p,lon:pos[p.id]});
+  }
+
+  for(const grp of Object.values(buckets)){
+    const n=grp.length;
+    grp.forEach((p,i)=>{
+      const r=rMid+(i-(n-1)/2)*10;
+      const[x,y]=toXY(r,p.lon);
+      const lbl=useThaiNum?p.numTH:p.numAR;
+      const isR=retro&&retro[p.id];
+      const fontSize=p.id==='lagna'?10:11.5;
+
+      s+=`<circle cx="${f(x)}" cy="${f(y)}" r="10" fill="${dotFill}" stroke="${dotText==='#FFFFFF'?'#1A3A6044':'#8AAABB66'}" stroke-width="1.2" opacity=".93"/>`;
+      s+=`<text x="${f(x)}" y="${f(y)}" text-anchor="middle" dominant-baseline="central"
+           font-size="${fontSize}" fill="${dotText}" font-family="Sarabun,sans-serif" font-weight="700">${lbl}</text>`;
+      if(isR){
+        s+=`<text x="${f(x+8)}" y="${f(y-8)}" font-size="7" fill="${dotFill==='#F8F5EE'?'#884422':'#88CCFF'}" font-family="sans-serif">*</text>`;
+      }
+    });
+  }
+  return s;
+}
+
+// ── PLANET TABLE ────────────────────────────────────────────────────────
+function renderTable(){
+  const tbody=document.getElementById('tableTbody');
+  let h='';
+
+  function rows(data,cls,label,useThaiNum){
+    const isNatal = (cls === 'col-n');
+    const rowBg = isNatal ? '#ffffff' : '#FFF9E6'; // White vs Cream-Gold for Transit
+    const rowTextColor = '#000000'; // Black
+    const nameColor = '#000000'; // Black
+    
+    const headerBg = isNatal ? '#fff0dc' : '#FFEAB0'; // Cream vs Soft Gold header
+    const headerTextColor = '#000000'; // Black
+
+    h+=`<tr class="group-head"><td colspan="4" style="background: ${headerBg}; color: ${headerTextColor}; padding: .4rem .8rem; font-size: .78rem; font-weight: 700; border-bottom: 1.5px solid #E8D0A0; text-align: left;">${label} — ${data.dateStr} ${data.timeStr}</td></tr>`;
+    for(const p of PLANETS){
+      if(data.pos[p.id]===undefined) continue;
+      const sp=signPos(data.pos[p.id]);
+      const retTag=data.retro&&data.retro[p.id]?`<span style="color:#ff3333; font-weight:bold; margin-left:2px;">*</span>`:'';
+      const lbl=useThaiNum?p.numTH:p.numAR;
+      h+=`<tr style="background: ${rowBg}; color: ${rowTextColor};">
+          <td style="text-align:center; font-weight:700; font-size:1.05rem; color: ${nameColor}; border-bottom: 1px solid #E8D0A044; border-right: 1px solid #E8D0A044;">${lbl}</td>
+          <td style="border-bottom: 1px solid #E8D0A044; border-right: 1px solid #E8D0A044;"><span class="pname" style="font-weight:700; color: ${nameColor};">${p.th}</span>${retTag}</td>
+          <td style="border-bottom: 1px solid #E8D0A044; border-right: 1px solid #E8D0A044; font-weight:500; color: ${rowTextColor};">${SIGNS_TH[sp.si]}</td>
+          <td style="font-family:monospace; font-size:0.95rem; font-weight:600; border-bottom: 1px solid #E8D0A044; color: ${rowTextColor};">${String(sp.deg).padStart(2,'0')}° ${String(sp.min).padStart(2,'0')}'</td>
+          </tr>`;
+    }
+  }
+
+  if(showN&&nData) rows(nData,'col-n','ดวงกำเนิด',true);
+  if(showT&&tData) rows(tData,'col-t','ดวงจร',false);
+  tbody.innerHTML=h||'<tr><td colspan="4" style="padding:.6rem;color:var(--dim);text-align:center">กดผูกดวงเพื่อดูผล</td></tr>';
+}
+
+// ── INIT ────────────────────────────────────────────────────────────────
+populateDateDropdowns('b', '1990-04-13');
+document.getElementById('bHour').value = "08";
+document.getElementById('bMin').value = "00";
+populateCities('b', 'bangkok');
+
+// Initialize transit to current time
+populateDateDropdowns('t');
+setTransitNow();
+populateCities('t', 'bangkok');
+
+drawWheel();
+renderTable();
+runCalc();
+</script>
+</body>
+</html>
