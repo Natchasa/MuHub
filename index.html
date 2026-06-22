@@ -5545,7 +5545,7 @@ function renderThaksa(by, bmo, bd, bh, bmn) {
     age = Math.max(1, age);
 
     // Update card subtitle to display Birth Date and Age Yang
-    const WEEKDAYS_TH = ['วันอาทิตย์', 'วันจันทร์', 'วันอังคาร', 'วันพุธกลางวัน', 'วันพฤหัสบดี', 'วันศุกร์', 'วันเสาร์', 'วันพุธกลางคืน'];
+    const WEEKDAYS_TH = ['วันอาทิตย์', 'วันจันทร์', 'วันอังคาร', 'วันพุธกลางวัน', 'วันพฤหัส', 'วันศุกร์', 'วันเสาร์', 'วันพุธกลางคืน'];
     const birthDayName = WEEKDAYS_TH[thaksaDay];
     const subtitleEl = document.getElementById('thaksa-subtitle');
     if (subtitleEl) {
@@ -5557,7 +5557,7 @@ function renderThaksa(by, bmo, bd, bh, bmn) {
     isTokaLang = false;
   } else {
     // Update card subtitle to default
-    const WEEKDAYS_TH = ['วันอาทิตย์', 'วันจันทร์', 'วันอังคาร', 'วันพุธกลางวัน', 'วันพฤหัสบดี', 'วันศุกร์', 'วันเสาร์', 'วันพุธกลางคืน'];
+    const WEEKDAYS_TH = ['วันอาทิตย์', 'วันจันทร์', 'วันอังคาร', 'วันพุธกลางวัน', 'วันพฤหัส', 'วันศุกร์', 'วันเสาร์', 'วันพุธกลางคืน'];
     const birthDayName = WEEKDAYS_TH[thaksaDay];
     const subtitleEl = document.getElementById('thaksa-subtitle');
     if (subtitleEl) {
@@ -5994,15 +5994,15 @@ function getDignityHTML(planetId, signIdx) {
   };
   const uchMap = {
     'sun': [0], 'moon': [1], 'mars': [9], 'mercury': [5],
-    'jupiter': [3], 'venus': [11], 'saturn': [6], 'rahu': [2]
+    'jupiter': [3], 'venus': [11], 'saturn': [6], 'rahu': [7]
   };
   const nitchMap = {
     'sun': [6], 'moon': [7], 'mars': [3], 'mercury': [11],
-    'jupiter': [9], 'venus': [5], 'saturn': [0], 'rahu': [8]
+    'jupiter': [9], 'venus': [5], 'saturn': [0], 'rahu': [1]
   };
   const rachaChokMap = {
-    'sun': [5], 'moon': [6], 'mars': [2], 'mercury': [10],
-    'jupiter': [1], 'venus': [0], 'saturn': [8], 'rahu': [7]
+    'sun': [2], 'moon': [5], 'mars': [1], 'mercury': [4],
+    'jupiter': [0], 'venus': [3], 'saturn': [7], 'rahu': [6]
   };
   const mahaChakMap = {
     'sun': [3], 'moon': [0], 'mars': [5], 'mercury': [4],
