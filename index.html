@@ -325,10 +325,10 @@ main{max-width:1360px;margin:0 auto 0 0;padding:1.2rem 1.2rem 3rem 1.2rem}
         <table class="ptable">
           <thead>
             <tr>
-              <th style="text-align:center; width: 12%;">สัญลักษณ์</th>
+              <th style="text-align:center; width: 8%;">สัญลักษณ์</th>
               <th style="width: 28%;">ดาว/ปัจจัย</th>
-              <th style="width: 25%;">ราศี</th>
-              <th style="width: 35%;">ค่าองศา / ลิปดา</th>
+              <th style="width: 24%;">ราศี</th>
+              <th style="width: 40%; white-space: nowrap;">ค่าองศา / ลิปดา</th>
             </tr>
           </thead>
           <tbody id="tableTbody"></tbody>
@@ -337,7 +337,7 @@ main{max-width:1360px;margin:0 auto 0 0;padding:1.2rem 1.2rem 3rem 1.2rem}
     </div>
 
     <!-- THAKSA CHART -->
-    <div style="display: flex; flex-direction: column; gap: 1.4rem; width: 320px;">
+    <div style="display: flex; flex-direction: column; gap: 1.4rem; width: 100%; max-width: 320px;">
       <div class="card">
         <div class="card-title" style="flex-direction: column; align-items: flex-start; gap: 0.25rem;">
           <div style="display: flex; align-items: center; gap: 0.4rem;">☸️ ตารางทักษา</div>
@@ -375,11 +375,11 @@ const PLANETS = [
   {id:'moon',    th:'จันทร์',     numTH:'๒', numAR:'2'},
   {id:'mars',    th:'อังคาร',     numTH:'๓', numAR:'3'},
   {id:'mercury', th:'พุธ',        numTH:'๔', numAR:'4'},
-  {id:'jupiter', th:'พฤหัสบดี',   numTH:'๕', numAR:'5'},
+  {id:'jupiter', th:'พฤหัส',      numTH:'๕', numAR:'5'},
   {id:'venus',   th:'ศุกร์',      numTH:'๖', numAR:'6'},
   {id:'saturn',  th:'เสาร์',      numTH:'๗', numAR:'7'},
   {id:'rahu',    th:'ราหู',       numTH:'๘', numAR:'8'},
-  {id:'thai_ketu', th:'เกตุ (ไทย)', numTH:'๙', numAR:'9'},
+  {id:'thai_ketu', th:'เกตุ',     numTH:'๙', numAR:'9'},
   {id:'uranus',   th:'มฤตยู',      numTH:'๐', numAR:'0'},
   {id:'neptune',  th:'เนปจูน',     numTH:'น', numAR:'น'},
   {id:'pluto',    th:'พลูโต',      numTH:'พ', numAR:'พ'},
@@ -887,7 +887,7 @@ function renderThaksa(by, bmo, bd, bh, bmn) {
 
   const THAKSA_HOUSES = ['บริวาร', 'อายุ', 'เดช', 'ศรี', 'มูละ', 'อุตสาหะ', 'มนตรี', 'กาลกิณี'];
 
-  let gridHTML = '<div style="display: grid; grid-template-columns: repeat(3, 85px); grid-template-rows: repeat(3, 85px); gap: 0; position: relative;">';
+  let gridHTML = '<div style="display: grid; grid-template-columns: repeat(3, 92px); grid-template-rows: repeat(3, 92px); gap: 0; position: relative;">';
 
   const cells = Array.from({ length: 3 }, () => Array(3).fill(null));
 
@@ -934,10 +934,10 @@ function renderThaksa(by, bmo, bd, bh, bmn) {
         let numWrapperStart = '';
         let numWrapperEnd = '';
         if (isBirthPlanet) {
-          numWrapperStart = '<div style="display: inline-flex; justify-content: center; align-items: center; width: 42px; height: 42px; border-radius: 50%; border: 2.5px solid #D4AF37; background: rgba(212, 175, 55, 0.08); position: relative;">';
+          numWrapperStart = '<div style="display: inline-flex; justify-content: center; align-items: center; width: 48px; height: 48px; border-radius: 50%; border: 2.5px solid #D4AF37; background: rgba(212, 175, 55, 0.08); position: relative;">';
           numWrapperEnd = '</div>';
         } else {
-          numWrapperStart = '<div style="display: inline-flex; justify-content: center; align-items: center; width: 42px; height: 42px; position: relative;">';
+          numWrapperStart = '<div style="display: inline-flex; justify-content: center; align-items: center; width: 48px; height: 48px; position: relative;">';
           numWrapperEnd = '</div>';
         }
 
@@ -946,12 +946,12 @@ function renderThaksa(by, bmo, bd, bh, bmn) {
           plusTag = '<span style="position: absolute; top: -1px; right: -1px; font-size: 0.95rem; font-weight: 800; color: #4a148c; line-height: 1;">+</span>';
         }
 
-        gridHTML += `<div style="display: flex; justify-content: center; align-items: center; height: 85px; width: 85px; ${borderStyle} box-sizing: border-box;">`;
-        gridHTML += `${numWrapperStart}<span style="font-size: 1.6rem; font-weight: 700; color: #222222; font-family: 'Sarabun', sans-serif; line-height: 1;">${cell.planetNum}</span>${plusTag}${numWrapperEnd}`;
+        gridHTML += `<div style="display: flex; justify-content: center; align-items: center; height: 92px; width: 92px; ${borderStyle} box-sizing: border-box;">`;
+        gridHTML += `${numWrapperStart}<span style="font-size: 1.8rem; font-weight: 700; color: #222222; font-family: 'Sarabun', sans-serif; line-height: 1;">${cell.planetNum}</span>${plusTag}${numWrapperEnd}`;
         gridHTML += '</div>';
       } else {
         // Center cell (Row 1, Col 1)
-        gridHTML += `<div style="display: flex; justify-content: center; align-items: center; height: 85px; width: 85px; ${borderStyle} box-sizing: border-box;">`;
+        gridHTML += `<div style="display: flex; justify-content: center; align-items: center; height: 92px; width: 92px; ${borderStyle} box-sizing: border-box;">`;
         if (isTransitActive && isTokaLang) {
           gridHTML += `<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; border: 1.5px dashed #FF6666; background: rgba(255, 102, 102, 0.08); border-radius: 8px; padding: 4px; text-align: center; width: 70px; height: 70px; box-sizing: border-box;">`;
           gridHTML += `<span style="font-size: 0.58rem; font-weight: 700; color: #FF8888; text-transform: uppercase;">ปีจร</span>`;
@@ -1013,31 +1013,32 @@ function drawWheel(){
 
   // 1. Backgrounds
   // Outer circle (transit background) - soft cream-gold
-  s+=`<circle cx="${CX}" cy="${CY}" r="255" fill="#FFF9E6"/>`;
+  s+=`<circle cx="${CX}" cy="${CY}" r="256" fill="#FFF9E6"/>`;
   // Inner circle (natal background) - white
-  s+=`<circle cx="${CX}" cy="${CY}" r="220" fill="#ffffff"/>`;
+  s+=`<circle cx="${CX}" cy="${CY}" r="210" fill="#ffffff"/>`;
 
   // 2. Outer boundary circle (gold)
-  s+=`<circle cx="${CX}" cy="${CY}" r="220" fill="none" stroke="#D4AF37" stroke-width="3.5"/>`;
+  s+=`<circle cx="${CX}" cy="${CY}" r="210" fill="none" stroke="#D4AF37" stroke-width="3.5"/>`;
 
   // 3. House dividing lines (gold) - drawn continuously to avoid any gaps at intersections
   // Vertical lines
-  s+=`<line x1="215" y1="44.7" x2="215" y2="475.3" stroke="#D4AF37" stroke-width="2"/>`;
-  s+=`<line x1="305" y1="44.7" x2="305" y2="475.3" stroke="#D4AF37" stroke-width="2"/>`;
+  s+=`<line x1="215" y1="54.9" x2="215" y2="465.1" stroke="#D4AF37" stroke-width="2"/>`;
+  s+=`<line x1="305" y1="54.9" x2="305" y2="465.1" stroke="#D4AF37" stroke-width="2"/>`;
   // Horizontal lines
-  s+=`<line x1="44.7" y1="215" x2="475.3" y2="215" stroke="#D4AF37" stroke-width="2"/>`;
-  s+=`<line x1="44.7" y1="305" x2="475.3" y2="305" stroke="#D4AF37" stroke-width="2"/>`;
-  // Diagonal lines
-  s+=`<line x1="104.4" y1="104.4" x2="415.6" y2="415.6" stroke="#D4AF37" stroke-width="2"/>`;
-  s+=`<line x1="415.6" y1="104.4" x2="104.4" y2="415.6" stroke="#D4AF37" stroke-width="2"/>`;
+  s+=`<line x1="54.9" y1="215" x2="465.1" y2="215" stroke="#D4AF37" stroke-width="2"/>`;
+  s+=`<line x1="54.9" y1="305" x2="465.1" y2="305" stroke="#D4AF37" stroke-width="2"/>`;
+  // Diagonal lines (split to not cross the central square [215, 305] x [215, 305])
+  s+=`<line x1="111.5" y1="111.5" x2="215" y2="215" stroke="#D4AF37" stroke-width="2"/>`;
+  s+=`<line x1="305" y1="305" x2="408.5" y2="408.5" stroke="#D4AF37" stroke-width="2"/>`;
+  s+=`<line x1="408.5" y1="111.5" x2="305" y2="215" stroke="#D4AF37" stroke-width="2"/>`;
+  s+=`<line x1="215" y1="305" x2="111.5" y2="408.5" stroke="#D4AF37" stroke-width="2"/>`;
 
-  // 4. Central circle (gold) - drawn ON TOP of dividing lines to cover the center area cleanly
-  s+=`<circle cx="${CX}" cy="${CY}" r="45" fill="#ffffff" stroke="#D4AF37" stroke-width="2.5"/>`;
+  // 4. Central area left clear to let transparent logo float directly (PNG background)
 
   // 5. Zodiac Sign Labels
   for(let i=0;i<12;i++){
     const isAxis = (i % 3 === 0);
-    const rLabel = isAxis ? 188 : 196;
+    const rLabel = isAxis ? 178 : 186;
     const a = toRad(90 + i * 30);
     const lx = CX + rLabel * Math.cos(a);
     const ly = CY - rLabel * Math.sin(a);
@@ -1066,7 +1067,7 @@ function drawWheel(){
     if (N === 0) continue;
 
     const isAxis = (i % 3 === 0);
-    const rCluster = isAxis ? 122 : 152;
+    const rCluster = isAxis ? 116 : 144;
     const a = toRad(90 + i * 30);
     const cx = CX + rCluster * Math.cos(a);
     const cy = CY - rCluster * Math.sin(a);
@@ -1081,16 +1082,16 @@ function drawWheel(){
       }
 
       if (p.id === 'lagna') {
-        // Highlighted circular badge for natal Lagna (ล)
-        s += `<circle cx="${f(px)}" cy="${f(py)}" r="12" fill="#FFE070" stroke="#7A5510" stroke-width="1.5" />`;
+        // Highlighted circular badge for natal Lagna (ล) - slightly larger
+        s += `<circle cx="${f(px)}" cy="${f(py)}" r="14" fill="#FFE070" stroke="#7A5510" stroke-width="1.5" />`;
         s += `<text x="${f(px)}" y="${f(py)}" text-anchor="middle" dominant-baseline="central"
-              font-size="15" fill="#2B1505" font-family="Sarabun,sans-serif" font-weight="800">${p.numTH}</text>`;
+              font-size="17" fill="#2B1505" font-family="Sarabun,sans-serif" font-weight="800">${p.numTH}</text>`;
       } else {
         s += `<text x="${f(px)}" y="${f(py)}" text-anchor="middle" dominant-baseline="central"
-              font-size="17" fill="${C_NAT_T}" font-family="Sarabun,sans-serif" font-weight="700">${p.numTH}</text>`;
+              font-size="20" fill="${C_NAT_T}" font-family="Sarabun,sans-serif" font-weight="700">${p.numTH}</text>`;
       }
       if (p.retro) {
-        s += `<text x="${f(px+10)}" y="${f(py-10)}" font-size="11" fill="#7A5510" font-weight="bold">*</text>`;
+        s += `<text x="${f(px+12)}" y="${f(py-12)}" font-size="13" fill="#7A5510" font-weight="bold">*</text>`;
       }
     });
   }
@@ -1127,7 +1128,7 @@ function drawWheel(){
     // Sort by longitude
     transitPlanets.sort((a, b) => a.lon - b.lon);
 
-    // Group into clusters where each planet is within 7.5 degrees of the next
+    // Group into clusters where each planet is within 8.5 degrees of the next
     const clusters = [];
     if (transitPlanets.length > 0) {
       let tempClusters = [];
@@ -1135,7 +1136,7 @@ function drawWheel(){
       for (let i = 1; i < transitPlanets.length; i++) {
         const p = transitPlanets[i];
         const prev = transitPlanets[i - 1];
-        if (p.lon - prev.lon < 7.5) {
+        if (p.lon - prev.lon < 8.5) {
           currentCluster.push(p);
         } else {
           tempClusters.push(currentCluster);
@@ -1150,7 +1151,7 @@ function drawWheel(){
         const lastCluster = tempClusters[tempClusters.length - 1];
         const firstPl = firstCluster[0];
         const lastPl = lastCluster[lastCluster.length - 1];
-        if ((firstPl.lon + 360) - lastPl.lon < 7.5) {
+        if ((firstPl.lon + 360) - lastPl.lon < 8.5) {
           tempClusters[0] = lastCluster.concat(firstCluster);
           tempClusters.pop();
         }
@@ -1159,7 +1160,7 @@ function drawWheel(){
     }
 
     // Adjust longitudes within each cluster to distribute them angularly
-    const MIN_GAP = 7.5; // degrees of gap to prevent overlaps (29px at r=237.5 is ~7 degrees)
+    const MIN_GAP = 8.5; // degrees of gap to prevent overlaps
     for (const grp of clusters) {
       const n = grp.length;
       if (n === 1) continue;
@@ -1182,8 +1183,8 @@ function drawWheel(){
       });
     }
 
-    // Draw all transit planets at a fixed radius centered inside the blue outer band (r = 237.5)
-    const fixedR = 237.5;
+    // Draw all transit planets at a fixed radius centered inside the outer band (r = 233)
+    const fixedR = 233;
     for (const grp of clusters) {
       grp.forEach(p => {
         const [tx, ty] = toXY(fixedR, p.lon);
@@ -1195,11 +1196,11 @@ function drawWheel(){
           s += `<text x="${f(tx)}" y="${f(ty)}" text-anchor="middle" dominant-baseline="central"
                font-size="33" fill="#2E7D32" font-family="Sarabun,sans-serif" font-weight="900">★</text>`;
         } else {
-          s += `<circle cx="${f(tx)}" cy="${f(ty)}" r="14.5" fill="${C_TRN}" stroke="#8AAABB88" stroke-width="1" opacity=".95"/>`;
+          s += `<circle cx="${f(tx)}" cy="${f(ty)}" r="16.5" fill="${C_TRN}" stroke="#8AAABB88" stroke-width="1.2" opacity=".95"/>`;
           s += `<text x="${f(tx)}" y="${f(ty)}" text-anchor="middle" dominant-baseline="central"
-               font-size="17" fill="${C_TRN_T}" font-family="Sarabun,sans-serif" font-weight="700">${lbl}</text>`;
+               font-size="20" fill="${C_TRN_T}" font-family="Sarabun,sans-serif" font-weight="700">${lbl}</text>`;
           if (isR) {
-            s += `<text x="${f(tx+9)}" y="${f(ty-9)}" font-size="11" fill="#4a148c" font-weight="bold">*</text>`;
+            s += `<text x="${f(tx+11)}" y="${f(ty-11)}" font-size="13" fill="#4a148c" font-weight="bold">*</text>`;
           }
         }
       });
@@ -1210,12 +1211,12 @@ function drawWheel(){
   if(nData){
     const sunSp = signPos(nData.pos.sun);
     
-    // Draw Logo image centered in the circle (gold-grad border)
-    s+=`<image href="logo.png" x="242" y="222" width="36" height="36"/>`;
+    // Draw Logo image centered in the square (PNG background) - enlarged to 68x68
+    s+=`<image href="logo.png" x="226" y="216" width="68" height="68"/>`;
     
     // Natal Sun degree: 29/08 (e.g. 29° 08')
     const sunStr = `${sunSp.deg}/${String(sunSp.min).padStart(2,'0')}`;
-    s+=`<text x="${CX}" y="${CY+23}" text-anchor="middle" font-size="12" fill="#2B1505" font-family="Sarabun,sans-serif" font-weight="700">${sunStr}</text>`;
+    s+=`<text x="${CX}" y="${CY+35}" text-anchor="middle" font-size="12" fill="#2B1505" font-family="Sarabun,sans-serif" font-weight="700">${sunStr}</text>`;
   } else {
     s+=`<text x="${CX}" y="${CY}" text-anchor="middle" dominant-baseline="middle" font-size="15" fill="#D4AF37" font-family="Sarabun,sans-serif">ผูกดวง</text>`;
   }
@@ -1287,7 +1288,7 @@ function renderTable(){
           <td style="text-align:center; font-weight:700; font-size:1.05rem; color: ${nameColor}; border-bottom: 1px solid #E8D0A044; border-right: 1px solid #E8D0A044;">${lbl}</td>
           <td style="border-bottom: 1px solid #E8D0A044; border-right: 1px solid #E8D0A044;"><span class="pname" style="font-weight:700; color: ${nameColor};">${p.th}</span>${retTag}</td>
           <td style="border-bottom: 1px solid #E8D0A044; border-right: 1px solid #E8D0A044; font-weight:500; color: ${rowTextColor};">${SIGNS_TH[sp.si]}</td>
-          <td style="font-family:monospace; font-size:0.95rem; font-weight:600; border-bottom: 1px solid #E8D0A044; color: ${rowTextColor};">${String(sp.deg).padStart(2,'0')}° ${String(sp.min).padStart(2,'0')}'</td>
+          <td style="font-family:monospace; font-size:0.95rem; font-weight:600; border-bottom: 1px solid #E8D0A044; color: ${rowTextColor}; white-space: nowrap;">${String(sp.deg).padStart(2,'0')}° ${String(sp.min).padStart(2,'0')}'</td>
           </tr>`;
     }
   }
