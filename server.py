@@ -2,10 +2,14 @@
 # dependencies = [
 #   "fastapi",
 #   "uvicorn",
+#   "timezonefinder",
+#   "pytz",
 # ]
 # ///
 
 import os
+import sys
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 import csv
 import math
 import datetime
@@ -15,6 +19,11 @@ from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from timezonefinder import TimezoneFinder
+import pytz
+
+# Initialize Timezone Finder
+tf = TimezoneFinder()
 
 # Initialize FastAPI
 app = FastAPI(
@@ -111,7 +120,7 @@ def calculate_from_csv(
     time: str = Query("07:00", description="Local time in HH:MM format"),
     lat: float = Query(13.7563, description="Latitude"),
     lon: float = Query(100.5018, description="Longitude"),
-    tz: float = Query(7.0, description="Timezone offset in hours")
+    tz: float = Query(None, description="Optional timezone offset in hours")
 ):
     """
     Retrieves and interpolates planetary positions from the pre-calculated CSV database.
@@ -124,6 +133,23 @@ def calculate_from_csv(
     except ValueError:
         raise HTTPException(status_code=400, detail="Invalid date or time format. Use YYYY-MM-DD and HH:MM.")
         
+    # Calculate timezone offset if not provided
+    if tz is None:
+        try:
+            tz_name = tf.timezone_at(lng=lon, lat=lat)
+            if tz_name:
+                timezone_obj = pytz.timezone(tz_name)
+                try:
+                    loc_dt = timezone_obj.localize(dt_local, is_dst=None)
+                except Exception:
+                    loc_dt = timezone_obj.localize(dt_local)
+                tz = loc_dt.utcoffset().total_seconds() / 3600.0
+            else:
+                tz = round(lon / 15.0)
+        except Exception as e:
+            print(f"Error calculating timezone offset: {e}")
+            tz = round(lon / 15.0)
+            
     # Convert local time to UTC
     dt_utc = dt_local - datetime.timedelta(hours=tz)
     
@@ -199,22 +225,62 @@ def calculate_from_csv(
         lon_interp = mod360(lon_start + fraction * diff)
         pos[p] = lon_interp
         
-        # Check retrograde (excluding sun and moon)
-        if p in ["sun", "moon"]:
-            retro[p] = False
+        # Check retrograde/stationary/fast motion (excluding Lagna)
+        if p == "lagna":
+            retro[p] = ""
         else:
-            retro[p] = diff < 0
+            if diff < 0:
+                retro[p] = "พักร์"
+            else:
+                slow_thresholds = {
+                    "sun": 0.96,
+                    "moon": 12.2,
+                    "mars": 0.15,
+                    "mercury": 0.40,
+                    "jupiter": 0.04,
+                    "venus": 0.40,
+                    "saturn": 0.015,
+                    "rahu": 0.04,
+                    "ketu": 0.04,
+                    "thai_ketu": 0.50,
+                    "uranus": 0.005,
+                    "neptune": 0.002,
+                    "pluto": 0.0015
+                }
+                fast_thresholds = {
+                    "sun": 1.01,
+                    "moon": 14.0,
+                    "mars": 0.60,
+                    "mercury": 1.30,
+                    "jupiter": 0.10,
+                    "venus": 1.22,
+                    "saturn": 0.045,
+                    "rahu": 0.06,
+                    "ketu": 0.06,
+                    "thai_ketu": 0.55,
+                    "uranus": 0.015,
+                    "neptune": 0.008,
+                    "pluto": 0.005
+                }
+                
+                if diff <= slow_thresholds.get(p, 0.01):
+                    retro[p] = "มนต์"
+                elif diff >= fast_thresholds.get(p, 1.5):
+                    retro[p] = "เสริด"
+                else:
+                    retro[p] = ""
             
     # 5. Calculate Lagna (Ascendant) on the fly
     lagna_lon = calculate_lagna(julian_day, lat, lon, ayanamsa)
     pos["lagna"] = lagna_lon
-    retro["lagna"] = False
+    retro["lagna"] = ""
     
     return {
         "pos": pos,
         "retro": retro,
         "ayanamsa": ayanamsa,
         "julian_day": julian_day,
+        "timezone_offset": tz,
         "source": "database_csv"
     }
 
@@ -232,4 +298,4 @@ app.mount("/", StaticFiles(directory=BASE_DIR), name="static")
 if __name__ == "__main__":
     import uvicorn
     # Serve on port 3737 to match the old perl server port
-    uvicorn.run("server:app", host="127.0.0.1", port=3737, reload=True)
+    uvicorn.run(app, host="127.0.0.1", port=3737)

@@ -5,334 +5,98 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MuHub — ผูกดวงโหราศาสตร์ไทย</title>
 <script src="astronomy.browser.min.js"></script>
-<style>@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap');
-/* ── TAB BAR & TABS ─────────────────── */
-.tab-bar {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 0.8rem;
-  flex-wrap: wrap;
-}
-.tab-btn {
-  background: #FFF9E6;
-  border: 2px solid var(--blue);
-  color: var(--blue);
-  padding: .38rem 1.05rem;
-  border-radius: 18px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all .12s;
-  font-family: inherit;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35rem;
-  height: 2.25rem;
-  user-select: none;
-}
-.tab-btn:hover {
-  background: var(--cream2);
-  color: var(--blue);
-  border-color: var(--blue);
-}
-.tab-btn.active {
-  background: var(--blue);
-  border-color: var(--blue-d);
-  color: #ffffff;
-  box-shadow: 0 2px 10px rgba(42, 107, 173, 0.3);
-}
-.tab-content {
-  display: block;
-}
-.tab-content.hidden {
-  display: none !important;
-}
-
-/* ── ASTROLOGER STYLES ───────────────── */
-.astrologer-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1rem;
-}
-.astrologer-card {
-  background: #ffffff;
-  border: 1px solid #E8D0A0;
-  border-radius: 16px;
-  padding: 1.4rem;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.04);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  position: relative;
-}
-.astrologer-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 25px rgba(212, 175, 55, 0.12);
-  border-color: var(--gold);
-}
-.astrologer-avatar {
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  border: 3px solid var(--gold);
-  object-fit: cover;
-  margin-bottom: 0.8rem;
-  background: var(--cream2);
-}
-.astrologer-name {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 0.3rem;
-}
-.astrologer-specialty {
-  font-size: 0.82rem;
-  color: var(--dim);
-  background: var(--cream2);
-  padding: 2px 10px;
-  border-radius: 20px;
-  font-weight: 500;
-  margin-bottom: 0.6rem;
-}
-.astrologer-rating {
-  color: var(--coral-d);
-  font-weight: 700;
-  font-size: 0.9rem;
-  margin-bottom: 0.8rem;
-  display: flex;
-  align-items: center;
-  gap: 2px;
-}
-.astrologer-price {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #1A3050;
-  margin-bottom: 1.2rem;
-}
-.astrologer-bio {
-  font-size: 0.82rem;
-  color: #555;
-  line-height: 1.4;
-  margin-bottom: 1.2rem;
-  min-height: 50px;
-}
-
-/* ── BOOKING FORM STYLES ─────────────── */
-.booking-container {
-  max-width: 800px;
-  margin: 0 auto;
-}
-.booking-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.2rem;
-  margin-bottom: 1.5rem;
-}
-@media (max-width: 600px) {
-  .booking-grid { grid-template-columns: 1fr; }
-}
-.time-slots {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-}
-.slot-btn {
-  background: #ffffff;
-  border: 1px solid #D4AF3744;
-  padding: 0.5rem;
-  border-radius: 8px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--text);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-align: center;
-  font-family: inherit;
-}
-.slot-btn:hover {
-  background: var(--cream2);
-  border-color: var(--gold);
-}
-.slot-btn.active {
-  background: var(--gold);
-  border-color: var(--gold-d);
-  color: #2B1505;
-  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
-}
-.slot-btn.busy {
-  background: #f5f5f5;
-  border-color: #e0e0e0;
-  color: #bbb;
-  cursor: not-allowed;
-  text-decoration: line-through;
-}
-
-/* ── QUEUE / BOOKING TRACKING ───────── */
-.booking-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-top: 1rem;
-}
-.booking-item {
-  background: #ffffff;
-  border: 1px solid #E8D0A0;
-  border-radius: 12px;
-  padding: 1.2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-.booking-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-}
-.booking-status {
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 0.78rem;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-.status-pending { background: #FFF3CD; color: #856404; }
-.status-confirmed { background: #D4EDDA; color: #155724; }
-.status-completed { background: #E2E3E5; color: #383D41; }
-
-/* ── MU SHOP STYLES ──────────────────── */
-.shop-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1rem;
-}
-.shop-card {
-  background: #ffffff;
-  border: 1px solid #E8D0A0;
-  border-radius: 16px;
-  padding: 1.2rem;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-  display: flex;
-  flex-direction: column;
-  transition: all 0.25s ease;
-}
-.shop-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(212, 175, 55, 0.1);
-  border-color: var(--gold);
-}
-.shop-img-holder {
-  height: 160px;
-  background: var(--cream2);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 0.8rem;
-  font-size: 3rem;
-  color: var(--gold-d);
-  overflow: hidden;
-  position: relative;
-}
-.shop-title {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 0.4rem;
-}
-.shop-price {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--coral-d);
-  margin-bottom: 0.6rem;
-}
-.shop-desc {
-  font-size: 0.82rem;
-  color: var(--dim);
-  line-height: 1.4;
-  margin-bottom: 1rem;
-  flex-grow: 1;
-}
-
-/* ── MOCK CHECKOUT MODAL ────────────── */
-.mu-modal {
-  position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(4px);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-.mu-modal-content {
-  background: #ffffff;
-  border: 2px solid var(--gold);
-  border-radius: 20px;
-  width: 90%;
-  max-width: 460px;
-  padding: 2rem;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-  position: relative;
-}
-.modal-close-btn {
-  position: absolute;
-  top: 1rem; right: 1rem;
-  font-size: 1.5rem;
-  font-weight: 700;
-  background: none; border: none;
-  cursor: pointer; color: var(--dim);
-}
-.modal-close-btn:hover { color: var(--text); }
-
-</style>
 <style>
-:root{
-  --coral:#F07060; --coral-l:#F59080; --coral-d:#B03828;
-  --gold:#F5C840;  --gold-l:#FFE070;  --gold-d:#7A5510;
-  --cream:#FFF8F0; --cream2:#FFF0DC;
-  --text:#2B1505;  --dim:#8B6030;
-  --blue:#2A6BAD;  --blue-l:#4488CC;  --blue-d:#1A3A60;
-  --white:#F8F4EE;
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Sarabun:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --bg: #07090e;
+  --card-bg: rgba(18, 22, 33, 0.7);
+  --border: rgba(226, 184, 66, 0.2);
+  --border-hover: rgba(226, 184, 66, 0.45);
+  --coral: #F07060; --coral-l: #F59080; --coral-d: #B03828;
+  --gold: #E2B842;  --gold-l: #FFE070;  --gold-d: #7A5510;
+  --cream: #0c0f17; --cream2: rgba(226, 184, 66, 0.08);
+  --text: #F1EDE6;  --dim: #A69E90;
+  --blue: #3A86C8;  --blue-l: #5BA4E5;  --blue-d: #1A3E60;
+  --white: #111522;
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+  --glow-gold: 0 0 15px rgba(226, 184, 66, 0.2);
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:'Sarabun','TH Sarabun New',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;font-size:15px}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Sarabun', 'Outfit', sans-serif;
+  background: var(--bg);
+  background-image: radial-gradient(circle at 50% 0%, #16182c 0%, #07090e 70%);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 15px;
+}
 
 /* ── HEADER ─────────────────────────── */
-header{
-  background:linear-gradient(135deg,#F07060 0%,#F5C840 100%);
-  padding:.7rem 1.2rem;
-  display:flex;align-items:center;gap:.8rem;
-  box-shadow:0 2px 10px rgba(200,80,40,.22);
+header {
+  background: linear-gradient(135deg, #131424 0%, #080811 100%);
+  border-bottom: 1.5px solid var(--border);
+  padding: .9rem 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
 }
-.logo-mu{font-size:1.7rem;font-weight:800;color:#fff;text-shadow:2px 2px 0 var(--coral-d);line-height:1}
-.logo-hub{font-size:1.7rem;font-weight:800;color:#FFF8D0;text-shadow:2px 2px 0 var(--gold-d);line-height:1}
-.header-tag{color:#ffffff;font-size:1.6rem;font-weight:700;letter-spacing:.04em;margin-left:.2rem;text-shadow:1px 1px 3px rgba(0,0,0,0.15)}
+
+.logo-mu {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 0 8px rgba(240, 112, 96, 0.5);
+  line-height: 1;
+}
+
+.logo-hub {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: var(--gold);
+  text-shadow: 0 0 8px rgba(226, 184, 66, 0.5);
+  line-height: 1;
+}
+
+.header-tag {
+  color: var(--gold);
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  margin-left: .2rem;
+}
+
 .header-logo-container {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   right: 1.2rem;
-  background: #ffffff;
+  background: rgba(18, 22, 33, 0.85);
+  backdrop-filter: blur(8px);
+  border: 2px solid var(--gold);
   width: 96px;
   height: 96px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  box-shadow: var(--glow-gold);
   z-index: 10;
   overflow: hidden;
 }
+
 .header-logo-container img {
   height: 76px;
   width: 76px;
@@ -340,60 +104,121 @@ header{
   display: block;
 }
 
+/* ── TAB BAR & TABS ─────────────────── */
+.tab-bar {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  background: rgba(226, 184, 66, 0.05);
+  border: 1.5px solid var(--border);
+  color: var(--dim);
+  padding: .38rem 1.15rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .2s ease;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  height: 2.25rem;
+  user-select: none;
+}
+
+.tab-btn:hover {
+  background: rgba(226, 184, 66, 0.12);
+  color: var(--text);
+  border-color: var(--border-hover);
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, var(--blue) 0%, var(--blue-d) 100%);
+  border-color: var(--blue-l);
+  color: #ffffff;
+  box-shadow: 0 0 15px rgba(58, 134, 200, 0.4);
+}
+
+.tab-content {
+  display: block;
+}
+
+.tab-content.hidden {
+  display: none !important;
+}
+
+/* ── INPUT BARS ─────────────────────── */
 .bar-row {
-  padding: .8rem 1.2rem;
+  padding: 1rem 1.2rem;
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
-  gap: .6rem .8rem;
+  gap: .8rem 1rem;
+  backdrop-filter: blur(12px);
+  border-bottom: 1.5px solid var(--border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
+
 .name-bar {
-  background: #fff;
-  border-bottom: 1px solid #E8D0A0;
+  background: rgba(18, 22, 33, 0.65);
 }
+
 .birth-bar {
-  background: #fff;
-  border-bottom: 1.5px solid #E8D0A0;
+  background: rgba(18, 22, 33, 0.75);
 }
+
 .transit-bar {
-  background: var(--cream2);
-  border-bottom: 1.5px solid #E0C090;
+  background: rgba(10, 14, 24, 0.85);
 }
+
 .bar-row .field {
   display: flex;
   flex-direction: column;
   gap: .2rem;
   min-width: 0;
 }
+
 .bar-row label {
   font-size: .72rem;
   font-weight: 700;
-  color: var(--dim);
+  color: var(--gold);
   letter-spacing: .04em;
   white-space: nowrap;
 }
+
 input, select, textarea {
-  background: var(--cream);
-  border: 1.5px solid #D4A84066;
-  border-radius: 6px;
-  padding: .38rem .65rem;
+  background: rgba(8, 11, 18, 0.85);
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: .38rem .75rem;
   color: var(--text);
   font-family: inherit;
   font-size: .88rem;
-  transition: border-color .15s;
-  height: 2.1rem;
+  transition: all 0.2s ease;
+  height: 2.25rem;
 }
+
 input[type="number"] {
   padding: .38rem .3rem .38rem .5rem;
 }
+
 input:focus, select:focus, textarea:focus {
   outline: none;
-  border-color: var(--coral);
-  box-shadow: 0 0 0 2px rgba(240, 112, 96, .12);
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(226, 184, 66, .2);
+  background: rgba(12, 17, 28, 0.95);
 }
+
 select option {
-  background: #fff;
+  background: #111522;
+  color: var(--text);
 }
+
 .bar-row .field-name { flex: 0 1 320px; }
 .bar-row .field-date { flex: 0 0 280px; }
 .bar-row .field-time { flex: 0 0 145px; }
@@ -401,7 +226,7 @@ select option {
 .bar-row .field-city { flex: 0 0 200px; }
 .bar-row .field-coord { flex: 0 0 100px; }
 
-/* ── CONTROLS BAR ───────────────────── */
+/* ── BUTTONS & CONTROLS ───────────────── */
 .tog {
   display: inline-flex;
   align-items: center;
@@ -416,69 +241,645 @@ select option {
   cursor: pointer;
   user-select: none;
   transition: all .12s;
-  height: 2.1rem;
+  height: 2.25rem;
   width: auto;
   min-width: 110px;
   align-self: flex-end;
 }
-.tog-n{background:var(--blue);color:#fff;border-color:var(--blue-d)}
-.tog-n.off{background:#FFF9E6;color:var(--blue);border-color:var(--blue)}
-.tog-t{background:var(--blue);color:#fff;border-color:var(--blue-d)}
-.tog-t.off{background:#FFF9E6;color:var(--blue);border-color:var(--blue)}
-.tog.off:hover{background:var(--cream2)}
-.tog-dot{width:8px;height:8px;border-radius:50%;background:currentColor}
+
+.tog-n {
+  background: var(--blue);
+  color: #fff;
+  border-color: var(--blue-d);
+  box-shadow: 0 0 10px rgba(58, 134, 200, 0.25);
+}
+
+.tog-n.off {
+  background: rgba(226, 184, 66, 0.05);
+  color: var(--blue);
+  border-color: var(--blue);
+  box-shadow: none;
+}
+
+.tog-t {
+  background: var(--blue);
+  color: #fff;
+  border-color: var(--blue-d);
+  box-shadow: 0 0 10px rgba(58, 134, 200, 0.25);
+}
+
+.tog-t.off {
+  background: rgba(226, 184, 66, 0.05);
+  color: var(--blue);
+  border-color: var(--blue);
+  box-shadow: none;
+}
+
+.tog.off:hover {
+  background: rgba(226, 184, 66, 0.12);
+}
+
+.tog-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
 .btn {
-  padding: .32rem .75rem;
-  border-radius: 6px;
+  padding: .38rem 1.15rem;
+  border-radius: 8px;
   border: none;
   font-family: inherit;
-  font-size: .82rem;
+  font-size: .85rem;
   font-weight: 700;
   cursor: pointer;
-  transition: all .12s;
-  height: 2.1rem;
+  transition: all .2s ease;
+  height: 2.25rem;
   width: auto;
   min-width: 110px;
   align-self: flex-end;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
-.btn:hover{filter:brightness(1.07);transform:translateY(-1px)}
-.btn:active{transform:translateY(0)}
-.btn-coral{background:var(--coral);color:#fff}
-.btn-gold{background:var(--gold);color:var(--text)}
-.btn-ghost{background:var(--cream2);color:var(--dim);border:1px solid #D4A840}
+
+.btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.15);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-coral {
+  background: linear-gradient(135deg, var(--coral) 0%, var(--coral-d) 100%);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(240, 112, 96, 0.35);
+}
+
+.btn-gold {
+  background: linear-gradient(135deg, var(--gold-l) 0%, var(--gold) 100%);
+  color: #1e1202;
+  box-shadow: 0 4px 15px rgba(226, 184, 66, 0.35);
+}
+
+.btn-ghost {
+  background: rgba(226, 184, 66, 0.05);
+  color: var(--text);
+  border: 1.5px solid var(--border);
+}
+
+.btn-ghost:hover {
+  background: rgba(226, 184, 66, 0.12);
+  border-color: var(--border-hover);
+}
 
 /* ── MAIN ───────────────────────────── */
-main{max-width:1360px;margin:0 auto 0 0;padding:1.2rem 1.2rem 3rem 1.2rem}
-.layout{display:grid;grid-template-columns:520px 1fr 1fr;gap:1.4rem;align-items:start}
-@media(max-width:1200px){
-  .layout{grid-template-columns:1fr 1fr;gap:1.2rem}
+main {
+  max-width: 1360px;
+  margin: 0 auto 0 0;
+  padding: 1.5rem 1.2rem 3rem 1.2rem;
 }
-@media(max-width:800px){
-  .layout{grid-template-columns:1fr}
+
+.layout {
+  display: grid;
+  grid-template-columns: 520px 1fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media(max-width:1200px) {
+  .layout {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+  }
+}
+
+@media(max-width:800px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ── WHEEL ──────────────────────────── */
-.wheel-wrap{display:flex;flex-direction:column;align-items:flex-start;gap:.7rem}
-#wheel-svg{width:100%;max-width:520px;height:auto;filter:drop-shadow(0 3px 14px rgba(40,80,160,.18))}
-.legend{display:flex;gap:.8rem;flex-wrap:wrap;font-size:.78rem;color:var(--dim)}
-.legend-item{display:flex;align-items:center;gap:.28rem}
-.lc{width:9px;height:9px;border-radius:50%;display:inline-block}
+.wheel-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: .8rem;
+}
+
+#wheel-svg {
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.5));
+}
+
+.legend {
+  display: flex;
+  gap: .8rem;
+  flex-wrap: wrap;
+  font-size: .78rem;
+  color: var(--dim);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: .28rem;
+}
+
+.lc {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+}
 
 /* ── CARD ───────────────────────────── */
-.card{background:#ffffff;border:1px solid #E8D0A0;border-radius:14px;padding:1.3rem;box-shadow:0 4px 15px rgba(0,0,0,0.05)}
-.card-title{font-size:1.02rem;font-weight:700;color:var(--text);margin-bottom:1rem;padding-bottom:.55rem;border-bottom:1.5px solid #E8D0A0;display:flex;align-items:center;gap:0.4rem}
+.card {
+  background: var(--card-bg);
+  border: 1.5px solid var(--border);
+  border-radius: 18px;
+  padding: 1.5rem;
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.25s ease;
+}
+
+.card:hover {
+  border-color: var(--border-hover);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), var(--glow-gold);
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--gold);
+  margin-bottom: 1.2rem;
+  padding-bottom: .6rem;
+  border-bottom: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
 
 /* ── PLANET TABLE ───────────────────── */
-.ptable{width:100%;border-collapse:collapse;font-size:.9rem;color:var(--text)}
-.ptable thead th{background:var(--cream2);color:var(--text);padding:.65rem .8rem;text-align:left;font-weight:600;border-bottom:2px solid #E8D0A0;text-transform:uppercase;font-size:0.75rem;letter-spacing:0.05em}
-.ptable thead th:first-child{border-top-left-radius:6px;border-bottom-left-radius:6px}
-.ptable thead th:last-child{border-top-right-radius:6px;border-bottom-right-radius:6px}
-.ptable tbody td{padding:.65rem .8rem;border-bottom:1px solid #E8D0A066;vertical-align:middle}
-.ptable tbody tr:hover td{background:rgba(212,175,55,0.04)}
-.ptable .transit-row td { background: #FFF9E6; color: var(--text); }
-.pname{font-weight:700}
-.retro{font-size:.68em;color:var(--coral);margin-left:2px}
-.group-head td{padding:.4rem .8rem;font-size:.78rem;font-weight:700;border-bottom:none}
+.ptable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .9rem;
+  color: var(--text);
+}
+
+.ptable thead th {
+  background: rgba(226, 184, 66, 0.12);
+  color: var(--gold);
+  padding: .75rem .8rem;
+  text-align: left;
+  font-weight: 700;
+  border-bottom: 2.5px solid var(--border);
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+}
+
+.ptable thead th:first-child {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.ptable thead th:last-child {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.ptable tbody td {
+  padding: .75rem .8rem;
+  border-bottom: 1px solid rgba(226, 184, 66, 0.08);
+  vertical-align: middle;
+}
+
+.ptable tbody tr:hover td {
+  background: rgba(226, 184, 66, 0.04);
+}
+
+.ptable .transit-row td {
+  background: rgba(226, 184, 66, 0.03);
+  color: var(--text);
+}
+
+.pname {
+  font-weight: 700;
+}
+
+.retro {
+  font-size: .68em;
+  color: var(--coral);
+  margin-left: 2px;
+}
+
+.group-head td {
+  padding: .5rem .8rem;
+  font-size: .8rem;
+  font-weight: 700;
+  border-bottom: none;
+}
+
+/* ── ASTROLOGER STYLES ───────────────── */
+.astrologer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.astrologer-card {
+  background: rgba(18, 22, 33, 0.6);
+  border: 1.5px solid var(--border);
+  border-radius: 18px;
+  padding: 1.5rem;
+  box-shadow: var(--glass-shadow);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.astrologer-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), var(--glow-gold);
+  border-color: var(--gold);
+}
+
+.astrologer-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 3px solid var(--gold);
+  object-fit: cover;
+  margin-bottom: 0.8rem;
+  background: var(--bg);
+  box-shadow: 0 0 10px rgba(226, 184, 66, 0.3);
+}
+
+.astrologer-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.3rem;
+}
+
+.astrologer-specialty {
+  font-size: 0.82rem;
+  color: var(--gold);
+  background: rgba(226, 184, 66, 0.1);
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+}
+
+.astrologer-rating {
+  color: var(--coral-l);
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.astrologer-price {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 1.2rem;
+}
+
+.astrologer-bio {
+  font-size: 0.82rem;
+  color: var(--dim);
+  line-height: 1.4;
+  margin-bottom: 1.2rem;
+  min-height: 50px;
+}
+
+/* ── BOOKING FORM STYLES ─────────────── */
+.booking-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.booking-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.time-slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.slot-btn {
+  background: rgba(8, 11, 18, 0.7);
+  border: 1.5px solid var(--border);
+  padding: 0.6rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  font-family: inherit;
+}
+
+.slot-btn:hover:not(.busy) {
+  background: rgba(226, 184, 66, 0.12);
+  border-color: var(--gold);
+}
+
+.slot-btn.active {
+  background: linear-gradient(135deg, var(--gold-l) 0%, var(--gold) 100%);
+  border-color: var(--gold-d);
+  color: #1e1202;
+  box-shadow: 0 0 12px rgba(226, 184, 66, 0.45);
+}
+
+.slot-btn.busy {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.2);
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+/* ── QUEUE / BOOKING TRACKING ───────── */
+.booking-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.booking-item {
+  background: rgba(22, 27, 38, 0.6);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 1.3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.booking-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.booking-status {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+}
+
+.status-pending {
+  background: rgba(255, 193, 7, 0.12);
+  color: #ffc107;
+  border-color: rgba(255, 193, 7, 0.2);
+}
+
+.status-confirmed {
+  background: rgba(40, 167, 69, 0.12);
+  color: #28a745;
+  border-color: rgba(40, 167, 69, 0.2);
+}
+
+.status-completed {
+  background: rgba(108, 117, 125, 0.12);
+  color: #6c757d;
+  border-color: rgba(108, 117, 125, 0.2);
+}
+
+/* ── MU SHOP STYLES ──────────────────── */
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.shop-card {
+  background: rgba(22, 27, 38, 0.6);
+  border: 1.5px solid var(--border);
+  border-radius: 18px;
+  padding: 1.3rem;
+  box-shadow: var(--glass-shadow);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.shop-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), var(--glow-gold);
+  border-color: var(--gold);
+}
+
+.shop-img-holder {
+  height: 160px;
+  background: rgba(8, 11, 18, 0.8);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.8rem;
+  font-size: 3rem;
+  color: var(--gold);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  position: relative;
+}
+
+.shop-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.4rem;
+}
+
+.shop-price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--coral-l);
+  margin-bottom: 0.6rem;
+}
+
+.shop-desc {
+  font-size: 0.82rem;
+  color: var(--dim);
+  line-height: 1.4;
+  margin-bottom: 1rem;
+  flex-grow: 1;
+}
+
+/* ── MOCK CHECKOUT MODAL ────────────── */
+.mu-modal {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.mu-modal-content {
+  background: #0f131c;
+  border: 2px solid var(--gold);
+  border-radius: 20px;
+  width: 90%;
+  max-width: 460px;
+  padding: 2rem;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+  position: relative;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 1rem; right: 1rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: none; border: none;
+  cursor: pointer; color: var(--dim);
+}
+
+.modal-close-btn:hover {
+  color: var(--text);
+}
+
+/* ── MOBILE BOTTOM TAB BAR & RESPONSIVE LAYOUT ──────────────── */
+@media (max-width: 768px) {
+  body {
+    padding-bottom: calc(68px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+  
+  .tab-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(8, 11, 18, 0.9);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1.5px solid var(--border);
+    box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.5);
+    margin-top: 0;
+    padding: 0.5rem 0.25rem calc(0.5rem + env(safe-area-inset-bottom, 0px)) 0.25rem;
+    z-index: 999;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 0;
+    flex-wrap: nowrap;
+  }
+  
+  .tab-btn {
+    border: none !important;
+    background: transparent !important;
+    padding: 0.2rem 0 !important;
+    border-radius: 0 !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+    height: auto !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    flex: 1;
+    color: var(--dim) !important;
+    box-shadow: none !important;
+    transition: color 0.15s ease, transform 0.15s ease;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .tab-btn:hover {
+    background: transparent !important;
+    color: var(--gold) !important;
+  }
+  
+  .tab-btn.active {
+    background: transparent !important;
+    color: var(--gold) !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+  }
+  
+  .tab-btn.active .tab-icon {
+    transform: scale(1.22);
+    filter: drop-shadow(0 0 8px rgba(226, 184, 66, 0.5));
+  }
+  
+  .tab-icon {
+    font-size: 1.3rem;
+    transition: transform 0.2s ease;
+  }
+  
+  .tab-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.72rem;
+  }
+  
+  /* Header & Logo styling on mobile */
+  .header-logo-container {
+    width: 64px !important;
+    height: 64px !important;
+    top: 32px !important;
+    transform: translateY(-50%) !important;
+    right: 1rem !important;
+  }
+  .header-logo-container img {
+    width: 50px !important;
+    height: 50px !important;
+  }
+  header {
+    padding-right: 85px !important;
+  }
+  .name-bar.bar-row {
+    padding-right: 1.2rem !important;
+  }
+  .header-tag {
+    font-size: 1.15rem !important;
+  }
+}
 </style>
 </head>
 <body>
@@ -489,13 +890,36 @@ main{max-width:1360px;margin:0 auto 0 0;padding:1.2rem 1.2rem 3rem 1.2rem}
   <header style="padding-right: 120px; display: flex; flex-direction: column; gap: 8px;">
     <span class="header-tag">ผูกดวงโหราศาสตร์ไทย ปฏิทินลาหิรี (นิรายนะ)</span>
     <div class="tab-bar">
-      <button id="btn-calculator-tab" class="tab-btn active" onclick="switchTab('calculator-tab')">🔮 ผูกดวงชะตา</button>
-      <button id="btn-astrologers-tab" class="tab-btn" onclick="switchTab('astrologers-tab')">🧙‍♂️ นักพยากรณ์</button>
-      <button id="btn-booking-tab" class="tab-btn" onclick="switchTab('booking-tab')">🗓️ จองคิวดูดวง</button>
-      <button id="btn-my-bookings-tab" class="tab-btn" onclick="switchTab('my-bookings-tab')">🎁 ดูดวงฟรี</button>
-      <button id="btn-shop-tab" class="tab-btn" onclick="switchTab('shop-tab')">🛍️ ร้านค้าสายมู</button>
+      <button id="btn-calculator-tab" class="tab-btn active" onclick="switchTab('calculator-tab')">
+        <span class="tab-icon">🔮</span>
+        <span class="tab-label">ผูกดวงชะตา</span>
+      </button>
+      <button id="btn-astrologers-tab" class="tab-btn" onclick="switchTab('astrologers-tab')">
+        <span class="tab-icon">🧙‍♂️</span>
+        <span class="tab-label">นักพยากรณ์</span>
+      </button>
+      <button id="btn-booking-tab" class="tab-btn" onclick="switchTab('booking-tab')">
+        <span class="tab-icon">🗓️</span>
+        <span class="tab-label">จองคิวดูดวง</span>
+      </button>
+      <button id="btn-my-bookings-tab" class="tab-btn" onclick="switchTab('my-bookings-tab')">
+        <span class="tab-icon">🎁</span>
+        <span class="tab-label">ดูดวงฟรี</span>
+      </button>
+      <button id="btn-shop-tab" class="tab-btn" onclick="switchTab('shop-tab')">
+        <span class="tab-icon">🛍️</span>
+        <span class="tab-label">ร้านค้าสายมู</span>
+      </button>
     </div>
   </header>
+  <!-- LARGE FLOATING LOGO -->
+  <div class="header-logo-container">
+    <img src="logo.png" alt="MuHub Logo">
+  </div>
+</div>
+
+<!-- CALCULATOR TAB START -->
+<div id="calculator-tab" class="tab-content">
   <div class="name-bar bar-row" style="padding-right: 120px; display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap;">
     <div class="field field-name" style="flex: 0 1 320px;">
       <label>ชื่อ</label>
@@ -511,14 +935,6 @@ main{max-width:1360px;margin:0 auto 0 0;padding:1.2rem 1.2rem 3rem 1.2rem}
       </button>
     </div>
   </div>
-  <!-- LARGE FLOATING LOGO -->
-  <div class="header-logo-container">
-    <img src="logo.png" alt="MuHub Logo">
-  </div>
-</div>
-
-<!-- CALCULATOR TAB START -->
-<div id="calculator-tab" class="tab-content">
 
 <div class="birth-bar bar-row">
   <button class="tog tog-n" id="togN" onclick="toggleLayer('n')">ดวงกำเนิด</button>
@@ -557,11 +973,11 @@ main{max-width:1360px;margin:0 auto 0 0;padding:1.2rem 1.2rem 3rem 1.2rem}
   </div>
   <div class="field field-coord" id="bLatField" style="display: none;">
     <label>ละติจูด</label>
-    <input type="number" id="bLat" value="13.7563" step="0.0001" style="width: 90px;">
+    <input type="number" id="bLat" value="13.7563" step="any" style="width: 90px;">
   </div>
   <div class="field field-coord" id="bLonField" style="display: none;">
     <label>ลองจิจูด</label>
-    <input type="number" id="bLon" value="100.5018" step="0.0001" style="width: 90px;">
+    <input type="number" id="bLon" value="100.5018" step="any" style="width: 90px;">
   </div>
   <button class="btn btn-ghost" id="btnUnknownTime" onclick="toggleUnknownTime()">ไม่ทราบเวลา</button>
   <div id="lagnaBadge" style="display: none; height: 2.1rem; padding: 0 .85rem; border-radius: 6px; font-family: inherit; font-size: .82rem; font-weight: 700; background: var(--blue); color: #ffffff; border: 1px solid var(--blue-d); align-self: flex-end; align-items: center; justify-content: center; white-space: nowrap;">ลัคนาราศี...</div>
@@ -605,11 +1021,11 @@ main{max-width:1360px;margin:0 auto 0 0;padding:1.2rem 1.2rem 3rem 1.2rem}
   </div>
   <div class="field field-coord" id="tLatField" style="display: none;">
     <label>ละติจูด</label>
-    <input type="number" id="tLat" value="13.7563" step="0.0001" style="width: 80px;">
+    <input type="number" id="tLat" value="13.7563" step="any" style="width: 80px;">
   </div>
   <div class="field field-coord" id="tLonField" style="display: none;">
     <label>ลองจิจูด</label>
-    <input type="number" id="tLon" value="100.5018" step="0.0001" style="width: 80px;">
+    <input type="number" id="tLon" value="100.5018" step="any" style="width: 80px;">
   </div>
   <button class="btn btn-ghost" onclick="setTransitNow()">ตอนนี้</button>
   <button class="btn btn-coral" onclick="runCalc()">✦ ผูกดวง</button>
@@ -737,12 +1153,39 @@ main{max-width:1360px;margin:0 auto 0 0;padding:1.2rem 1.2rem 3rem 1.2rem}
   <div class="card booking-container">
     <div class="card-title">🗓️ ระบบจองคิวตรวจดวงชะตา</div>
     <div style="font-size: 0.88rem; color: var(--dim); margin-bottom: 1.5rem;">ระบุรายละเอียดเพื่อยืนยันนัดหมายของคุณกับหมอดู</div>
+    
+    <!-- Google Calendar Sync Card (Hidden in Background) -->
+    <div class="card" style="display: none;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.8rem;">
+        <span style="font-size: 0.9rem; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 6px;">
+          📅 การเชื่อมต่อ Google Calendar (ตรวจสอบสิทธิ์ว่าง)
+        </span>
+        <span id="gcalStatusBadge" style="font-size: 0.78rem; font-weight: 700; color: #2E7D32; background: #E8F5E9; padding: 3px 8px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px;">
+          <span style="width: 6px; height: 6px; border-radius: 50%; background: #2E7D32; display: inline-block;"></span> 
+          โหมดจำลอง (muhub54@gmail.com)
+        </span>
+      </div>
+      <div style="width: 100%;">
+        <div class="field" style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 0; width: 100%;">
+          <label style="font-size: 0.72rem; font-weight: 700; color: var(--dim);">Google Calendar API Key (ทางเลือก - สำหรับดึงข้อมูลจริง)</label>
+          <input type="password" id="gcalApiKey" placeholder="ใส่ Google Calendar API Key เพื่อดึงข้อมูลจริง" style="width: 100%; height: 2.1rem;" onchange="onGCalApiKeyChange()">
+        </div>
+      </div>
+    </div>
+
     <form id="bookingForm" onsubmit="submitBooking(event)">
+      <!-- Reschedule warning banner -->
+      <div id="rescheduleWarning" style="display: none; background: rgba(226, 184, 66, 0.12); border: 1.5px solid var(--gold); border-radius: 8px; padding: 12px; margin-bottom: 1.5rem; color: var(--gold); font-weight: bold; font-size: 0.9rem;">
+        🕒 กำลังเลื่อนนัดคิว ID: <span id="rescheduleIdText" style="text-decoration: underline;"></span> (อ้างอิงสลิปใบเดิม)<br>
+        <span style="font-size: 0.8rem; font-weight: normal; color: var(--dim); display: block; margin-top: 4px;">
+          กรุณาเลือกวันและเวลาใหม่ที่คุณต้องการ จากนั้นกดยืนยันด้านล่าง (หากต้องการยกเลิกการเลื่อนนัด <a href="javascript:void(0)" onclick="cancelReschedule()" style="color: var(--coral-l); text-decoration: underline;">กดยกเลิกที่นี่</a>)
+        </span>
+      </div>
       
       <div class="booking-grid">
         <div class="field">
           <label>เลือกนักพยากรณ์</label>
-          <select id="bookAstrologer" style="width: 100%;" required>
+          <select id="bookAstrologer" style="width: 100%;" required onchange="onAstrologerChange()">
             <option value="">-- เลือกนักพยากรณ์ --</option>
             <option value="อ. โกโก้ (โหราศาสตร์ไทย ระบบลาหิรี)">อ. โกโก้ (โหราศาสตร์ไทย ระบบลาหิรี) (399฿/45นาที)</option>
             <option value="อ. โกโก้ (วิเคราะห์เบอร์มงคล/ชื่อ)">อ. โกโก้ (วิเคราะห์เบอร์มงคล/ชื่อ) (399฿/30นาที)</option>
@@ -757,14 +1200,29 @@ main{max-width:1360px;margin:0 auto 0 0;padding:1.2rem 1.2rem 3rem 1.2rem}
             <option value="ส่งสรุปเอกสาร PDF">สรุปวิเคราะห์เอกสาร PDF</option>
           </select>
         </div>
+        <div class="field">
+          <label>เลือกวันนัดหมาย</label>
+          <input type="date" id="bookDate" required onchange="onDateChange()" style="width: 100%;">
+        </div>
       </div>
 
       <div style="margin-bottom: 1.5rem;">
-        <div style="font-size: 0.85rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text);">เลือกเวลาที่สะดวก</div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+          <div style="font-size: 0.85rem; font-weight: 700; color: var(--text);">เลือกเวลาที่สะดวก</div>
+          <span id="slotsLoader" style="font-size: 0.8rem; font-weight: 700; color: var(--blue); display: none;">
+            🔄 กำลังตรวจสอบสถานะคิวว่างจากปฏิทิน...
+          </span>
+        </div>
         <div class="time-slots" id="slotsContainer">
           <!-- Slots will be populated dynamically -->
         </div>
-        <input type="hidden" id="selectedTime" required>
+        <div style="margin-top: 1.2rem; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+          <button type="button" class="btn btn-coral" style="display: inline-flex; align-items: center; gap: 6px; justify-content: center; width: auto; min-width: 140px; height: 2.4rem;" onclick="checkCalendarAvailability()">
+            🔄 เช็คตารางนัด
+          </button>
+          <div id="bookingStatusMessage" style="font-size: 0.88rem; font-weight: 700; display: none; align-items: center; gap: 6px; line-height: 1.4; flex: 1;"></div>
+        </div>
+        <input type="hidden" id="selectedTime">
       </div>
 
       <div class="card" style="border: 1px dashed #E8D0A0; background: var(--cream1); margin-bottom: 1.5rem; padding: 1rem;">
@@ -777,11 +1235,11 @@ main{max-width:1360px;margin:0 auto 0 0;padding:1.2rem 1.2rem 3rem 1.2rem}
           <div style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
             <div class="field" style="display: flex; flex-direction: column; gap: 0.2rem; flex: 1; min-width: 200px; max-width: 320px;">
               <label style="font-size: .72rem; font-weight: 700; color: var(--dim); letter-spacing: .04em;">ชื่อผู้รับทำนาย</label>
-              <input type="text" id="bookName" style="width: 100%;" placeholder="ชื่อเล่น หรือชื่อจริง" required>
+              <input type="text" id="bookName" style="width: 100%; padding: 0.65rem 0.75rem; height: 2.8rem; box-sizing: border-box;" placeholder="ชื่อเล่น หรือชื่อจริง" required>
             </div>
             <div class="field" style="display: flex; flex-direction: column; gap: 0.2rem; flex: 1; min-width: 200px; max-width: 320px;">
               <label style="font-size: .72rem; font-weight: 700; color: var(--dim); letter-spacing: .04em;">Line ID ของคุณ</label>
-              <input type="text" id="bookLineId" style="width: 100%;" placeholder="Line ID (สำหรับติดต่อดูดวง)" required>
+              <input type="text" id="bookLineId" style="width: 100%; padding: 0.65rem 0.75rem; height: 2.8rem; box-sizing: border-box;" placeholder="Line ID (สำหรับติดต่อดูดวง)" required>
             </div>
           </div>
           <!-- Birth details row in bar-row format -->
@@ -816,20 +1274,123 @@ main{max-width:1360px;margin:0 auto 0 0;padding:1.2rem 1.2rem 3rem 1.2rem}
             </div>
             <div class="field field-coord" id="bookLatField" style="display: none;">
               <label>ละติจูด</label>
-              <input type="number" id="bookLat" value="13.7563" step="0.0001" style="width: 90px;">
+              <input type="number" id="bookLat" value="13.7563" step="any" style="width: 90px;">
             </div>
             <div class="field field-coord" id="bookLonField" style="display: none;">
               <label>ลองจิจูด</label>
-              <input type="number" id="bookLon" value="100.5018" step="0.0001" style="width: 90px;">
+              <input type="number" id="bookLon" value="100.5018" step="any" style="width: 90px;">
             </div>
           </div>
         </div>
       </div>
 
-      <div style="text-align: right;">
-        <button type="submit" class="btn btn-coral" style="padding: 0.6rem 2rem;">✦ ยืนยันการจองคิว</button>
+      <div style="text-align: left;">
+        <button type="submit" class="btn btn-coral" style="padding: 0.6rem 2rem; width: auto; min-width: 250px;">✦ ยืนยันตารางนัด ไปที่หน้าชำระเงิน</button>
       </div>
     </form>
+    
+    <!-- BOOKING CHECKOUT INLINE SECTION -->
+    <div id="bookingCheckoutSection" style="display: none; border-top: 2.5px dashed #E8D0A0; margin-top: 2rem; padding-top: 2rem; width: 100%;">
+      <div style="max-width: 480px; padding: 1.8rem; margin: 0 auto; background: #ffffff; border: 2px solid var(--gold); border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.05);">
+        <div id="checkoutTitle" style="font-size: 1.25rem; font-weight: 800; color: var(--text); border-bottom: 2.5px solid #E8D0A0; padding-bottom: 0.5rem; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 6px;">
+          💳 ยืนยันการชำระเงินค่าจองคิว
+        </div>
+        
+        <!-- Booking Details Summary -->
+        <div style="background: var(--cream); border: 1.5px solid #E8D0A0; border-radius: 12px; padding: 1rem; margin-bottom: 1.2rem; font-size: 0.88rem; display: flex; flex-direction: column; gap: 6px; text-align: left;">
+          <div><span style="color: var(--dim); font-weight: 600;">นักพยากรณ์:</span> <strong id="summaryAstrologer">-</strong></div>
+          <div><span style="color: var(--dim); font-weight: 600;">บริการ:</span> <span id="summaryService">-</span></div>
+          <div><span style="color: var(--dim); font-weight: 600;">วันและเวลานัดหมาย:</span> <strong id="summaryTime">-</strong></div>
+          <div><span style="color: var(--dim); font-weight: 600;">ชื่อผู้รับการทำนาย:</span> <span id="summaryName">-</span></div>
+          <div><span style="color: var(--dim); font-weight: 600;">Line ID ติดต่อ:</span> <span id="summaryLine">-</span></div>
+          <div id="checkoutPriceContainer" style="border-top: 1px dashed #E8D0A0; margin-top: 6px; padding-top: 6px; display: flex; justify-content: space-between; align-items: center; font-size: 1.05rem;">
+            <span style="font-weight: 700; color: var(--text);">ยอดชำระทั้งสิ้น:</span>
+            <strong style="color: var(--coral-d); font-size: 1.2rem;">399 ฿</strong>
+          </div>
+        </div>
+
+        <!-- Reschedule Slip Reference Info -->
+        <div id="checkoutRescheduleInfo" style="display: none; background: rgba(40, 167, 69, 0.12); border: 1.5px solid rgba(40, 167, 69, 0.3); border-radius: 12px; padding: 1rem; margin-bottom: 1.2rem; font-size: 0.88rem; color: #28a745; text-align: left; font-weight: 600; line-height: 1.4;">
+          🟢 ระบบตรวจพบสลิปการโอนเงินใบเดิมเรียบร้อยแล้ว ไม่จำเป็นต้องแนบไฟล์ใหม่หรือชำระเงินเพิ่มเติม ระบบจะอ้างอิงข้อมูลสลิปการชำระเงินเดิมสำหรับคิวจองนี้
+        </div>
+ 
+        <!-- PromptPay QR Code Mock -->
+        <div id="checkoutQrSection" style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 1.2rem; background: #ffffff; border: 1px solid #eee; padding: 1rem; border-radius: 12px;">
+          <div style="display: flex; align-items: center; gap: 6px; font-weight: 700; color: #113566; font-size: 0.9rem;">
+            <span style="background: #113566; color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem;">พร้อมเพย์</span>
+            <span>PromptPay QR</span>
+          </div>
+          <!-- Styled SVG Mock QR Code -->
+          <div style="width: 140px; height: 140px; background: #f9f9f9; border: 1px solid #ddd; padding: 6px; display: flex; align-items: center; justify-content: center; position: relative;">
+            <svg viewBox="0 0 100 100" width="100%" height="100%">
+              <!-- Mock QR Patterns -->
+              <rect x="5" y="5" width="25" height="25" fill="#113566" />
+              <rect x="10" y="10" width="15" height="15" fill="#fff" />
+              <rect x="13" y="13" width="9" height="9" fill="#113566" />
+              
+              <rect x="70" y="5" width="25" height="25" fill="#113566" />
+              <rect x="75" y="10" width="15" height="15" fill="#fff" />
+              <rect x="78" y="13" width="9" height="9" fill="#113566" />
+              
+              <rect x="5" y="70" width="25" height="25" fill="#113566" />
+              <rect x="10" y="75" width="15" height="15" fill="#fff" />
+              <rect x="13" y="78" width="9" height="9" fill="#113566" />
+              
+              <!-- Random blocks to simulate QR -->
+              <rect x="35" y="10" width="5" height="15" fill="#113566" />
+              <rect x="45" y="5" width="15" height="5" fill="#113566" />
+              <rect x="35" y="35" width="25" height="5" fill="#113566" />
+              <rect x="5" y="45" width="15" height="10" fill="#113566" />
+              <rect x="45" y="45" width="10" height="20" fill="#113566" />
+              <rect x="70" y="45" width="20" height="10" fill="#113566" />
+              <rect x="35" y="70" width="15" height="5" fill="#113566" />
+              <rect x="70" y="70" width="5" height="15" fill="#113566" />
+              <rect x="85" y="80" width="10" height="10" fill="#113566" />
+              <rect x="50" y="80" width="10" height="15" fill="#113566" />
+              
+              <!-- Center icon placeholder -->
+              <rect x="42" y="42" width="16" height="16" rx="3" fill="#113566" />
+              <text x="50" y="52" fill="#fff" font-size="7" font-weight="bold" text-anchor="middle">MU</text>
+            </svg>
+          </div>
+          <div style="font-size: 0.72rem; color: var(--dim); text-align: center;">
+            ชื่อบัญชี: บจก. มูฮับ (MuHub Co., Ltd.)<br>
+            เลขที่อ้างอิง: <span id="paymentRefId">MU-88912-339</span>
+          </div>
+          <div style="font-size: 0.8rem; font-weight: 700; color: #d32f2f;">
+            ⏳ กรุณาชำระเงินและแนบสลิปภายใน <span id="paymentTimer">05:00</span> นาที
+          </div>
+        </div>
+
+        <!-- Slip Upload Form -->
+        <div id="checkoutSlipSection" style="margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 8px; text-align: left;">
+          <label style="font-size: 0.78rem; font-weight: 700; color: var(--text);">แนบสลิปการโอนเงิน (จำลอง)</label>
+          <div style="display: flex; gap: 8px;">
+            <input type="file" id="bookingSlipFile" accept="image/*" style="display: none;" onchange="onBookingSlipSelected()">
+            <button type="button" class="btn btn-ghost" style="flex: 1; height: 2.2rem; min-width: auto; font-size: 0.82rem;" onclick="document.getElementById('bookingSlipFile').click()">
+              📁 <span id="bookingSlipFilename">เลือกไฟล์รูปภาพสลิป</span>
+            </button>
+            <button type="button" class="btn btn-gold" style="height: 2.2rem; min-width: auto; padding: 0 0.8rem; font-size: 0.78rem;" onclick="simulateSlipAutoFill()">
+              🪄 จำลองไฟล์สลิป
+            </button>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 4px; margin-top: 6px;">
+            <label style="font-size: 0.72rem; font-weight: 700; color: var(--dim); letter-spacing: .04em;">ชื่อบัญชีผู้โอน</label>
+            <input type="text" id="slipSenderName" style="width: 100%; padding: 0.4rem 0.6rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.82rem; background: var(--bg-card); color: var(--text); box-sizing: border-box;" placeholder="ระบุชื่อบัญชีผู้โอน">
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <label style="font-size: 0.72rem; font-weight: 700; color: var(--dim); letter-spacing: .04em;">วันเวลาโอน (ตามสลิป)</label>
+            <input type="datetime-local" id="slipTransferDateTime" style="width: 100%; padding: 0.4rem 0.6rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.82rem; background: var(--bg-card); color: var(--text); box-sizing: border-box;">
+          </div>
+        </div>
+
+        <!-- Confirm Button -->
+        <div style="display: flex; gap: 10px;">
+          <button type="button" class="btn btn-coral" style="flex: 1.5;" onclick="confirmBookingPayment()">✔️ ยืนยันการชำระเงิน</button>
+          <button type="button" class="btn btn-ghost" style="flex: 1;" onclick="closeBookingCheckoutModal()">ยกเลิก</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -906,6 +1467,9 @@ main{max-width:1360px;margin:0 auto 0 0;padding:1.2rem 1.2rem 3rem 1.2rem}
      ============================================================ -->
 <script>
 'use strict';
+
+
+
 
 // ── CONSTANTS ──────────────────────────────────────────────────────────
 const SIGNS_TH = ['เมษ','พฤษภ','มิถุน','กรกฎ','สิงห์','กันย์',
@@ -6539,15 +7103,15 @@ const RO=252,  // zodiac outer
       RC=118;  // center
 
 // Colors
-const C_BG='#ffffff';          // white
-const C_ZOD_W='#F0EDE6';       // zodiac white sector
-const C_ZOD_B='#4477AA';       // zodiac blue sector
-const C_ZOD_WT='#1A2840';      // text on white sector
-const C_ZOD_BT='#F0EDE6';      // text on blue sector
-const C_NAT='#2A6BAD';         // natal dot fill (blue)
-const C_NAT_T='#1A3A60';       // natal text (dark blue)
-const C_TRN='#F8F5EE';         // transit dot fill (white/cream)
-const C_TRN_T='#1A3050';       // transit text
+const C_BG='#07090e';          // dark bg
+const C_ZOD_W='#11162b';       // zodiac dark sector
+const C_ZOD_B='#18223d';       // zodiac blue-black sector
+const C_ZOD_WT='#F1EDE6';      // text on dark sector
+const C_ZOD_BT='#E2B842';      // text on blue-black sector
+const C_NAT='#E2B842';         // natal dot fill (gold)
+const C_NAT_T='#E2B842';       // natal text (gold)
+const C_TRN='#88C2FF';         // transit dot fill (ice blue)
+const C_TRN_T='#88C2FF';       // transit text
 const C_DIV='#6688AA';         // divider ring
 
 function f(n){return Math.round(n*10)/10;}
@@ -6571,10 +7135,10 @@ function drawWheel(){
   let s='';
 
   // 1. Backgrounds
-  // Outer circle (transit background) - soft cream-gold
-  s+=`<circle cx="${CX}" cy="${CY}" r="256" fill="#FFF9E6"/>`;
-  // Inner circle (natal background) - white
-  s+=`<circle cx="${CX}" cy="${CY}" r="210" fill="#ffffff"/>`;
+  // Outer circle (transit background) - dark space navy
+  s+=`<circle cx="${CX}" cy="${CY}" r="256" fill="#0c101f"/>`;
+  // Inner circle (natal background) - dark cosmic indigo
+  s+=`<circle cx="${CX}" cy="${CY}" r="210" fill="#11162b"/>`;
 
   // 2. Outer boundary circle (gold)
   s+=`<circle cx="${CX}" cy="${CY}" r="210" fill="none" stroke="#D4AF37" stroke-width="3.5"/>`;
@@ -6602,7 +7166,7 @@ function drawWheel(){
     const lx = CX + rLabel * Math.cos(a);
     const ly = CY - rLabel * Math.sin(a);
     s += `<text x="${f(lx)}" y="${f(ly)}" text-anchor="middle" dominant-baseline="middle"
-          font-size="12" fill="#7A5510" font-family="Sarabun,sans-serif" font-weight="700" opacity="0.85">${SIGNS_TH[i]}</text>`;
+          font-size="12" fill="#E2B842" font-family="Sarabun,sans-serif" font-weight="700" opacity="0.9">${SIGNS_TH[i]}</text>`;
   }
 
   // 6. Draw Natal Planets (inside the sectors, using Thai numerals)
@@ -6918,20 +7482,84 @@ window.switchTab = function(tabId) {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
-// Available time slots (simulated)
-const MOCK_SLOTS = [
-  { time: '09:00 - 10:00', busy: false },
-  { time: '10:00 - 11:00', busy: true },
-  { time: '11:00 - 12:00', busy: false },
-  { time: '13:00 - 14:00', busy: false },
-  { time: '14:00 - 15:00', busy: false },
-  { time: '15:00 - 16:00', busy: true },
-  { time: '16:00 - 17:00', busy: false },
-  { time: '19:00 - 20:00', busy: false }
+// Base time slots definition
+const MOCK_SLOTS_BASE = [
+  { time: '09:00 - 10:00', startHour: 9, endHour: 10 },
+  { time: '10:00 - 11:00', startHour: 10, endHour: 11 },
+  { time: '11:00 - 12:00', startHour: 11, endHour: 12 },
+  { time: '13:00 - 14:00', startHour: 13, endHour: 14 },
+  { time: '14:00 - 15:00', startHour: 14, endHour: 15 },
+  { time: '15:00 - 16:00', startHour: 15, endHour: 16 },
+  { time: '16:00 - 17:00', startHour: 16, endHour: 17 },
+  { time: '19:00 - 20:00', startHour: 19, endHour: 20 }
 ];
 
-// User bookings list (initially contains one completed/past booking)
-const MY_BOOKINGS = [
+let reschedulingBookingId = null;
+
+window.rescheduleBooking = function(id) {
+  const booking = MY_BOOKINGS.find(b => b.id === id);
+  if (!booking) return;
+
+  reschedulingBookingId = id;
+  
+  // Switch tab to booking
+  switchTab('booking-tab');
+
+  // Fill form
+  document.getElementById('bookAstrologer').value = booking.astrologer;
+  document.getElementById('bookService').value = booking.service;
+  document.getElementById('bookName').value = booking.name;
+  document.getElementById('bookLineId').value = booking.lineId;
+
+  // Show warning banner
+  document.getElementById('rescheduleWarning').style.display = 'block';
+  document.getElementById('rescheduleIdText').textContent = id;
+  
+  // Set default values for slip inputs
+  document.getElementById('slipSenderName').value = booking.name;
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  document.getElementById('slipTransferDateTime').value = `${year}-${month}-${day}T${hours}:${minutes}`;
+
+  // Scroll to booking form
+  setTimeout(() => {
+    document.getElementById('bookingForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+};
+
+window.cancelReschedule = function() {
+  reschedulingBookingId = null;
+  document.getElementById('rescheduleWarning').style.display = 'none';
+  document.getElementById('bookingForm').reset();
+  
+  // Reset date/time defaults
+  document.getElementById('bookDay').value = "13";
+  document.getElementById('bookMonth').value = "4";
+  document.getElementById('bookYear').value = "2533";
+  document.getElementById('bookHour').value = "08";
+  document.getElementById('bookMin').value = "00";
+  document.getElementById('bookCountry').value = "TH";
+  populateCities('book', 'bangkok');
+  
+  document.querySelectorAll('.slot-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('selectedTime').value = '';
+  
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const tyyyy = tomorrow.getFullYear();
+  const tmm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+  const tdd = String(tomorrow.getDate()).padStart(2, '0');
+  document.getElementById('bookDate').value = `${tyyyy}-${tmm}-${tdd}`;
+  checkCalendarAvailability();
+};
+
+// User bookings list (loaded from localStorage or initialized with mock default)
+const STORAGE_KEY = 'muhub_bookings';
+const MY_BOOKINGS = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [
   {
     id: 'Q-9812',
     astrologer: 'อ. โกโก้ (โหราศาสตร์ไทย ระบบลาหิรี)',
@@ -6944,27 +7572,404 @@ const MY_BOOKINGS = [
   }
 ];
 
-function populateSlots() {
+function saveBookings() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(MY_BOOKINGS));
+}
+
+// ── GOOGLE CALENDAR SERVICE INTEGRATION ───────────────────────────────────
+class GoogleCalendarService {
+  constructor(apiKey, calendarId = 'muhub54@gmail.com') {
+    this.apiKey = apiKey;
+    this.calendarId = calendarId;
+  }
+
+  async fetchBusySlots(dateStr) {
+    if (!this.apiKey) {
+      return this.getMockBusySlots(dateStr);
+    }
+    
+    // Check real Google Calendar API (Date format: YYYY-MM-DD)
+    const timeMin = new Date(`${dateStr}T00:00:00Z`).toISOString();
+    const timeMax = new Date(`${dateStr}T23:59:59Z`).toISOString();
+    const url = `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(this.calendarId)}/events?key=${this.apiKey}&timeMin=${timeMin}&timeMax=${timeMax}&singleEvents=true`;
+
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      if (data.error) {
+        throw new Error(data.error.message);
+      }
+      
+      return (data.items || []).map(event => {
+        const start = new Date(event.start.dateTime || event.start.date);
+        const end = new Date(event.end.dateTime || event.end.date);
+        return {
+          startHour: start.getHours(),
+          endHour: end.getHours()
+        };
+      });
+    } catch (e) {
+      console.error("GCal API fetch error:", e);
+      throw e;
+    }
+  }
+
+  async blockEvent(dateStr, slotStr, name, lineId, serviceName, astrologerName) {
+    if (!this.apiKey) {
+      const mockEventId = 'mock-gcal-' + Math.floor(100000 + Math.random() * 900000);
+      console.log("Simulating blockEvent: created mock event ID:", mockEventId);
+      return {
+        success: true,
+        simulated: true,
+        data: { eventId: mockEventId }
+      };
+    }
+
+    const parts = slotStr.split('-');
+    const startPart = parts[0].trim();
+    const endPart = parts[1] ? parts[1].trim() : '';
+    const startHour = startPart.substring(0, 2);
+    const endHour = endPart ? endPart.substring(0, 2) : String(parseInt(startHour, 10) + 1).padStart(2, '0');
+    const endMinute = endPart ? endPart.substring(3, 5) : '00';
+
+    const startStr = `${dateStr}T${startHour}:00:00+07:00`;
+    const endStr = `${dateStr}T${endHour}:${endMinute}:00+07:00`;
+    
+    const payload = {
+      action: 'create',
+      summary: `MuHub จองคิว: คุณ ${name} (Line: ${lineId || 'ไม่ระบุ'})`,
+      description: `บริการ: ${serviceName}\nนักพยากรณ์: ${astrologerName}\nLine ID: ${lineId || 'ไม่ระบุ'}\nบันทึกจากระบบ MuHub Booking`,
+      startTime: startStr,
+      endTime: endStr
+    };
+
+    console.log("Sending block request to Google Apps Script:", payload);
+
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbwUkfB7te_1-o_u_2ZroBzpuACWmFYd8XS5JN3iv9rItvql-887wQw95SIIQBXWUQumPA/exec";
+
+    try {
+      const response = await fetch(scriptUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8'
+        },
+        body: JSON.stringify(payload)
+      });
+      
+      const data = await response.json();
+      if (data && data.success === false) {
+        throw new Error(data.error || 'Google Apps Script returned failure');
+      }
+      
+      console.log("Successfully blocked calendar via Google Apps Script:", data);
+      return { success: true, simulated: false, data };
+    } catch (e) {
+      console.error("Google Apps Script Request details:", e);
+      throw new Error("ไม่สามารถบันทึกลงปฏิทินจริงได้ (ตรวจสอบ Google Apps Script): " + e.message);
+    }
+  }
+
+  async deleteEvent(eventId) {
+    if (!eventId) return { success: false, error: "No event ID provided" };
+    if (!this.apiKey || eventId.startsWith('mock-')) {
+      console.log("Simulating deleteEvent for event ID:", eventId);
+      return { success: true, simulated: true, message: "ลบกิจกรรมจำลองสำเร็จ" };
+    }
+    
+    const payload = {
+      action: 'delete',
+      eventId: eventId
+    };
+
+    console.log("Sending delete request to Google Apps Script:", payload);
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbwUkfB7te_1-o_u_2ZroBzpuACWmFYd8XS5JN3iv9rItvql-887wQw95SIIQBXWUQumPA/exec";
+
+    try {
+      const response = await fetch(scriptUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8'
+        },
+        body: JSON.stringify(payload)
+      });
+      const data = await response.json();
+      return { success: true, data };
+    } catch (e) {
+      console.error("Google Apps Script Delete error:", e);
+      return { success: false, error: e.message };
+    }
+  }
+
+  async uploadSlip(base64Data, mimeType, filename) {
+    if (!this.apiKey) {
+      console.log("Simulating uploadSlip: created simulated slip file in GDrive folder 1RtwEoH4ES9QJT2oB8JobUQw1rncnETYF with name:", filename);
+      return {
+        success: true,
+        simulated: true,
+        fileUrl: "https://drive.google.com/open?id=mock-drive-file-id"
+      };
+    }
+
+    const payload = {
+      action: 'uploadSlip',
+      folderId: '1RtwEoH4ES9QJT2oB8JobUQw1rncnETYF',
+      filename: filename,
+      mimeType: mimeType,
+      base64Data: base64Data
+    };
+
+    console.log("Sending uploadSlip request to Google Apps Script:", { ...payload, base64Data: "(truncated)" });
+
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbwUkfB7te_1-o_u_2ZroBzpuACWmFYd8XS5JN3iv9rItvql-887wQw95SIIQBXWUQumPA/exec";
+
+    try {
+      const response = await fetch(scriptUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8'
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json();
+      if (data && data.success === false) {
+        throw new Error(data.error || 'Google Apps Script returned failure');
+      }
+
+      console.log("Successfully uploaded slip via Google Apps Script:", data);
+      return { success: true, simulated: false, fileUrl: data.fileUrl };
+    } catch (e) {
+      console.error("Google Apps Script uploadSlip error:", e);
+      throw new Error("ไม่สามารถอัปโหลดสลิปไปยัง Google Drive ได้: " + e.message);
+    }
+  }
+
+  getMockBusySlots(dateStr) {
+    // Generate deterministic busy slots based on selected date
+    const dateNum = new Date(dateStr).getDate() || 1;
+    // Map to 2 mock busy indexes (based on date modulo)
+    const busyIdx1 = dateNum % 8;
+    const busyIdx2 = (dateNum + 3) % 8;
+    return [busyIdx1, busyIdx2];
+  }
+}
+
+function getSelectedSessionDuration() {
+  const select = document.getElementById('bookAstrologer');
+  if (!select) return 45; // default 45 mins
+  const selectedOption = select.options[select.selectedIndex];
+  if (!selectedOption) return 45;
+  const match = selectedOption.textContent.match(/(\d+)\s*นาที/);
+  if (match) {
+    return parseInt(match[1], 10);
+  }
+  return 45; // default fallback
+}
+
+window.onAstrologerChange = function() {
+  document.getElementById('selectedTime').value = '';
+  document.querySelectorAll('.slot-btn').forEach(el => el.classList.remove('active'));
+  hideStatusMessage();
+  checkCalendarAvailability();
+};
+
+// ใส่ Google Calendar API Key ของคุณที่นี่เพื่อเชื่อมต่อระบบจริงใน Background
+const GOOGLE_CALENDAR_API_KEY = "AIzaSyBJDmuRqBOUAPnh8bwTL5EQFRj_28fF3K4"; 
+
+let gcalApiKey = GOOGLE_CALENDAR_API_KEY;
+let calendarService = new GoogleCalendarService(gcalApiKey);
+
+window.onGCalApiKeyChange = function() {
+  gcalApiKey = document.getElementById('gcalApiKey').value.trim();
+  calendarService = new GoogleCalendarService(gcalApiKey);
+  const badge = document.getElementById('gcalStatusBadge');
+  if (gcalApiKey) {
+    badge.innerHTML = '<span style="width: 6px; height: 6px; border-radius: 50%; background: #2A6BAD; display: inline-block;"></span> ดึงข้อมูลจริงจาก Calendar';
+    badge.style.color = '#2A6BAD';
+    badge.style.backgroundColor = '#E1F5FE';
+  } else {
+    badge.innerHTML = '<span style="width: 6px; height: 6px; border-radius: 50%; background: #2E7D32; display: inline-block;"></span> โหมดจำลอง (muhub54@gmail.com)';
+    badge.style.color = '#2E7D32';
+    badge.style.backgroundColor = '#E8F5E9';
+  }
+  checkCalendarAvailability();
+};
+
+window.onDateChange = function() {
+  document.getElementById('selectedTime').value = '';
+  document.querySelectorAll('.slot-btn').forEach(el => el.classList.remove('active'));
+  hideStatusMessage();
+  checkCalendarAvailability();
+};
+
+window.checkCalendarAvailability = async function() {
+  const datePicker = document.getElementById('bookDate');
+  const loader = document.getElementById('slotsLoader');
+  const container = document.getElementById('slotsContainer');
+  if (!datePicker || !container) return;
+
+  const dateVal = datePicker.value;
+  if (!dateVal) {
+    container.innerHTML = '<div style="color: var(--dim); font-size: 0.85rem; text-align: center; width: 100%; padding: 1rem;">⚠️ กรุณาเลือกวันนัดหมายก่อนตรวจสอบเวลาว่าง</div>';
+    return;
+  }
+
+  if (loader) loader.style.display = 'inline';
+  container.innerHTML = '<div style="color: var(--dim); font-size: 0.85rem; text-align: center; width: 100%; padding: 1rem;">🔄 กำลังโหลดและตรวจสอบปฏิทิน...</div>';
+
+  try {
+    if (gcalApiKey) {
+      // Real API fetch
+      const busyRanges = await calendarService.fetchBusySlots(dateVal);
+      renderSlotsWithBusyRanges(busyRanges);
+    } else {
+      // Mock fetch delay
+      await new Promise(resolve => setTimeout(resolve, 600));
+      const busyIndexes = calendarService.getMockBusySlots(dateVal);
+      renderSlotsWithMockIndexes(busyIndexes);
+    }
+  } catch (error) {
+    console.error(error);
+    container.innerHTML = `<div style="color: var(--coral-d); font-size: 0.82rem; text-align: center; width: 100%; padding: 1rem; border: 1px solid rgba(220,53,69,0.2); background: rgba(220,53,69,0.05); border-radius: 8px; margin-bottom: 0.5rem;">❌ เกิดข้อผิดพลาดจาก Google Calendar API: ${error.message}<br>ระบบเปลี่ยนมาใช้ข้อมูลจำลองแทนเพื่อความต่อเนื่อง</div>`;
+    
+    // Fallback to mock
+    setTimeout(() => {
+      const busyIndexes = calendarService.getMockBusySlots(dateVal);
+      renderSlotsWithMockIndexes(busyIndexes);
+    }, 1000);
+  } finally {
+    if (loader) loader.style.display = 'none';
+  }
+};
+
+function updateStatusMessage(isAvailable) {
+  const statusMsg = document.getElementById('bookingStatusMessage');
+  if (!statusMsg) return;
+  
+  if (isAvailable) {
+    statusMsg.innerHTML = '🟢 ว่างครับ กรุณาคอนเฟิร์มข้อมูลดวงด้านล่าง แล้วกดยืนยัน';
+    statusMsg.style.color = '#2E7D32';
+    statusMsg.style.backgroundColor = '#E8F5E9';
+    statusMsg.style.padding = '4px 12px';
+    statusMsg.style.borderRadius = '6px';
+    statusMsg.style.border = '1px solid rgba(46, 125, 50, 0.2)';
+    statusMsg.style.display = 'inline-flex';
+  } else {
+    statusMsg.innerHTML = '🔴 ขออภัยครับ เวลานี้ถูกจองแล้ว กรุณาเลือกใหม่อีกครั้งครับ';
+    statusMsg.style.color = '#C62828';
+    statusMsg.style.backgroundColor = '#FFEBEE';
+    statusMsg.style.padding = '4px 12px';
+    statusMsg.style.borderRadius = '6px';
+    statusMsg.style.border = '1px solid rgba(198, 40, 40, 0.2)';
+    statusMsg.style.display = 'inline-flex';
+  }
+}
+
+function hideStatusMessage() {
+  const statusMsg = document.getElementById('bookingStatusMessage');
+  if (statusMsg) {
+    statusMsg.style.display = 'none';
+  }
+}
+
+function renderSlotsWithMockIndexes(busyIndexes) {
   const container = document.getElementById('slotsContainer');
   if (!container) return;
-  
   container.innerHTML = '';
-  MOCK_SLOTS.forEach(slot => {
+  
+  const selectedTime = document.getElementById('selectedTime').value;
+  let selectedIsNowBusy = false;
+  
+  const duration = getSelectedSessionDuration();
+  
+  MOCK_SLOTS_BASE.forEach((slot, index) => {
+    const startStr = `${String(slot.startHour).padStart(2, '0')}:00`;
+    const endStr = `${String(slot.startHour).padStart(2, '0')}:${String(duration).padStart(2, '0')}`;
+    const displayTime = `${startStr} - ${endStr}`;
+
+    const isBusy = busyIndexes.includes(index);
     const btn = document.createElement('button');
     btn.type = 'button';
-    btn.className = 'slot-btn' + (slot.busy ? ' busy' : '');
-    btn.textContent = slot.time;
-    if (!slot.busy) {
-      btn.onclick = () => selectSlot(btn, slot.time);
+    btn.className = 'slot-btn' + (isBusy ? ' busy' : '');
+    btn.textContent = displayTime;
+    if (isBusy) {
+      btn.title = "ไม่ว่าง (จาก Google Calendar)";
+      if (displayTime === selectedTime) selectedIsNowBusy = true;
+    } else {
+      btn.onclick = () => selectSlot(btn, displayTime);
+      if (displayTime === selectedTime) {
+        btn.classList.add('active');
+      }
     }
     container.appendChild(btn);
   });
+  
+  if (selectedTime) {
+    if (selectedIsNowBusy) {
+      document.getElementById('selectedTime').value = '';
+      updateStatusMessage(false);
+    } else {
+      updateStatusMessage(true);
+    }
+  } else {
+    hideStatusMessage();
+  }
+}
+
+function renderSlotsWithBusyRanges(busyRanges) {
+  const container = document.getElementById('slotsContainer');
+  if (!container) return;
+  container.innerHTML = '';
+
+  const selectedTime = document.getElementById('selectedTime').value;
+  let selectedIsNowBusy = false;
+
+  const duration = getSelectedSessionDuration();
+
+  MOCK_SLOTS_BASE.forEach(slot => {
+    const isBusy = busyRanges.some(range => {
+      return (range.startHour >= slot.startHour && range.startHour < slot.endHour) ||
+             (range.endHour > slot.startHour && range.endHour <= slot.endHour) ||
+             (range.startHour <= slot.startHour && range.endHour >= slot.endHour);
+    });
+
+    const startStr = `${String(slot.startHour).padStart(2, '0')}:00`;
+    const endStr = `${String(slot.startHour).padStart(2, '0')}:${String(duration).padStart(2, '0')}`;
+    const displayTime = `${startStr} - ${endStr}`;
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'slot-btn' + (isBusy ? ' busy' : '');
+    btn.textContent = displayTime;
+    if (isBusy) {
+      btn.title = "ไม่ว่าง (จาก Google Calendar)";
+      if (displayTime === selectedTime) selectedIsNowBusy = true;
+    } else {
+      btn.onclick = () => selectSlot(btn, displayTime);
+      if (displayTime === selectedTime) {
+        btn.classList.add('active');
+      }
+    }
+    container.appendChild(btn);
+  });
+
+  if (selectedTime) {
+    if (selectedIsNowBusy) {
+      document.getElementById('selectedTime').value = '';
+      updateStatusMessage(false);
+    } else {
+      updateStatusMessage(true);
+    }
+  } else {
+    hideStatusMessage();
+  }
 }
 
 function selectSlot(btn, time) {
   document.querySelectorAll('.slot-btn').forEach(el => el.classList.remove('active'));
   btn.classList.add('active');
   document.getElementById('selectedTime').value = time;
+  hideStatusMessage();
 }
 
 window.selectAstrologer = function(name) {
@@ -6973,39 +7978,43 @@ window.selectAstrologer = function(name) {
     select.value = name;
   }
   switchTab('booking-tab');
+  onAstrologerChange();
 };
 
 window.autoFillBooking = function() {
-  // Grab name from calculator
   const calcName = document.getElementById('bName').value || 'เจ้าชะตา';
   document.getElementById('bookName').value = calcName;
   
-  // Grab Line ID from calculator header
   const calcLineId = document.getElementById('bLineId').value || '';
   document.getElementById('bookLineId').value = calcLineId;
   
-  // Grab date from calculator dropdowns
   document.getElementById('bookDay').value = document.getElementById('bDay').value;
   document.getElementById('bookMonth').value = document.getElementById('bMonth').value;
   document.getElementById('bookYear').value = document.getElementById('bYear').value;
   
-  // Grab birth time
   document.getElementById('bookHour').value = document.getElementById('bHour').value;
   document.getElementById('bookMin').value = document.getElementById('bMin').value;
   
-  // Grab birth location
   const countryVal = document.getElementById('bCountry').value;
-  document.getElementById('bookCountry').value = countryVal;
-  
-  // Repopulate cities for booking form and select correct city
+  const bookCountryEl = document.getElementById('bookCountry');
+  bookCountryEl.value = countryVal;
+  if (typeof onCountryChange === 'function') onCountryChange('book');
+
   const cityVal = document.getElementById('bCity').value;
-  populateCities('book', cityVal);
-  
-  // Custom coordinates
+  setTimeout(() => {
+    const bookCityEl = document.getElementById('bookCity');
+    if (bookCityEl) {
+      bookCityEl.value = cityVal;
+      if (!bookCityEl.value && cityVal) {
+        populateCities('book', cityVal);
+        bookCityEl.value = cityVal;
+      }
+    }
+  }, 80);
+
   document.getElementById('bookLat').value = document.getElementById('bLat').value;
   document.getElementById('bookLon').value = document.getElementById('bLon').value;
-  
-  // Display coordinate fields if country is custom
+
   const latField = document.getElementById('bookLatField');
   const lonField = document.getElementById('bookLonField');
   if (countryVal === 'custom') {
@@ -7015,8 +8024,48 @@ window.autoFillBooking = function() {
     latField.style.display = 'none';
     lonField.style.display = 'none';
   }
+
+  alert('\ud83d\udce5 \u0e14\u0e36\u0e07\u0e02\u0e49\u0e2d\u0e21\u0e39\u0e25\u0e14\u0e27\u0e07\u0e01\u0e33\u0e40\u0e19\u0e34\u0e14\u0e25\u0e48\u0e32\u0e2a\u0e38\u0e14\u0e40\u0e2a\u0e23\u0e47\u0e08\u0e2a\u0e34\u0e49\u0e19!');
+};
+
+// ── BOOKING CHECKOUT MODAL LOGIC ─────────────────────────────────────────
+let bookingCountdownInterval = null;
+let currentBookingData = null;
+
+window.closeBookingCheckoutModal = function() {
+  const el = document.getElementById('bookingCheckoutSection') || document.getElementById('bookingCheckoutModal');
+  if (el) el.style.display = 'none';
+  if (bookingCountdownInterval) clearInterval(bookingCountdownInterval);
+};
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      const base64String = reader.result.split(',')[1];
+      resolve(base64String);
+    };
+    reader.onerror = error => reject(error);
+  });
+}
+
+window.onBookingSlipSelected = function() {
+  const fileInput = document.getElementById('bookingSlipFile');
+  const label = document.getElementById('bookingSlipFilename');
+  if (fileInput.files.length > 0) {
+    label.textContent = fileInput.files[0].name;
+  }
+};
+
+window.simulateSlipAutoFill = function() {
+  const label = document.getElementById('bookingSlipFilename');
+  label.textContent = 'slip_muhub_399.jpg (ไฟล์หลักฐาน)';
   
-  alert('📥 ดึงข้อมูลดวงกำเนิดล่าสุดเสร็จสิ้น!');
+  const dataTransfer = new DataTransfer();
+  const file = new File(["dummy slip"], "slip_muhub_399.jpg", { type: "image/jpeg" });
+  dataTransfer.items.add(file);
+  document.getElementById('bookingSlipFile').files = dataTransfer.files;
 };
 
 window.submitBooking = function(event) {
@@ -7024,38 +8073,243 @@ window.submitBooking = function(event) {
   
   const astrologer = document.getElementById('bookAstrologer').value;
   const service = document.getElementById('bookService').value;
+  const dateVal = document.getElementById('bookDate').value;
   const slot = document.getElementById('selectedTime').value;
   const name = document.getElementById('bookName').value;
   const lineId = document.getElementById('bookLineId').value;
-  
-  const day = document.getElementById('bookDay').value;
-  const month = document.getElementById('bookMonth').value;
-  const yearBE = document.getElementById('bookYear').value;
-  const dateVal = `${day} ${MONTHS_TH[parseInt(month)-1]} พ.ศ. ${yearBE}`;
   
   if (!slot) {
     alert('⚠️ กรุณาเลือกช่วงเวลาที่ต้องการดูดวง');
     return;
   }
-  
-  // Generate mock queue ID
-  const queueId = 'Q-' + Math.floor(1000 + Math.random() * 9000);
-  
-  const newBooking = {
-    id: queueId,
-    astrologer: astrologer,
-    service: service,
-    time: `${dateVal} (${slot})`,
-    name: name,
-    lineId: lineId,
-    status: 'confirmed',
-    statusText: 'รอรับคิวดูดวง'
+
+  // Format date values to Thai
+  const dateParts = dateVal.split('-');
+  const yyyy = parseInt(dateParts[0]);
+  const mm = parseInt(dateParts[1]);
+  const dd = parseInt(dateParts[2]);
+  const formattedDate = `${dd} ${MONTHS_TH[mm - 1]} พ.ศ. ${yyyy + 543}`;
+
+  currentBookingData = {
+    astrologer,
+    service,
+    dateVal: formattedDate,
+    rawDate: dateVal,
+    slot,
+    name,
+    lineId,
+    isReschedule: !!reschedulingBookingId,
+    rescheduleBookingId: reschedulingBookingId
   };
+
+  // Populate Summary inside Modal
+  document.getElementById('summaryAstrologer').textContent = astrologer;
+  document.getElementById('summaryService').textContent = service;
+  document.getElementById('summaryTime').textContent = `${formattedDate} (${slot})`;
+  document.getElementById('summaryName').textContent = name;
+  document.getElementById('summaryLine').textContent = lineId || '-';
   
-  MY_BOOKINGS.unshift(newBooking);
+  const refId = 'MU-' + Math.floor(10000 + Math.random() * 90000) + '-' + (yyyy + 543);
+  document.getElementById('paymentRefId').textContent = refId;
+
+  // Set default values for slip inputs
+  document.getElementById('slipSenderName').value = name;
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  document.getElementById('slipTransferDateTime').value = `${year}-${month}-${day}T${hours}:${minutes}`;
+  
+  // Custom display for rescheduling
+  if (currentBookingData.isReschedule) {
+    document.getElementById('checkoutTitle').innerHTML = '🔄 ยืนยันการเลื่อนวันเวลานัดหมาย';
+    document.getElementById('checkoutPriceContainer').style.display = 'none';
+    document.getElementById('checkoutQrSection').style.display = 'none';
+    document.getElementById('checkoutSlipSection').style.display = 'none';
+    document.getElementById('checkoutRescheduleInfo').style.display = 'block';
+  } else {
+    document.getElementById('checkoutTitle').innerHTML = '💳 ยืนยันการชำระเงินค่าจองคิว';
+    document.getElementById('checkoutPriceContainer').style.display = 'flex';
+    document.getElementById('checkoutQrSection').style.display = 'flex';
+    document.getElementById('checkoutSlipSection').style.display = 'block';
+    document.getElementById('checkoutRescheduleInfo').style.display = 'none';
+    
+    document.getElementById('bookingSlipFile').value = '';
+    document.getElementById('bookingSlipFilename').textContent = 'เลือกไฟล์รูปภาพสลิป';
+  }
+  
+  const el = document.getElementById('bookingCheckoutSection') || document.getElementById('bookingCheckoutModal');
+  if (el) {
+    el.style.display = el.id === 'bookingCheckoutModal' ? 'flex' : 'block';
+    setTimeout(() => {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  }
+  
+  let timeRemaining = 300;
+  const timerLabel = document.getElementById('paymentTimer');
+  if (bookingCountdownInterval) clearInterval(bookingCountdownInterval);
+  
+  bookingCountdownInterval = setInterval(() => {
+    timeRemaining--;
+    const minutes = Math.floor(timeRemaining / 60);
+    const seconds = timeRemaining % 60;
+    timerLabel.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    
+    if (timeRemaining <= 0) {
+      clearInterval(bookingCountdownInterval);
+      alert('⏰ หมดเวลาการทำรายการชำระเงิน กรุณาทำรายการจองใหม่อีกครั้ง');
+      closeBookingCheckoutModal();
+    }
+  }, 1000);
+};
+
+window.confirmBookingPayment = async function() {
+  const fileInput = document.getElementById('bookingSlipFile');
+  const isReschedule = currentBookingData && currentBookingData.isReschedule;
+
+  let cleanFilename = "";
+  let uploadStatus = "";
+
+  if (!isReschedule) {
+    if (fileInput.files.length === 0) {
+      alert('⚠️ กรุณาแนบไฟล์สลิปหลักฐานการชำระเงิน (หรือกดปุ่ม "จำลองไฟล์สลิป" เพื่อทดสอบ)');
+      return;
+    }
+
+    const senderName = document.getElementById('slipSenderName').value.trim();
+    if (!senderName) {
+      alert('⚠️ กรุณาระบุชื่อบัญชีผู้โอน');
+      return;
+    }
+
+    const dtVal = document.getElementById('slipTransferDateTime').value;
+    if (!dtVal) {
+      alert('⚠️ กรุณาระบุวันเวลาที่โอนเงิน');
+      return;
+    }
+
+    const parts = dtVal.split('T');
+    const datePart = parts[0].replace(/-/g, ''); // YYYYMMDD
+    const timePart = parts[1] ? parts[1].replace(/:/g, '') : '0000'; // HHMM
+
+    const lineId = currentBookingData.lineId ? currentBookingData.lineId.trim() : 'ไม่ระบุ';
+
+    const originalFilename = fileInput.files[0].name;
+    const lastDotIndex = originalFilename.lastIndexOf('.');
+    const ext = lastDotIndex !== -1 ? originalFilename.substring(lastDotIndex) : '.jpg';
+
+    const constructedFilename = datePart + "_" + timePart + "_" + senderName + "_" + lineId + ext;
+    cleanFilename = constructedFilename.replace('/', '_').replace('\\', '_').replace('?', '_').replace('%', '_').replace('*', '_').replace(':', '_').replace('|', '_').replace('"', '_').replace('<', '_').replace('>', '_');
+  }
+  
+  const queueId = isReschedule ? currentBookingData.rescheduleBookingId : ('Q-' + Math.floor(1000 + Math.random() * 9000));
+  
+  if (isReschedule) {
+    const booking = MY_BOOKINGS.find(b => b.id === queueId);
+    if (booking) {
+      // If there is an old event, delete it from Google Calendar
+      if (booking.gcalEventId) {
+        console.log("Rescheduling: Deleting old Google Calendar event:", booking.gcalEventId);
+        calendarService.deleteEvent(booking.gcalEventId).catch(err => console.error("Error deleting old event:", err));
+      }
+      booking.gcalEventId = null; // Clear old event ID so it's not stale if creation fails
+      booking.astrologer = currentBookingData.astrologer;
+      booking.service = currentBookingData.service;
+      booking.time = `${currentBookingData.dateVal} (${currentBookingData.slot})`;
+      booking.name = currentBookingData.name;
+      booking.lineId = currentBookingData.lineId;
+      booking.status = 'pending';
+      booking.statusText = 'รอตรวจสอบการเลื่อนนัด';
+    }
+  } else {
+    const newBooking = {
+      id: queueId,
+      astrologer: currentBookingData.astrologer,
+      service: currentBookingData.service,
+      time: `${currentBookingData.dateVal} (${currentBookingData.slot})`,
+      name: currentBookingData.name,
+      lineId: currentBookingData.lineId,
+      status: 'pending',
+      statusText: 'รอตรวจสอบสลิป',
+      gcalEventId: null
+    };
+    MY_BOOKINGS.unshift(newBooking);
+  }
+  
+  // Upload slip to Google Drive if not rescheduling
+  if (!isReschedule) {
+    try {
+      const base64Data = await fileToBase64(fileInput.files[0]);
+      const mimeType = fileInput.files[0].type || 'image/jpeg';
+      const uploadResult = await calendarService.uploadSlip(
+        base64Data,
+        mimeType,
+        cleanFilename
+      );
+      if (uploadResult.success && !uploadResult.simulated) {
+        uploadStatus = `\n📁 [Google Drive] อัปโหลดสลิปเรียบร้อยแล้ว: ${uploadResult.fileUrl}`;
+      } else if (uploadResult.simulated) {
+        uploadStatus = `\n📁 [Google Drive] จำลองการอัปโหลดสลิปสำเร็จ (ชื่อไฟล์: ${cleanFilename})`;
+      } else {
+        uploadStatus = `\n⚠️ [Google Drive Alert] อัปโหลดสลิปไม่สำเร็จ: ${uploadResult.error}`;
+      }
+    } catch (uploadErr) {
+      console.error("Error uploading slip:", uploadErr);
+      uploadStatus = `\n⚠️ [Google Drive Error] ไม่สามารถส่งไฟล์สลิปได้: ${uploadErr.message || String(uploadErr)}`;
+    }
+  }
+
+  saveBookings();
   renderBookings();
+  closeBookingCheckoutModal();
+
+  // Send data to block Google Calendar
+  let blockStatus = "";
+  let isRealGCalSuccess = false;
+  let isSimulatedGCal = false;
+  let gcalErrorMsg = "";
+  let gcalEventId = null;
+
+  try {
+    const result = await calendarService.blockEvent(
+      currentBookingData.rawDate,
+      currentBookingData.slot,
+      currentBookingData.name,
+      currentBookingData.lineId,
+      currentBookingData.service,
+      currentBookingData.astrologer
+    );
+    if (result.success && !result.simulated) {
+      isRealGCalSuccess = true;
+      gcalEventId = result.data ? result.data.eventId : null;
+      blockStatus = "\n📅 [Google Calendar] บันทึกนัดหมายในปฏิทินจริงเรียบร้อยแล้ว!";
+    } else if (result.error) {
+      gcalErrorMsg = result.message || result.error;
+      blockStatus = `\n⚠️ [Google Calendar Alert] ${gcalErrorMsg}\n(ดูรายละเอียด Payload ใน Console)`;
+    } else {
+      isSimulatedGCal = true;
+      gcalEventId = result.data ? result.data.eventId : null;
+      blockStatus = "\n📅 [Google Calendar] บันทึกนัดหมายในปฏิทิน (โหมดจำลอง) เรียบร้อยแล้ว!";
+    }
+  } catch (err) {
+    console.error("Error blocking calendar event:", err);
+    gcalErrorMsg = err.message || String(err);
+    blockStatus = `\n⚠️ [Google Calendar Error] ไม่สามารถเชื่อมต่อกับปฏิทินได้: ${gcalErrorMsg}`;
+  }
   
-  // Reset form
+  // Update the booking object with new eventId if successful
+  if (gcalEventId) {
+    const booking = MY_BOOKINGS.find(b => b.id === queueId);
+    if (booking) {
+      booking.gcalEventId = gcalEventId;
+      saveBookings();
+    }
+  }
+
+  // Reset booking form inputs
   document.getElementById('bookingForm').reset();
   document.getElementById('bookDay').value = "13";
   document.getElementById('bookMonth').value = "4";
@@ -7068,8 +8322,83 @@ window.submitBooking = function(event) {
   document.querySelectorAll('.slot-btn').forEach(el => el.classList.remove('active'));
   document.getElementById('selectedTime').value = '';
   
-  alert(`✅ ลงทะเบียนจองคิวดูดวงสำเร็จ! หมายเลขคิวของคุณคือ: ${queueId}`);
-  switchTab('booking-tab');
+  // Hide warning banner
+  if (isReschedule) {
+    reschedulingBookingId = null;
+    document.getElementById('rescheduleWarning').style.display = 'none';
+  }
+  
+  // Set default date picker to tomorrow again
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const tyyyy = tomorrow.getFullYear();
+  const tmm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+  const tdd = String(tomorrow.getDate()).padStart(2, '0');
+  document.getElementById('bookDate').value = `${tyyyy}-${tmm}-${tdd}`;
+  checkCalendarAvailability();
+
+  if (isReschedule) {
+    alert(`✅ ยืนยันการเลื่อนวันเวลานัดคิว ${queueId} สำเร็จ! (อ้างอิงสลิปใบเดิม)${blockStatus}\nระบบกำลังจำลองการตรวจสอบจากแอดมิน (ใช้เวลา 5 วินาที)...`);
+  } else {
+    alert(`✅ อัปโหลดสลิปหลักฐานสำเร็จ! หมายเลขคิวของคุณคือ: ${queueId}${uploadStatus}${blockStatus}\nระบบกำลังจำลองการตรวจสอบจากแอดมิน (ใช้เวลา 5 วินาที)...`);
+  }
+  
+  // Simulate admin verifying the slip
+  setTimeout(() => {
+    const booking = MY_BOOKINGS.find(b => b.id === queueId);
+    if (booking) {
+      booking.status = 'confirmed';
+      if (isReschedule) {
+        if (isRealGCalSuccess) {
+          booking.statusText = 'คอนเฟิร์มนัด';
+          booking.statusSub = 'บันทึก Google Calendar สำเร็จ';
+          alert(`🔔 แจ้งเตือน: เลื่อนนัดสำหรับคิว ${queueId} ได้รับการอนุมัติและบันทึกลง Google Calendar เรียบร้อยแล้ว!`);
+        } else if (isSimulatedGCal) {
+          booking.statusText = 'คอนเฟิร์มนัด';
+          booking.statusSub = 'บันทึกปฏิทิน (จำลอง)';
+          alert(`🔔 แจ้งเตือน: เลื่อนนัดสำหรับคิว ${queueId} ได้รับการอนุมัติแล้ว (เลื่อนนัดใน Google Calendar โหมดจำลอง)`);
+        } else {
+          booking.statusText = 'คอนเฟิร์มนัด';
+          booking.statusSub = '⚠️ บันทึกปฏิทินล้มเหลว';
+          alert(`🔔 แจ้งเตือน: เลื่อนนัดสำหรับคิว ${queueId} ได้รับการอนุมัติแล้ว\n⚠️ แต่เลื่อนนัดลง Google Calendar ล้มเหลว: ${gcalErrorMsg}`);
+        }
+      } else {
+        if (isRealGCalSuccess) {
+          booking.statusText = 'คอนเฟิร์มนัด';
+          booking.statusSub = 'บันทึก Google Calendar สำเร็จ';
+          alert(`🔔 แจ้งเตือน: คิวจองหมายเลข ${queueId} ได้รับการอนุมัติสลิปและบันทึกคิวลงใน Google Calendar เรียบร้อยแล้ว!`);
+        } else if (isSimulatedGCal) {
+          booking.statusText = 'คอนเฟิร์มนัด';
+          booking.statusSub = 'บันทึกปฏิทิน (จำลอง)';
+          alert(`🔔 แจ้งเตือน: คิวจองหมายเลข ${queueId} ได้รับการอนุมัติสลิปแล้ว (บันทึกคิวลงใน Google Calendar โหมดจำลอง)`);
+        } else {
+          booking.statusText = 'คอนเฟิร์มนัด';
+          booking.statusSub = '⚠️ บันทึกปฏิทินล้มเหลว';
+          alert(`🔔 แจ้งเตือน: คิวจองหมายเลข ${queueId} ได้รับการอนุมัติสลิปแล้ว\n⚠️ แต่ไม่สามารถบันทึกลง Google Calendar ได้เนื่องจากเกิดข้อผิดพลาด: ${gcalErrorMsg}`);
+        }
+      }
+      saveBookings();
+      renderBookings();
+    }
+  }, 5000);
+};
+
+window.cancelBooking = function(id) {
+  if (confirm('คุณแน่ใจไหมว่าต้องการยกเลิกคอนเฟิร์มนัด? ทางเราไม่มีนโยบายโอนเงินคืนนะครับ')) {
+    const idx = MY_BOOKINGS.findIndex(b => b.id === id);
+    if (idx !== -1) {
+      const booking = MY_BOOKINGS[idx];
+      // If there is an associated Google Calendar event, delete it
+      if (booking.gcalEventId) {
+        console.log("Cancelling booking: Deleting Google Calendar event:", booking.gcalEventId);
+        calendarService.deleteEvent(booking.gcalEventId).catch(err => console.error("Error deleting event:", err));
+      }
+      MY_BOOKINGS.splice(idx, 1);
+      saveBookings();
+      renderBookings();
+      alert('❌ ยกเลิกคิวจองเรียบร้อยแล้ว (ระบบได้ลบนัดหมายใน Google Calendar ให้แล้วหากเชื่อมต่อไว้)');
+    }
+  }
 };
 
 let showActiveBookings = true;
@@ -7106,8 +8435,14 @@ function renderBookings() {
   container.innerHTML = '';
   filtered.forEach(b => {
     let badgeClass = 'status-pending';
-    if (b.status === 'confirmed') badgeClass = 'status-confirmed';
-    if (b.status === 'completed') badgeClass = 'status-completed';
+    let displayStatus = b.statusText || 'รอตรวจสอบ';
+    if (b.status === 'confirmed') { badgeClass = 'status-confirmed'; displayStatus = 'คอนเฟิร์มนัด'; }
+    if (b.status === 'completed') { badgeClass = 'status-completed'; displayStatus = 'ตรวจดวงแล้ว'; }
+    const actionButtons = b.status !== 'completed' ? `
+      <div style="display:flex;gap:6px;margin-top:4px;">
+        <button class="btn" style="padding:4px 12px;font-size:0.75rem;height:2rem;background:rgba(226,184,66,0.1);border:1px solid rgba(226,184,66,0.35);color:var(--gold);border-radius:6px;cursor:pointer;white-space:nowrap;" onclick="rescheduleBooking('${b.id}')">🕒 เลื่อนนัด</button>
+        <button class="btn" style="padding:4px 12px;font-size:0.75rem;height:2rem;background:rgba(211,47,47,0.1);border:1px solid rgba(211,47,47,0.35);color:#ef9a9a;border-radius:6px;cursor:pointer;white-space:nowrap;" onclick="cancelBooking('${b.id}')">✕ ยกเลิกนัด</button>
+      </div>` : '';
     
     container.innerHTML += `
       <div class="booking-item">
@@ -7117,9 +8452,9 @@ function renderBookings() {
           <div style="font-size:0.82rem;color:var(--dim);"><span style="font-weight:600;">บริการ:</span> ${b.service}</div>
           <div style="font-size:0.82rem;color:var(--text);font-weight:500;margin-top:4px;"><span style="font-size:1.1rem;vertical-align:-1px;">🕒</span> ${b.time}</div>
         </div>
-        <div style="text-align:right;display:flex;flex-direction:column;gap:6px;align-items:flex-end;">
-          <span class="booking-status ${badgeClass}">${b.statusText}</span>
-          ${b.status === 'confirmed' ? `<button class="btn btn-ghost" style="padding:2px 8px;font-size:0.75rem;" onclick="alert('ยกเลิกคิวแล้ว ทางทีมจะทำการติดต่อทำรายการคืนเงินจำลอง')">ยกเลิกจอง</button>` : ''}
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
+          <span class="booking-status ${badgeClass}">${displayStatus}</span>
+          ${actionButtons}
         </div>
       </div>
     `;
@@ -7210,7 +8545,35 @@ window.simulatePurchase = function() {
 };
 
 // Initialize Slots and Bookings on load
-populateSlots();
+const bookDatePicker = document.getElementById('bookDate');
+if (bookDatePicker) {
+  const todayDate = new Date();
+  const yyyy = todayDate.getFullYear();
+  const mm = String(todayDate.getMonth() + 1).padStart(2, '0');
+  const dd = String(todayDate.getDate()).padStart(2, '0');
+  bookDatePicker.min = `${yyyy}-${mm}-${dd}`;
+  
+  // Set default date to tomorrow
+  const tomorrow = new Date(todayDate);
+  tomorrow.setDate(todayDate.getDate() + 1);
+  const tyyyy = tomorrow.getFullYear();
+  const tmm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+  const tdd = String(tomorrow.getDate()).padStart(2, '0');
+  bookDatePicker.value = `${tyyyy}-${tmm}-${tdd}`;
+}
+// Check if API Key is configured in JavaScript
+if (gcalApiKey) {
+  const gcalInput = document.getElementById('gcalApiKey');
+  if (gcalInput) gcalInput.value = gcalApiKey;
+  const badge = document.getElementById('gcalStatusBadge');
+  if (badge) {
+    badge.innerHTML = '<span style="width: 6px; height: 6px; border-radius: 50%; background: #2A6BAD; display: inline-block;"></span> ดึงข้อมูลจริงจาก Calendar';
+    badge.style.color = '#2A6BAD';
+    badge.style.backgroundColor = '#E1F5FE';
+  }
+}
+
+checkCalendarAvailability();
 renderBookings();
 
 
