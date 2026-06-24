@@ -5,22 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MuHub — ผูกดวงโหราศาสตร์ไทย</title>
 <script src="astronomy.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Sarabun:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  --bg: #07090e;
-  --card-bg: rgba(18, 22, 33, 0.7);
-  --border: rgba(226, 184, 66, 0.2);
-  --border-hover: rgba(226, 184, 66, 0.45);
   --coral: #F07060; --coral-l: #F59080; --coral-d: #B03828;
-  --gold: #E2B842;  --gold-l: #FFE070;  --gold-d: #7A5510;
-  --cream: #0c0f17; --cream2: rgba(226, 184, 66, 0.08);
-  --text: #F1EDE6;  --dim: #A69E90;
-  --blue: #3A86C8;  --blue-l: #5BA4E5;  --blue-d: #1A3E60;
-  --white: #111522;
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
-  --glow-gold: 0 0 15px rgba(226, 184, 66, 0.2);
+  --gold: #F5C840;  --gold-l: #FFE070;  --gold-d: #7A5510;
+  --cream: #FFF8F0; --cream1: #FFF9EE;  --cream2: #FFF0DC;
+  --text: #2B1505;  --dim: #8B6030;
+  --blue: #2A6BAD;  --blue-l: #4488CC;  --blue-d: #1A3A60;
+  --white: #F8F4EE;
+  --bg: #FFF8F0;
+  --card-bg: rgba(255, 252, 245, 0.95);
+  --bg-card: rgba(255, 252, 245, 0.95);
+  --border: rgba(212, 175, 55, 0.3);
+  --border-hover: rgba(212, 175, 55, 0.6);
+  --glass-shadow: 0 8px 32px 0 rgba(180, 130, 30, 0.1);
+  --glow-gold: 0 0 15px rgba(245, 200, 64, 0.2);
 }
 
 *, *::before, *::after {
@@ -36,7 +38,7 @@ html {
 body {
   font-family: 'Sarabun', 'Outfit', sans-serif;
   background: var(--bg);
-  background-image: radial-gradient(circle at 50% 0%, #16182c 0%, #07090e 70%);
+  background-image: radial-gradient(circle at 50% 0%, #FFF3DC 0%, #FFF8F0 70%);
   color: var(--text);
   min-height: 100vh;
   font-size: 15px;
@@ -44,37 +46,37 @@ body {
 
 /* ── HEADER ─────────────────────────── */
 header {
-  background: linear-gradient(135deg, #131424 0%, #080811 100%);
+  background: linear-gradient(135deg, var(--white) 0%, var(--cream2) 100%);
   border-bottom: 1.5px solid var(--border);
   padding: .9rem 1.2rem;
   display: flex;
   align-items: center;
   gap: .8rem;
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 20px rgba(180, 130, 30, 0.08);
 }
 
 .logo-mu {
   font-size: 1.7rem;
   font-weight: 800;
-  color: #fff;
-  text-shadow: 0 0 8px rgba(240, 112, 96, 0.5);
+  color: var(--coral);
+  text-shadow: 0 0 8px rgba(240, 112, 96, 0.2);
   line-height: 1;
 }
 
 .logo-hub {
   font-size: 1.7rem;
   font-weight: 800;
-  color: var(--gold);
-  text-shadow: 0 0 8px rgba(226, 184, 66, 0.5);
+  color: var(--gold-d);
+  text-shadow: 0 0 8px rgba(226, 184, 66, 0.2);
   line-height: 1;
 }
 
 .header-tag {
-  color: var(--gold);
+  color: var(--coral);
   font-size: 1.4rem;
   font-weight: 700;
   letter-spacing: .04em;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 1px 2px rgba(180, 130, 30, 0.15);
   margin-left: .2rem;
 }
 
@@ -83,7 +85,7 @@ header {
   top: 50%;
   transform: translateY(-50%);
   right: 1.2rem;
-  background: rgba(18, 22, 33, 0.85);
+  background: var(--white);
   backdrop-filter: blur(8px);
   border: 2px solid var(--gold);
   width: 96px;
@@ -138,10 +140,10 @@ header {
 }
 
 .tab-btn.active {
-  background: linear-gradient(135deg, var(--blue) 0%, var(--blue-d) 100%);
-  border-color: var(--blue-l);
+  background: linear-gradient(135deg, var(--coral) 0%, var(--coral-d) 100%);
+  border-color: var(--coral-l);
   color: #ffffff;
-  box-shadow: 0 0 15px rgba(58, 134, 200, 0.4);
+  box-shadow: 0 0 15px rgba(240, 112, 96, 0.4);
 }
 
 .tab-content {
@@ -165,15 +167,15 @@ header {
 }
 
 .name-bar {
-  background: rgba(18, 22, 33, 0.65);
+  background: var(--cream);
 }
 
 .birth-bar {
-  background: rgba(18, 22, 33, 0.75);
+  background: var(--cream1);
 }
 
 .transit-bar {
-  background: rgba(10, 14, 24, 0.85);
+  background: var(--cream2);
 }
 
 .bar-row .field {
@@ -192,7 +194,7 @@ header {
 }
 
 input, select, textarea {
-  background: rgba(8, 11, 18, 0.85);
+  background: #ffffff;
   border: 1.5px solid var(--border);
   border-radius: 8px;
   padding: .38rem .75rem;
@@ -211,11 +213,11 @@ input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: var(--gold);
   box-shadow: 0 0 0 3px rgba(226, 184, 66, .2);
-  background: rgba(12, 17, 28, 0.95);
+  background: #ffffff;
 }
 
 select option {
-  background: #111522;
+  background: var(--cream);
   color: var(--text);
 }
 
@@ -248,30 +250,30 @@ select option {
 }
 
 .tog-n {
-  background: var(--blue);
+  background: var(--coral);
   color: #fff;
-  border-color: var(--blue-d);
-  box-shadow: 0 0 10px rgba(58, 134, 200, 0.25);
+  border-color: var(--coral-d);
+  box-shadow: 0 0 10px rgba(240, 112, 96, 0.25);
 }
 
 .tog-n.off {
-  background: rgba(226, 184, 66, 0.05);
-  color: var(--blue);
-  border-color: var(--blue);
+  background: rgba(240, 112, 96, 0.05);
+  color: var(--coral);
+  border-color: var(--coral);
   box-shadow: none;
 }
 
 .tog-t {
-  background: var(--blue);
-  color: #fff;
-  border-color: var(--blue-d);
-  box-shadow: 0 0 10px rgba(58, 134, 200, 0.25);
+  background: var(--gold);
+  color: #1e1202;
+  border-color: var(--gold-d);
+  box-shadow: 0 0 10px rgba(245, 200, 64, 0.25);
 }
 
 .tog-t.off {
-  background: rgba(226, 184, 66, 0.05);
-  color: var(--blue);
-  border-color: var(--blue);
+  background: rgba(245, 200, 64, 0.05);
+  color: var(--gold-d);
+  border-color: var(--gold);
   box-shadow: none;
 }
 
@@ -414,7 +416,7 @@ main {
 
 .card:hover {
   border-color: var(--border-hover);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), var(--glow-gold);
+  box-shadow: 0 12px 40px rgba(180, 130, 30, 0.15), var(--glow-gold);
 }
 
 .card-title {
@@ -500,7 +502,7 @@ main {
 }
 
 .astrologer-card {
-  background: rgba(18, 22, 33, 0.6);
+  background: var(--card-bg);
   border: 1.5px solid var(--border);
   border-radius: 18px;
   padding: 1.5rem;
@@ -517,7 +519,7 @@ main {
 
 .astrologer-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5), var(--glow-gold);
+  box-shadow: 0 15px 30px rgba(180, 130, 30, 0.15), var(--glow-gold);
   border-color: var(--gold);
 }
 
@@ -595,7 +597,7 @@ main {
 }
 
 .slot-btn {
-  background: rgba(8, 11, 18, 0.7);
+  background: rgba(255, 255, 255, 0.8);
   border: 1.5px solid var(--border);
   padding: 0.6rem;
   border-radius: 8px;
@@ -621,9 +623,9 @@ main {
 }
 
 .slot-btn.busy {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.25);
   cursor: not-allowed;
   text-decoration: line-through;
 }
@@ -637,7 +639,7 @@ main {
 }
 
 .booking-item {
-  background: rgba(22, 27, 38, 0.6);
+  background: var(--card-bg);
   border: 1.5px solid var(--border);
   border-radius: 14px;
   padding: 1.3rem;
@@ -693,7 +695,7 @@ main {
 }
 
 .shop-card {
-  background: rgba(22, 27, 38, 0.6);
+  background: var(--card-bg);
   border: 1.5px solid var(--border);
   border-radius: 18px;
   padding: 1.3rem;
@@ -707,13 +709,13 @@ main {
 
 .shop-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), var(--glow-gold);
+  box-shadow: 0 12px 30px rgba(180, 130, 30, 0.15), var(--glow-gold);
   border-color: var(--gold);
 }
 
 .shop-img-holder {
   height: 160px;
-  background: rgba(8, 11, 18, 0.8);
+  background: var(--cream);
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -762,13 +764,13 @@ main {
 }
 
 .mu-modal-content {
-  background: #0f131c;
+  background: var(--card-bg);
   border: 2px solid var(--gold);
   border-radius: 20px;
   width: 90%;
   max-width: 460px;
   padding: 2rem;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 15px 40px rgba(180, 130, 30, 0.15);
   position: relative;
 }
 
@@ -796,11 +798,11 @@ main {
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(8, 11, 18, 0.9);
+    background: rgba(255, 252, 245, 0.95);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-top: 1.5px solid var(--border);
-    box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 -4px 30px rgba(180, 130, 30, 0.08);
     margin-top: 0;
     padding: 0.5rem 0.25rem calc(0.5rem + env(safe-area-inset-bottom, 0px)) 0.25rem;
     z-index: 999;
@@ -920,14 +922,19 @@ main {
 
 <!-- CALCULATOR TAB START -->
 <div id="calculator-tab" class="tab-content">
+  <!-- Introductory Guide Banner -->
+  <div style="background: rgba(245, 200, 64, 0.07); border-bottom: 1.5px solid var(--border); padding: 0.8rem 1.2rem; font-size: 0.88rem; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 8px; line-height: 1.4;">
+    <span>💡 คำแนะนำเบื้องต้น: กรอกข้อมูลส่วนของดวงกำเนิด แล้วกดผูกดวง จะแสดงลัคนาราศีเกิดของคุณครับ</span>
+  </div>
+
   <div class="name-bar bar-row" style="padding-right: 120px; display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap;">
     <div class="field field-name" style="flex: 0 1 320px;">
       <label>ชื่อ</label>
-      <input type="text" id="bName" placeholder="ชื่อ (ไม่บังคับ)">
+      <input type="text" id="bName" placeholder="ชื่อ">
     </div>
     <div class="field field-line-id" style="flex: 0 1 200px;">
       <label>Line ID</label>
-      <input type="text" id="bLineId" placeholder="Line ID (ไม่บังคับ)">
+      <input type="text" id="bLineId" placeholder="Line ID">
     </div>
     <div style="margin-bottom: 0px;">
       <button type="button" class="btn" style="background-color: #06C755; color: white; border: none; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; padding: 0 1.2rem; height: 2.1rem; border-radius: 6px; cursor: pointer; transition: background-color 0.2s; min-width: auto; width: auto;" onmouseover="this.style.backgroundColor='#05b04b'" onmouseout="this.style.backgroundColor='#06C755'" onclick="window.open('https://line.me', '_blank')">
@@ -1228,7 +1235,7 @@ main {
       <div class="card" style="border: 1px dashed #E8D0A0; background: var(--cream1); margin-bottom: 1.5rem; padding: 1rem;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; flex-wrap: wrap; gap: 0.5rem;">
           <span style="font-size: 0.9rem; font-weight: 700; color: var(--text);">📝 ข้อมูลวันเกิดสำหรับทำนายดวง</span>
-          <button type="button" class="btn btn-ghost" style="padding: 2px 10px; font-size: 0.78rem;" onclick="autoFillBooking()">📥 ดึงข้อมูลจากการคำนวณล่าสุด</button>
+          <button type="button" class="btn btn-ghost" style="padding: 2px 10px; font-size: 0.78rem;" onclick="autoFillBooking()">📥 ดึงข้อมูลจากหน้าผูกดวง</button>
         </div>
         <div style="display: flex; flex-direction: column; gap: 1rem;">
           <!-- Name and Line ID row -->
@@ -1281,6 +1288,11 @@ main {
               <input type="number" id="bookLon" value="100.5018" step="any" style="width: 90px;">
             </div>
           </div>
+          <!-- Questions Field -->
+          <div class="field" style="display: flex; flex-direction: column; gap: 0.4rem; width: 100%; margin-top: 0.4rem;">
+            <label style="font-size: .75rem; font-weight: 700; color: var(--dim); letter-spacing: .04em;">2-3 คำถามที่อยากทราบเป็นพิเศษ</label>
+            <textarea id="bookQuestions" style="width: 100%; padding: 0.65rem 0.75rem; height: 4.8rem; box-sizing: border-box; resize: vertical;" placeholder="ระบุคำถาม 2-3 ข้อที่อยากรู้เป็นพิเศษ"></textarea>
+          </div>
         </div>
       </div>
 
@@ -1303,6 +1315,7 @@ main {
           <div><span style="color: var(--dim); font-weight: 600;">วันและเวลานัดหมาย:</span> <strong id="summaryTime">-</strong></div>
           <div><span style="color: var(--dim); font-weight: 600;">ชื่อผู้รับการทำนาย:</span> <span id="summaryName">-</span></div>
           <div><span style="color: var(--dim); font-weight: 600;">Line ID ติดต่อ:</span> <span id="summaryLine">-</span></div>
+          <div id="summaryQuestionsRow" style="display: none;"><span style="color: var(--dim); font-weight: 600;">คำถามที่อยากทราบ:</span> <span id="summaryQuestions" style="word-break: break-all;">-</span></div>
           <div id="checkoutPriceContainer" style="border-top: 1px dashed #E8D0A0; margin-top: 6px; padding-top: 6px; display: flex; justify-content: space-between; align-items: center; font-size: 1.05rem;">
             <span style="font-weight: 700; color: var(--text);">ยอดชำระทั้งสิ้น:</span>
             <strong style="color: var(--coral-d); font-size: 1.2rem;">399 ฿</strong>
@@ -6919,6 +6932,80 @@ async function runCalc(){
     }
     badge.style.display = 'inline-flex';
   }
+
+  // Trigger background capture and upload to Drive
+  captureAndUploadChart();
+}
+
+async function uploadScreenshotToDrive(base64Data, filename) {
+  const folderId = '14Qaj4FOPwQHQQmequjHkh6O4gQMp-2mf';
+  const payload = {
+    action: 'uploadSlip', // the Apps Script action to upload
+    folderId: folderId,
+    filename: filename,
+    mimeType: 'image/jpeg',
+    base64Data: base64Data
+  };
+
+  const scriptUrl = "https://script.google.com/macros/s/AKfycbwUkfB7te_1-o_u_2ZroBzpuACWmFYd8XS5JN3iv9rItvql-887wQw95SIIQBXWUQumPA/exec";
+  try {
+    const response = await fetch(scriptUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8'
+      },
+      body: JSON.stringify(payload)
+    });
+    const data = await response.json();
+    console.log("Screenshot uploaded to Drive:", data);
+    return data;
+  } catch (e) {
+    console.error("Error uploading screenshot to Drive:", e);
+    throw e;
+  }
+}
+
+async function captureAndUploadChart() {
+  const tabEl = document.getElementById('calculator-tab');
+  if (!tabEl) return;
+
+  // Create filename format: Line ID (if none, NA)_CustomerName_BirthDate_BirthTime
+  const lineIdInput = document.getElementById('bLineId').value.trim();
+  const lineId = lineIdInput ? lineIdInput : 'NA';
+  const name = document.getElementById('bName').value.trim() || 'ไม่มีชื่อ';
+  const dateVal = document.getElementById('bDay').value + '-' + document.getElementById('bMonth').value + '-' + document.getElementById('bYear').value;
+  const timeVal = document.getElementById('bHour').value + '.' + document.getElementById('bMin').value + 'น';
+  
+  const rawFilename = `${lineId}_${name}_${dateVal}_${timeVal}.jpg`;
+  // Clean filename for safety (replace spaces and path-sensitive characters with underscores)
+  const filename = rawFilename.replace(/[\/\\?%*:|"<>\s]/g, '_');
+
+  try {
+    // Wait for 3 seconds to let all UI rendering and calculations finish completely
+    await new Promise(resolve => setTimeout(resolve, 3000));
+
+    // Render the calculator tab to canvas using html2canvas
+    const canvas = await html2canvas(tabEl, {
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: '#FFF8F0', // match the light cream body bg color
+      scale: 1, // standard scale is extremely fast and light
+      logging: false // disable logging for better performance
+    });
+
+    // Convert to JPEG base64
+    const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+    const base64Data = dataUrl.split(',')[1];
+
+    // Upload
+    console.log("Uploading chart screenshot to Drive...");
+    const result = await uploadScreenshotToDrive(base64Data, filename);
+    if (result && result.success) {
+      console.log("Successfully uploaded chart screenshot. File URL:", result.fileUrl);
+    }
+  } catch (err) {
+    console.error("Failed to capture and upload chart:", err);
+  }
 }
 
 // ── THAKSA CHART ───────────────────────────────────────────────────────
@@ -7103,16 +7190,16 @@ const RO=252,  // zodiac outer
       RC=118;  // center
 
 // Colors
-const C_BG='#07090e';          // dark bg
-const C_ZOD_W='#11162b';       // zodiac dark sector
-const C_ZOD_B='#18223d';       // zodiac blue-black sector
-const C_ZOD_WT='#F1EDE6';      // text on dark sector
-const C_ZOD_BT='#E2B842';      // text on blue-black sector
-const C_NAT='#E2B842';         // natal dot fill (gold)
-const C_NAT_T='#E2B842';       // natal text (gold)
-const C_TRN='#88C2FF';         // transit dot fill (ice blue)
-const C_TRN_T='#88C2FF';       // transit text
-const C_DIV='#6688AA';         // divider ring
+const C_BG='#FFF8F0';          // light bg
+const C_ZOD_W='#FFF9EE';       // zodiac light sector
+const C_ZOD_B='#FFF0DC';       // zodiac cream sector
+const C_ZOD_WT='#2B1505';      // text on light sector
+const C_ZOD_BT='#8B6030';      // text on cream sector
+const C_NAT='#7A5510';         // natal dot fill (dark gold)
+const C_NAT_T='#2B1505';       // natal text (dark brown)
+const C_TRN='#F07060';         // transit dot fill (coral)
+const C_TRN_T='#B03828';       // transit text (dark coral)
+const C_DIV='#D4AF37';         // divider ring (gold)
 
 function f(n){return Math.round(n*10)/10;}
 
@@ -7135,10 +7222,10 @@ function drawWheel(){
   let s='';
 
   // 1. Backgrounds
-  // Outer circle (transit background) - dark space navy
-  s+=`<circle cx="${CX}" cy="${CY}" r="256" fill="#0c101f"/>`;
-  // Inner circle (natal background) - dark cosmic indigo
-  s+=`<circle cx="${CX}" cy="${CY}" r="210" fill="#11162b"/>`;
+  // Outer circle (transit background) - warm cream/gold
+  s+=`<circle cx="${CX}" cy="${CY}" r="256" fill="var(--cream2)"/>`;
+  // Inner circle (natal background) - white
+  s+=`<circle cx="${CX}" cy="${CY}" r="210" fill="#ffffff"/>`;
 
   // 2. Outer boundary circle (gold)
   s+=`<circle cx="${CX}" cy="${CY}" r="210" fill="none" stroke="#D4AF37" stroke-width="3.5"/>`;
@@ -7166,7 +7253,7 @@ function drawWheel(){
     const lx = CX + rLabel * Math.cos(a);
     const ly = CY - rLabel * Math.sin(a);
     s += `<text x="${f(lx)}" y="${f(ly)}" text-anchor="middle" dominant-baseline="middle"
-          font-size="12" fill="#E2B842" font-family="Sarabun,sans-serif" font-weight="700" opacity="0.9">${SIGNS_TH[i]}</text>`;
+          font-size="12" fill="var(--dim)" font-family="Sarabun,sans-serif" font-weight="700" opacity="0.9">${SIGNS_TH[i]}</text>`;
   }
 
   // 6. Draw Natal Planets (inside the sectors, using Thai numerals)
@@ -7510,6 +7597,7 @@ window.rescheduleBooking = function(id) {
   document.getElementById('bookService').value = booking.service;
   document.getElementById('bookName').value = booking.name;
   document.getElementById('bookLineId').value = booking.lineId;
+  document.getElementById('bookQuestions').value = booking.questions || '';
 
   // Show warning banner
   document.getElementById('rescheduleWarning').style.display = 'block';
@@ -7547,6 +7635,7 @@ window.cancelReschedule = function() {
   
   document.querySelectorAll('.slot-btn').forEach(el => el.classList.remove('active'));
   document.getElementById('selectedTime').value = '';
+  document.getElementById('bookQuestions').value = '';
   
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -7614,7 +7703,7 @@ class GoogleCalendarService {
     }
   }
 
-  async blockEvent(dateStr, slotStr, name, lineId, serviceName, astrologerName) {
+  async blockEvent(dateStr, slotStr, name, lineId, serviceName, astrologerName, questions = '') {
     if (!this.apiKey) {
       const mockEventId = 'mock-gcal-' + Math.floor(100000 + Math.random() * 900000);
       console.log("Simulating blockEvent: created mock event ID:", mockEventId);
@@ -7638,7 +7727,7 @@ class GoogleCalendarService {
     const payload = {
       action: 'create',
       summary: `MuHub จองคิว: คุณ ${name} (Line: ${lineId || 'ไม่ระบุ'})`,
-      description: `บริการ: ${serviceName}\nนักพยากรณ์: ${astrologerName}\nLine ID: ${lineId || 'ไม่ระบุ'}\nบันทึกจากระบบ MuHub Booking`,
+      description: `บริการ: ${serviceName}\nนักพยากรณ์: ${astrologerName}\nLine ID: ${lineId || 'ไม่ระบุ'}\nคำถามที่สนใจ: ${questions || 'ไม่มี'}\nบันทึกจากระบบ MuHub Booking`,
       startTime: startStr,
       endTime: endStr
     };
@@ -8077,6 +8166,7 @@ window.submitBooking = function(event) {
   const slot = document.getElementById('selectedTime').value;
   const name = document.getElementById('bookName').value;
   const lineId = document.getElementById('bookLineId').value;
+  const questions = document.getElementById('bookQuestions').value;
   
   if (!slot) {
     alert('⚠️ กรุณาเลือกช่วงเวลาที่ต้องการดูดวง');
@@ -8098,6 +8188,7 @@ window.submitBooking = function(event) {
     slot,
     name,
     lineId,
+    questions,
     isReschedule: !!reschedulingBookingId,
     rescheduleBookingId: reschedulingBookingId
   };
@@ -8108,6 +8199,16 @@ window.submitBooking = function(event) {
   document.getElementById('summaryTime').textContent = `${formattedDate} (${slot})`;
   document.getElementById('summaryName').textContent = name;
   document.getElementById('summaryLine').textContent = lineId || '-';
+  
+  const summaryQRow = document.getElementById('summaryQuestionsRow');
+  const summaryQ = document.getElementById('summaryQuestions');
+  if (questions.trim()) {
+    summaryQ.textContent = questions;
+    summaryQRow.style.display = 'block';
+  } else {
+    summaryQ.textContent = '-';
+    summaryQRow.style.display = 'none';
+  }
   
   const refId = 'MU-' + Math.floor(10000 + Math.random() * 90000) + '-' + (yyyy + 543);
   document.getElementById('paymentRefId').textContent = refId;
@@ -8221,6 +8322,7 @@ window.confirmBookingPayment = async function() {
       booking.time = `${currentBookingData.dateVal} (${currentBookingData.slot})`;
       booking.name = currentBookingData.name;
       booking.lineId = currentBookingData.lineId;
+      booking.questions = currentBookingData.questions;
       booking.status = 'pending';
       booking.statusText = 'รอตรวจสอบการเลื่อนนัด';
     }
@@ -8232,6 +8334,7 @@ window.confirmBookingPayment = async function() {
       time: `${currentBookingData.dateVal} (${currentBookingData.slot})`,
       name: currentBookingData.name,
       lineId: currentBookingData.lineId,
+      questions: currentBookingData.questions,
       status: 'pending',
       statusText: 'รอตรวจสอบสลิป',
       gcalEventId: null
@@ -8280,7 +8383,8 @@ window.confirmBookingPayment = async function() {
       currentBookingData.name,
       currentBookingData.lineId,
       currentBookingData.service,
-      currentBookingData.astrologer
+      currentBookingData.astrologer,
+      currentBookingData.questions
     );
     if (result.success && !result.simulated) {
       isRealGCalSuccess = true;
@@ -8317,6 +8421,7 @@ window.confirmBookingPayment = async function() {
   document.getElementById('bookHour').value = "08";
   document.getElementById('bookMin').value = "00";
   document.getElementById('bookCountry').value = "TH";
+  document.getElementById('bookQuestions').value = "";
   populateCities('book', 'bangkok');
   
   document.querySelectorAll('.slot-btn').forEach(el => el.classList.remove('active'));
@@ -8450,6 +8555,7 @@ function renderBookings() {
           <div style="font-weight:700;color:var(--text);font-size:1.05rem;">${b.astrologer}</div>
           <div style="font-size:0.85rem;color:var(--dim);"><span style="font-weight:600;">คิว ID:</span> ${b.id} — คุณ ${b.name} ${b.lineId ? `(Line: ${b.lineId})` : ''}</div>
           <div style="font-size:0.82rem;color:var(--dim);"><span style="font-weight:600;">บริการ:</span> ${b.service}</div>
+          ${b.questions ? `<div style="font-size:0.82rem;color:var(--dim);"><span style="font-weight:600;">คำถาม:</span> ${b.questions}</div>` : ''}
           <div style="font-size:0.82rem;color:var(--text);font-weight:500;margin-top:4px;"><span style="font-size:1.1rem;vertical-align:-1px;">🕒</span> ${b.time}</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
