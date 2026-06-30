@@ -1,4 +1,4 @@
-{
+LOCATION_DATABASE = {
   "AW": {
     "name": "อารูบา",
     "enName": "Aruba",
@@ -5665,4 +5665,4 @@
     ],
     "tz": 2.0
   }
-}
+};

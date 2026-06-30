@@ -1,0 +1,1640 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Sarabun:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --coral: #F07060; --coral-l: #F59080; --coral-d: #B03828;
+  --gold: #F5C840;  --gold-l: #FFE070;  --gold-d: #7A5510;
+  --cream: #FFF8F0; --cream1: #FFF9EE;  --cream2: #FFF0DC;
+  --text: #2B1505;  --dim: #8B6030;
+  --blue: #2A6BAD;  --blue-l: #4488CC;  --blue-d: #1A3A60;
+  --white: #F8F4EE;
+  --bg: #FFF8F0;
+  --card-bg: rgba(255, 252, 245, 0.95);
+  --bg-card: rgba(255, 252, 245, 0.95);
+  --border: rgba(212, 175, 55, 0.3);
+  --border-hover: rgba(212, 175, 55, 0.6);
+  --glass-shadow: 0 8px 32px 0 rgba(180, 130, 30, 0.1);
+  --glow-gold: 0 0 15px rgba(245, 200, 64, 0.2);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+input, select, textarea, button {
+  font-family: inherit;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Sarabun', 'Outfit', sans-serif;
+  background: var(--bg);
+  background-image: radial-gradient(circle at 50% 0%, #FFF3DC 0%, #FFF8F0 70%);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 15px;
+}
+
+/* ── HEADER ─────────────────────────── */
+header {
+  background: linear-gradient(135deg, var(--white) 0%, var(--cream2) 100%);
+  border-bottom: 1.5px solid var(--border);
+  padding: .9rem 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: .8rem;
+  box-shadow: 0 4px 20px rgba(180, 130, 30, 0.08);
+}
+
+.logo-mu {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: var(--coral);
+  text-shadow: 0 0 8px rgba(240, 112, 96, 0.2);
+  line-height: 1;
+}
+
+.logo-hub {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: var(--gold-d);
+  text-shadow: 0 0 8px rgba(226, 184, 66, 0.2);
+  line-height: 1;
+}
+
+.header-tag {
+  color: var(--coral);
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-shadow: 0 1px 2px rgba(180, 130, 30, 0.15);
+  margin-left: .2rem;
+}
+
+.header-logo-container {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 1.2rem;
+  background: var(--white);
+  backdrop-filter: blur(8px);
+  border: 2px solid var(--gold);
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--glow-gold);
+  z-index: 10;
+  overflow: hidden;
+}
+
+.header-logo-container img {
+  height: 76px;
+  width: 76px;
+  object-fit: contain;
+  display: block;
+}
+
+/* ── TAB BAR & TABS ─────────────────── */
+.tab-bar {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.tab-btn {
+  background: rgba(226, 184, 66, 0.05);
+  border: 1.5px solid var(--border);
+  color: var(--dim);
+  padding: .38rem 1.15rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .2s ease;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  height: 2.25rem;
+  user-select: none;
+}
+
+.tab-btn:hover {
+  background: rgba(226, 184, 66, 0.12);
+  color: var(--text);
+  border-color: var(--border-hover);
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, var(--coral) 0%, var(--coral-d) 100%);
+  border-color: var(--coral-l);
+  color: #ffffff;
+  box-shadow: 0 0 15px rgba(240, 112, 96, 0.4);
+}
+
+.tab-content {
+  display: block;
+}
+
+.tab-content.hidden {
+  display: none !important;
+}
+
+/* ── INPUT BARS ─────────────────────── */
+.bar-row {
+  padding: 1rem 1.2rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: .8rem 1rem;
+  backdrop-filter: blur(12px);
+  border-bottom: 1.5px solid var(--border);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.name-bar {
+  background: var(--cream);
+}
+
+.birth-bar {
+  background: var(--cream1);
+}
+
+.transit-bar {
+  background: var(--cream2);
+}
+
+.bar-row .field {
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
+  min-width: 0;
+}
+
+.bar-row label {
+  font-size: .72rem;
+  font-weight: 700;
+  color: var(--gold-d);
+  letter-spacing: .04em;
+  white-space: nowrap;
+}
+
+input, select, textarea {
+  background: #ffffff;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: .38rem .75rem;
+  color: var(--text);
+  font-family: inherit;
+  font-size: .88rem;
+  transition: all 0.2s ease;
+  height: 2.25rem;
+}
+
+input[type="number"] {
+  padding: .38rem .3rem .38rem .5rem;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(226, 184, 66, .2);
+  background: #ffffff;
+}
+
+select option {
+  background: var(--cream);
+  color: var(--text);
+}
+
+.bar-row .field-name { flex: 0 1 220px; }
+.bar-row .field-lastname { flex: 0 1 280px; }
+.bar-row .field-line-id { flex: 0 1 220px; }
+.bar-row .field-date { flex: 0 0 280px; }
+.bar-row .field-time { flex: 0 0 145px; }
+.bar-row .field-country { flex: 0 0 170px; }
+.bar-row .field-city { flex: 0 0 200px; }
+.bar-row .field-coord { flex: 0 0 100px; }
+
+/* ── BUTTONS & CONTROLS ───────────────── */
+.tog {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .35rem;
+  padding: .3rem .85rem;
+  border-radius: 16px;
+  border: 2px solid transparent;
+  font-family: inherit;
+  font-size: .82rem;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  transition: all .12s;
+  height: 2.25rem;
+  width: auto;
+  min-width: 110px;
+  align-self: flex-end;
+}
+
+.tog-n, .tog-t {
+  background: rgba(226, 184, 66, 0.1);
+  color: var(--gold-d);
+  border: 1.5px solid rgba(226, 184, 66, 0.4);
+  box-shadow: none;
+}
+
+.tog-n:hover, .tog-t:hover {
+  background: rgba(226, 184, 66, 0.18);
+  border-color: var(--gold);
+}
+
+.tog-n.off, .tog-t.off {
+  background: rgba(0, 0, 0, 0.02);
+  color: var(--dim);
+  border-color: var(--border);
+  box-shadow: none;
+}
+
+.tog-n.off:hover, .tog-t.off:hover {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: var(--border-hover);
+}
+
+.tog.off:hover {
+  background: rgba(226, 184, 66, 0.12);
+}
+
+.tog-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.btn {
+  padding: .38rem 1.15rem;
+  border-radius: 8px;
+  border: none;
+  font-family: inherit;
+  font-size: .85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .2s ease;
+  height: 2.25rem;
+  width: auto;
+  min-width: 110px;
+  align-self: flex-end;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.15);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-coral {
+  background: linear-gradient(135deg, var(--coral) 0%, var(--coral-d) 100%);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(240, 112, 96, 0.35);
+}
+
+.btn-gold {
+  background: rgba(226, 184, 66, 0.08);
+  color: var(--gold-d);
+  border: 1.5px solid rgba(226, 184, 66, 0.45);
+  box-shadow: none;
+}
+
+.btn-gold:hover {
+  background: rgba(226, 184, 66, 0.15);
+  border-color: var(--gold);
+}
+
+.btn-ghost {
+  background: rgba(226, 184, 66, 0.05);
+  color: var(--text);
+  border: 1.5px solid var(--border);
+}
+
+.btn-ghost:hover {
+  background: rgba(226, 184, 66, 0.12);
+  border-color: var(--border-hover);
+}
+
+/* ── MAIN ───────────────────────────── */
+main {
+  max-width: 1360px;
+  margin-inline: auto;
+  padding: 1.5rem 1.2rem 3rem 1.2rem;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 520px 1fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media(max-width:1200px) {
+  .layout {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+  }
+}
+
+@media(max-width:800px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── WHEEL ──────────────────────────── */
+.wheel-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: .8rem;
+}
+
+#wheel-svg {
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.5));
+}
+
+.legend {
+  display: flex;
+  gap: .8rem;
+  flex-wrap: wrap;
+  font-size: .78rem;
+  color: var(--dim);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: .28rem;
+}
+
+.lc {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* ── CARD ───────────────────────────── */
+.card {
+  background: var(--card-bg);
+  border: 1.5px solid var(--border);
+  border-radius: 18px;
+  padding: 1.5rem;
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.25s ease;
+}
+
+.card:hover {
+  border-color: var(--border-hover);
+  box-shadow: 0 12px 40px rgba(180, 130, 30, 0.15), var(--glow-gold);
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--gold-d);
+  margin-bottom: 1.2rem;
+  padding-bottom: .6rem;
+  border-bottom: 1.5px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ── PLANET TABLE ───────────────────── */
+.ptable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .9rem;
+  color: var(--text);
+}
+
+.ptable thead th {
+  background: rgba(226, 184, 66, 0.12);
+  color: var(--gold-d);
+  padding: .75rem .8rem;
+  text-align: left;
+  font-weight: 700;
+  border-bottom: 2.5px solid var(--border);
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+}
+
+.ptable thead th:first-child {
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+}
+
+.ptable thead th:last-child {
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+
+.ptable tbody td {
+  padding: .75rem .8rem;
+  border-bottom: 1px solid rgba(226, 184, 66, 0.08);
+  vertical-align: middle;
+}
+
+.ptable tbody tr:hover td {
+  background: rgba(226, 184, 66, 0.04);
+}
+
+.ptable .transit-row td {
+  background: rgba(226, 184, 66, 0.03);
+  color: var(--text);
+}
+
+.pname {
+  font-weight: 700;
+}
+
+.retro {
+  font-size: .68em;
+  color: var(--coral);
+  margin-left: 2px;
+}
+
+.group-head td {
+  padding: .5rem .8rem;
+  font-size: .8rem;
+  font-weight: 700;
+  border-bottom: none;
+}
+
+/* ── ASTROLOGER STYLES ───────────────── */
+.astrologer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.astrologer-card {
+  background: var(--card-bg);
+  border: 1.5px solid var(--border);
+  border-radius: 18px;
+  padding: 1.5rem;
+  box-shadow: var(--glass-shadow);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.astrologer-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(180, 130, 30, 0.15), var(--glow-gold);
+  border-color: var(--gold);
+}
+
+.astrologer-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 3px solid var(--gold);
+  object-fit: cover;
+  margin-bottom: 0.8rem;
+  background: var(--bg);
+  box-shadow: 0 0 10px rgba(226, 184, 66, 0.3);
+}
+
+.astrologer-card-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+
+.astrologer-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 0.3rem;
+  width: 100%;
+}
+
+.astrologer-rating .stars {
+  color: #ffd700;
+  margin-right: 4px;
+  font-size: 0.95rem;
+}
+
+.astrologer-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.3rem;
+}
+
+.astrologer-specialty {
+  font-size: 0.82rem;
+  color: var(--gold-d);
+  background: rgba(226, 184, 66, 0.1);
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+}
+
+.astrologer-card .btn-coral {
+  background: linear-gradient(135deg, var(--coral) 0%, var(--coral-d) 100%) !important;
+  box-shadow: 0 4px 12px rgba(240, 112, 96, 0.3) !important;
+  border: none !important;
+}
+
+.astrologer-card .btn-coral:hover {
+  filter: brightness(1.1) !important;
+  transform: translateY(-2px) !important;
+}
+
+.astrologer-rating {
+  color: var(--dim);
+  font-weight: 700;
+  font-size: 0.85rem;
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.astrologer-price {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 1.2rem;
+}
+
+.astrologer-bio {
+  font-size: 0.82rem;
+  color: var(--dim);
+  line-height: 1.4;
+  margin-bottom: 1.2rem;
+  min-height: 50px;
+}
+
+/* ── BOOKING FORM STYLES ─────────────── */
+.booking-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.booking-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.time-slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.slot-btn {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1.5px solid var(--border);
+  padding: 0.6rem;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  font-family: inherit;
+}
+
+.slot-btn:hover:not(.busy) {
+  background: rgba(226, 184, 66, 0.12);
+  border-color: var(--gold);
+}
+
+.slot-btn.active {
+  background: linear-gradient(135deg, var(--gold-l) 0%, var(--gold) 100%);
+  border-color: var(--gold-d);
+  color: #1e1202;
+  box-shadow: 0 0 12px rgba(226, 184, 66, 0.45);
+}
+
+.slot-btn.busy {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.25);
+  cursor: not-allowed;
+  text-decoration: line-through;
+}
+
+/* ── QUEUE / BOOKING TRACKING ───────── */
+.booking-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.booking-item {
+  background: var(--card-bg);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 1.3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.booking-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.booking-status {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border: 1px solid transparent;
+}
+
+.status-pending {
+  background: rgba(255, 193, 7, 0.12);
+  color: #ffc107;
+  border-color: rgba(255, 193, 7, 0.2);
+}
+
+.status-confirmed {
+  background: rgba(40, 167, 69, 0.12);
+  color: #28a745;
+  border-color: rgba(40, 167, 69, 0.2);
+}
+
+.status-completed {
+  background: rgba(108, 117, 125, 0.12);
+  color: #6c757d;
+  border-color: rgba(108, 117, 125, 0.2);
+}
+
+/* ── MU SHOP STYLES ──────────────────── */
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.shop-card {
+  background: var(--card-bg);
+  border: 1.5px solid var(--border);
+  border-radius: 18px;
+  padding: 1.3rem;
+  box-shadow: var(--glass-shadow);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.shop-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(180, 130, 30, 0.15), var(--glow-gold);
+  border-color: var(--gold);
+}
+
+.shop-img-holder {
+  height: 160px;
+  background: var(--cream);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.8rem;
+  font-size: 3rem;
+  color: var(--gold);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  position: relative;
+}
+
+.shop-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.4rem;
+}
+
+.shop-price {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--coral-l);
+  margin-bottom: 0.6rem;
+}
+
+.shop-desc {
+  font-size: 0.82rem;
+  color: var(--dim);
+  line-height: 1.4;
+  margin-bottom: 1rem;
+  flex-grow: 1;
+}
+
+/* ── MOCK CHECKOUT MODAL ────────────── */
+.mu-modal {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.mu-modal-content {
+  background: var(--card-bg);
+  border: 2px solid var(--gold);
+  border-radius: 20px;
+  width: 90%;
+  max-width: 460px;
+  padding: 2rem;
+  box-shadow: 0 15px 40px rgba(180, 130, 30, 0.15);
+  position: relative;
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 1rem; right: 1rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: none; border: none;
+  cursor: pointer; color: var(--dim);
+}
+
+.modal-close-btn:hover {
+  color: var(--text);
+}
+
+/* ── MOBILE BOTTOM TAB BAR & RESPONSIVE LAYOUT ──────────────── */
+@media (max-width: 768px) {
+  body {
+    padding-bottom: calc(68px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+  
+  .tab-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 252, 245, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1.5px solid var(--border);
+    box-shadow: 0 -4px 30px rgba(180, 130, 30, 0.08);
+    margin-top: 0;
+    padding: 0.5rem 0.25rem calc(0.5rem + env(safe-area-inset-bottom, 0px)) 0.25rem;
+    z-index: 999;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 0;
+    flex-wrap: nowrap;
+  }
+  
+  .tab-btn {
+    border: none !important;
+    background: transparent !important;
+    padding: 0.2rem 0 !important;
+    border-radius: 0 !important;
+    flex-direction: column !important;
+    gap: 4px !important;
+    height: auto !important;
+    font-size: 0.72rem !important;
+    font-weight: 700 !important;
+    flex: 1;
+    color: var(--dim) !important;
+    box-shadow: none !important;
+    transition: color 0.15s ease, transform 0.15s ease;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .tab-btn:hover {
+    background: transparent !important;
+    color: var(--gold) !important;
+  }
+  
+  .tab-btn.active {
+    background: transparent !important;
+    color: var(--gold) !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+  }
+  
+  .tab-btn.active .tab-icon {
+    transform: scale(1.22);
+    filter: drop-shadow(0 0 8px rgba(226, 184, 66, 0.5));
+  }
+  
+  .tab-icon {
+    font-size: 1.3rem;
+    transition: transform 0.2s ease;
+  }
+  
+  .tab-label {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.72rem;
+  }
+  
+  /* Header & Logo styling on mobile */
+  .header-logo-container {
+    width: 64px !important;
+    height: 64px !important;
+    top: 32px !important;
+    transform: translateY(-50%) !important;
+    right: 1rem !important;
+  }
+  .header-logo-container img {
+    width: 50px !important;
+    height: 50px !important;
+  }
+  header {
+    padding-right: 85px !important;
+  }
+  .name-bar.bar-row {
+    padding-right: 1.2rem !important;
+  }
+  .header-tag {
+    font-size: 1.15rem !important;
+  }
+}
+
+/* ── FREE HOROSCOPE & E-SIIMSI STYLES ── */
+.free-no-data-card {
+  max-width: 600px;
+  margin: 2rem auto;
+  text-align: center;
+  padding: 3rem 2rem;
+  background: linear-gradient(135deg, rgba(255, 252, 245, 0.9) 0%, rgba(255, 243, 220, 0.9) 100%);
+  border: 2px dashed var(--gold);
+  border-radius: 24px;
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.free-no-data-icon {
+  font-size: 4.5rem;
+  margin-bottom: 1.5rem;
+  display: block;
+  filter: drop-shadow(0 4px 10px rgba(245, 200, 64, 0.3));
+}
+.free-no-data-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 0.8rem;
+}
+.free-no-data-text {
+  font-size: 0.95rem;
+  color: var(--dim);
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+/* ── FREE PAGE QUICK NAV ─────────────────── */
+.free-quicknav {
+  position: sticky;
+  top: 0;
+  z-index: 90;
+  display: flex;
+  gap: 0.45rem;
+  padding: 0.6rem 0.2rem;
+  margin-bottom: 0.2rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  background: linear-gradient(to bottom, var(--bg) 80%, transparent 100%);
+  -webkit-overflow-scrolling: touch;
+}
+.free-quicknav::-webkit-scrollbar { display: none; }
+
+.free-quicknav-btn {
+  flex-shrink: 0;
+  background: rgba(255, 252, 245, 0.92);
+  border: 1.5px solid var(--border);
+  color: var(--dim);
+  padding: 0.3rem 0.85rem;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+  backdrop-filter: blur(8px);
+}
+.free-quicknav-btn:hover {
+  background: rgba(240, 112, 96, 0.08);
+  border-color: var(--coral);
+  color: var(--coral);
+}
+.free-quicknav-btn.active {
+  background: var(--coral);
+  border-color: var(--coral);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(240, 112, 96, 0.35);
+}
+
+.free-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.free-accent-title {
+  color: var(--coral) !important;
+  border-bottom-color: rgba(240, 112, 96, 0.2) !important;
+}
+
+.free-lagna-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, var(--gold-l) 0%, var(--gold) 100%);
+  color: var(--text);
+  padding: 0.5rem 1.2rem;
+  border-radius: 30px;
+  font-weight: 800;
+  font-size: 1.05rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--glow-gold);
+}
+
+.free-lagna-desc {
+  font-size: 0.9rem;
+  color: var(--text);
+  line-height: 1.6;
+  text-align: justify;
+}
+
+.thaksa-guide-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-top: 0.5rem;
+}
+.thaksa-guide-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
+  padding: 0.8rem 1rem;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  border-radius: 12px;
+}
+.thaksa-guide-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--dim);
+}
+.thaksa-color-pills {
+  display: flex;
+  gap: 0.5rem;
+}
+.thaksa-color-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.rating-aspects {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+.rating-aspect-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.rating-aspect-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.rating-aspect-label {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.rating-aspect-stars {
+  font-size: 0.95rem;
+  color: var(--gold);
+}
+.rating-aspect-bar-bg {
+  height: 10px;
+  background: rgba(226, 184, 66, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(212, 175, 55, 0.15);
+}
+.rating-aspect-bar-fill {
+  height: 100%;
+  border-radius: 10px;
+  width: 0%;
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* E-Siimsi interactive styles */
+.siimsi-widget {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem 0.5rem;
+}
+
+.siimsi-cup-container {
+  position: relative;
+  width: 130px;
+  height: 220px;
+  margin: 1.5rem 0;
+  cursor: pointer;
+  perspective: 600px;
+}
+
+.siimsi-cup-wrapper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transform-origin: bottom center;
+}
+
+.siimsi-cup-wrapper.shaking {
+  animation: siimsiShake 0.15s infinite alternate;
+}
+
+@keyframes siimsiShake {
+  0% { transform: translate(3px, 5px) rotate(-8deg); }
+  100% { transform: translate(-3px, -5px) rotate(8deg); }
+}
+
+.siimsi-sticks {
+  position: absolute;
+  top: -10px; /* Pushed down by 25px to sit beautifully in balance with the cylinder */
+  left: 15px;
+  width: 100px;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  pointer-events: none;
+  transition: transform 0.3s;
+}
+
+.siimsi-stick-item {
+  width: 6px;
+  height: 110px;
+  background: linear-gradient(to right, #e8c595 0%, #c4995f 50%, #996e38 100%);
+  border-radius: 2px;
+  margin-left: -2px;
+  transform-origin: bottom center;
+  box-shadow: 1px 2px 4px rgba(0,0,0,0.15);
+  border-top: 15px solid var(--coral-d); /* red tips */
+}
+
+/* Stagger stick rotations for realistic look */
+.siimsi-stick-item:nth-child(1) { transform: rotate(-10deg); }
+.siimsi-stick-item:nth-child(2) { transform: rotate(-5deg); }
+.siimsi-stick-item:nth-child(3) { transform: rotate(0deg); }
+.siimsi-stick-item:nth-child(4) { transform: rotate(4deg); }
+.siimsi-stick-item:nth-child(5) { transform: rotate(-8deg); }
+.siimsi-stick-item:nth-child(6) { transform: rotate(8deg); }
+.siimsi-stick-item:nth-child(7) { transform: rotate(-3deg); }
+.siimsi-stick-item:nth-child(8) { transform: rotate(6deg); }
+.siimsi-stick-item:nth-child(9) { transform: rotate(2deg); }
+
+.siimsi-cup-cylinder {
+  position: absolute;
+  bottom: 0;
+  width: 130px;
+  height: 170px;
+  background: linear-gradient(135deg, var(--coral-d) 0%, var(--coral) 40%, #7a1d12 100%);
+  border: none !important; /* Removed yellow border completely as requested */
+  border-radius: 12px 12px 20px 20px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.4), inset 0 0 20px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  overflow: hidden;
+}
+
+.siimsi-cup-cylinder::after {
+  content: "เซียมซี";
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  font-family: 'Sarabun', sans-serif;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--gold);
+  letter-spacing: 4px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5), 0 0 10px rgba(245, 200, 64, 0.4);
+  border: 1.5px solid var(--gold);
+  padding: 10px 4px;
+  background: rgba(0,0,0,0.2);
+  border-radius: 4px;
+}
+
+.siimsi-stick-falling {
+  position: absolute;
+  top: -80px;
+  left: 62px;
+  width: 7px;
+  height: 120px;
+  background: linear-gradient(to right, #ffe0b2, #ffb74d);
+  border-top: 20px solid var(--coral-d);
+  border-radius: 2px;
+  z-index: 5;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  display: none;
+  transform-origin: bottom center;
+}
+
+.siimsi-stick-falling.dropping {
+  display: block;
+  animation: siimsiDrop 1.2s forwards;
+}
+
+@keyframes siimsiDrop {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  30% { transform: translateY(-40px) rotate(15deg); }
+  70% { transform: translateY(30px) rotate(85deg); opacity: 1; }
+  100% { transform: translateY(180px) rotate(100deg); opacity: 0; }
+}
+
+.siimsi-instruction {
+  font-size: 0.88rem;
+  font-weight: bold;
+  color: var(--dim);
+  margin-bottom: 0.5rem;
+  text-align: center;
+  animation: pulseText 1.5s infinite alternate;
+}
+
+@keyframes pulseText {
+  0% { opacity: 0.7; transform: scale(0.98); }
+  100% { opacity: 1; transform: scale(1.02); }
+}
+
+.siimsi-scroll {
+  width: 100%;
+  max-width: 440px;
+  height: 600px;
+  background: #fff6e5;
+  border: 2px solid var(--gold);
+  border-radius: 16px;
+  padding: 2.4rem 1.8rem 1.8rem;
+  box-shadow: 0 10px 30px rgba(180, 130, 30, 0.15);
+  background-image: radial-gradient(circle at 50% 50%, #fffbf2 0%, #fff6e5 100%);
+  position: relative;
+  display: none;
+  flex-direction: column;
+  transform: scale(0.9);
+  opacity: 0;
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s;
+}
+
+.siimsi-scroll.active {
+  display: flex;
+  transform: scale(1);
+  opacity: 1;
+}
+
+.siimsi-scroll-header {
+  border-bottom: 2px dashed rgba(212, 175, 55, 0.4);
+  padding-bottom: 0.8rem;
+  margin-bottom: 1.2rem;
+  text-align: center;
+}
+
+.siimsi-scroll-number {
+  background: var(--coral);
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: 800;
+  padding: 4px 14px;
+  border-radius: 30px;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 3px 10px rgba(240, 112, 96, 0.3);
+}
+
+.siimsi-scroll-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--coral-d);
+}
+
+.siimsi-scroll-body {
+  font-size: 0.92rem;
+  color: var(--text);
+  line-height: 1.8;
+  text-align: justify;
+  white-space: pre-line;
+  font-weight: 500;
+  margin: auto 0;
+  padding: 4rem 0 1rem;
+}
+
+.siimsi-scroll-footer {
+  border-top: 1.5px dashed rgba(212, 175, 55, 0.4);
+  padding-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  position: absolute;
+  bottom: 1.8rem;
+  left: 1.8rem;
+  right: 1.8rem;
+}
+
+.siimsi-lucky-num {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--blue-d);
+  background: rgba(42, 107, 173, 0.08);
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px dashed var(--blue);
+}
+
+/* ── IMMERSIVE DEITY-SPECIFIC E-SIIMSI THEMES ────────────────── */
+
+/* 1. Main Card Glowing Borders & Shadows */
+#siimsiCard {
+  transition: all 0.5s ease;
+}
+#siimsiCard.deity-ganesh {
+  border-color: rgba(176, 56, 40, 0.25) !important;
+  box-shadow: 0 8px 32px rgba(176, 56, 40, 0.08) !important;
+}
+#siimsiCard.deity-guanyin {
+  border-color: rgba(0, 77, 64, 0.25) !important;
+  box-shadow: 0 8px 32px rgba(0, 77, 64, 0.08) !important;
+}
+#siimsiCard.deity-citypillar {
+  border-color: rgba(13, 71, 161, 0.25) !important;
+  box-shadow: 0 8px 32px rgba(13, 71, 161, 0.08) !important;
+}
+#siimsiCard .tab-btn.active {
+  background: linear-gradient(135deg, #D4AF37 0%, #8B6914 50%, #C4920A 100%) !important;
+  color: #fff8e8 !important;
+  box-shadow:
+    0 0 0 2px #fff4d6,
+    0 0 0 3.5px #9B7300,
+    0 3px 12px rgba(139, 105, 20, 0.35),
+    inset 0 1px 0 rgba(255, 240, 160, 0.35) !important;
+  border: none !important;
+}
+
+/* 2. Spiritual Background Auras */
+.siimsi-aura {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.3;
+  pointer-events: none;
+  z-index: 1;
+  transition: background 0.6s ease;
+}
+.deity-ganesh .siimsi-aura {
+  background: radial-gradient(circle, rgba(244, 67, 54, 0.8) 0%, rgba(255, 152, 0, 0) 70%);
+}
+.deity-guanyin .siimsi-aura {
+  background: radial-gradient(circle, rgba(0, 150, 136, 0.8) 0%, rgba(128, 203, 196, 0) 70%);
+}
+.deity-citypillar .siimsi-aura {
+  background: radial-gradient(circle, rgba(21, 101, 192, 0.8) 0%, rgba(144, 202, 249, 0) 70%);
+}
+
+/* 3. Hide the default vertical "เซียมซี" text on the cylinder */
+.siimsi-cup-cylinder::after {
+  display: none !important;
+}
+
+/* 3b. Golden Carved SVG Overlays */
+.cup-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 15;
+}
+.deity-ganesh .overlay-ganesh { display: none !important; opacity: 0; }
+.deity-guanyin .overlay-guanyin { display: none !important; opacity: 0; }
+.deity-citypillar .overlay-citypillar { display: none !important; opacity: 0; }
+
+/* 4. Cylinder Dynamic Background Patterns & Gradients */
+.deity-ganesh .siimsi-cup-cylinder {
+  background-image: url('ganesh_cup.png') !important;
+  background-size: 100% 100% !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  border: none !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(0,0,0,0.3) !important;
+}
+.deity-guanyin .siimsi-cup-cylinder {
+  background-image: url('guanyin_cup.png') !important;
+  background-size: 100% 100% !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  border: none !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(0,0,0,0.3) !important;
+}
+.deity-citypillar .siimsi-cup-cylinder {
+  background-image: url('citypillar_cup.png') !important;
+  background-size: 100% 100% !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  border: none !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), inset 0 0 20px rgba(0,0,0,0.3) !important;
+}
+
+/* 5. Custom Deity Bamboo Sticks */
+.deity-ganesh .siimsi-stick-item,
+.deity-ganesh .siimsi-stick-falling {
+  background: linear-gradient(to right, #3d1f0f 0%, #8a6f27 50%, #28140a 100%) !important; /* Golden mahogany wood */
+  border-top-color: #d4af37 !important; /* Gold tips */
+}
+.deity-guanyin .siimsi-stick-item,
+.deity-guanyin .siimsi-stick-falling {
+  background: linear-gradient(to right, #8a6c2f 0%, #c5a059 50%, #705420 100%) !important; /* Polished golden-teak bamboo */
+  border-top-color: #ffe259 !important; /* Brilliant gold tips */
+}
+.deity-citypillar .siimsi-stick-item,
+.deity-citypillar .siimsi-stick-falling {
+  background: linear-gradient(to right, #5d4037 0%, #a88a45 50%, #4e342e 100%) !important; /* Deep golden teak wood */
+  border-top-color: #ffe259 !important; /* Brilliant gold tips */
+}
+
+/* 6. Card Title Colors */
+#siimsiCard .card-title {
+  color: var(--coral) !important;
+  border-bottom-color: rgba(240, 112, 96, 0.2) !important;
+}
+
+/* ── MOBILE RESPONSIVE OVERRIDES (WHEEL, SOMPHUT, THAKSA) ── */
+@media (max-width: 768px) {
+  /* 1. Horoscope Wheel */
+  .wheel-wrap {
+    align-items: center !important;
+    width: 100% !important;
+  }
+  #wheel-svg {
+    max-width: 90% !important;
+    margin: 0 auto !important;
+  }
+  .legend {
+    justify-content: center !important;
+    padding: 0 0.5rem !important;
+    gap: 0.5rem !important;
+  }
+
+  /* 2. Somphut Table */
+  .ptable {
+    font-size: 0.76rem !important;
+  }
+  .ptable thead th, .ptable tbody td {
+    padding: 0.45rem 0.25rem !important;
+  }
+
+  /* 3. Thaksa Table/Grid */
+  #thaksa-container > div {
+    grid-template-columns: repeat(3, 80px) !important;
+    grid-template-rows: repeat(3, 80px) !important;
+  }
+  #thaksa-container div[style*="height: 92px"] {
+    height: 80px !important;
+    width: 80px !important;
+  }
+  #thaksa-container div[style*="width: 48px"] {
+    width: 42px !important;
+    height: 42px !important;
+  }
+  #thaksa-container span[style*="font-size: 1.8rem"] {
+    font-size: 1.4rem !important;
+  }
+
+  /* 4. E-Siimsi Scroll Mobile Optimization */
+  .siimsi-scroll {
+    padding: 1.6rem 1.2rem 1.2rem !important;
+    max-width: 95% !important;
+    height: 520px !important;
+    margin: 0 auto !important;
+  }
+  .siimsi-scroll-body {
+    padding-bottom: 4rem !important;
+  }
+  .siimsi-scroll-footer {
+    left: 1.2rem !important;
+    right: 1.2rem !important;
+    bottom: 1.2rem !important;
+  }
+  .siimsi-scroll-header {
+    padding-bottom: 0.5rem !important;
+    margin-bottom: 0.8rem !important;
+  }
+  .siimsi-scroll-number {
+    font-size: 0.95rem !important;
+    padding: 2px 10px !important;
+    margin-bottom: 0.3rem !important;
+  }
+  .siimsi-scroll-title {
+    font-size: 1.15rem !important;
+  }
+  .siimsi-scroll-body {
+    font-size: 0.84rem !important;
+    line-height: 1.55 !important;
+    margin-bottom: 0.8rem !important;
+  }
+  .siimsi-scroll-body > div {
+    font-size: 0.92rem !important;
+    margin-bottom: 0.6rem !important;
+    line-height: 1.4 !important;
+  }
+  .siimsi-scroll-footer {
+    padding-top: 0.6rem !important;
+    gap: 0.5rem !important;
+  }
+  .siimsi-lucky-num {
+    font-size: 0.78rem !important;
+  }
+  #siimsiResetBtn {
+    height: 1.8rem !important;
+    font-size: 0.75rem !important;
+    padding: 0 0.8rem !important;
+  }
+
+  /* 5. Mobile Astrologer Card Optimization (Horizontal row layout) */
+  .astrologer-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.6rem !important;
+    margin-top: 0.5rem !important;
+  }
+  .astrologer-card {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    text-align: left !important;
+    padding: 0.6rem 0.8rem !important;
+    border-radius: 12px !important;
+    gap: 0.8rem !important;
+    justify-content: space-between !important;
+    min-height: unset !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+  }
+  .astrologer-card > div:first-child {
+    font-size: 1.4rem !important;
+    margin-bottom: 0 !important;
+    flex-shrink: 0 !important;
+    width: 38px !important;
+    height: 38px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(226, 184, 66, 0.08) !important;
+    border-radius: 50% !important;
+    border: 1px solid rgba(226, 184, 66, 0.2) !important;
+  }
+  .astrologer-card-details {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    text-align: left !important;
+    flex-grow: 1 !important;
+    gap: 3px !important;
+    width: auto !important;
+  }
+  .astrologer-header {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 6px !important;
+    flex-wrap: wrap !important;
+    margin-bottom: 0 !important;
+    width: 100% !important;
+  }
+  .astrologer-name {
+    font-size: 0.95rem !important;
+    margin-bottom: 0 !important;
+  }
+  .astrologer-specialty {
+    font-size: 0.7rem !important;
+    padding: 1px 8px !important;
+    margin-bottom: 0 !important;
+    width: fit-content !important;
+  }
+  .astrologer-rating {
+    font-size: 0.75rem !important;
+    margin-bottom: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 2px !important;
+  }
+  .astrologer-price {
+    font-size: 0.78rem !important;
+    margin-bottom: 0 !important;
+    font-weight: 700 !important;
+    color: var(--gold-d) !important;
+  }
+  .astrologer-bio {
+    display: none !important; /* Hide bio on mobile to save vertical space and guarantee seeing 3+ astrologers */
+  }
+  .astrologer-card .btn-coral {
+    width: auto !important;
+    min-width: 68px !important;
+    height: 1.8rem !important; /* Shorter button height! */
+    font-size: 0.72rem !important;
+    padding: 0 0.6rem !important;
+    margin-top: 0 !important;
+    align-self: center !important;
+    border-radius: 6px !important;
+    background: linear-gradient(135deg, var(--coral) 0%, var(--coral-d) 100%) !important;
+    box-shadow: 0 2px 8px rgba(240, 112, 96, 0.25) !important;
+    border: none !important;
+  }
+}
