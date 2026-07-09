@@ -30,9 +30,69 @@ import hmac
 import hashlib
 import requests
 import time
+import threading
+import logging
+from logging.handlers import RotatingFileHandler
+from collections import defaultdict, deque
 
 app = Flask(__name__)
 CORS(app)
+
+# ── Logging: บันทึกทุกอย่างที่เคย print() ลงไฟล์ log แบบ rotate อัตโนมัติ ──────
+# ไฟล์นี้ใช้ print() เป็น logger อยู่แล้วเกือบ 100 จุด แทนที่จะไปแก้ print() ทีละจุด
+# (เสี่ยงพลาด/ตกหล่น) เราแค่ "ดักฟัง" stdout/stderr แล้วเขียนสำเนาออกไฟล์ log ด้วย
+# ทำให้ log เดิมทั้งหมดถูกเก็บถาวรลงไฟล์ (ไม่หายไปเมื่อปิด terminal/รันเป็น background)
+BASE_DIR_FOR_LOG = os.path.dirname(os.path.abspath(__file__))
+LOG_DIR = os.path.join(BASE_DIR_FOR_LOG, "logs")
+os.makedirs(LOG_DIR, exist_ok=True)
+
+_excel_server_logger = logging.getLogger("muhub_excel_server")
+_excel_server_logger.setLevel(logging.INFO)
+_excel_server_logger.propagate = False
+if not _excel_server_logger.handlers:
+    _log_handler = RotatingFileHandler(
+        os.path.join(LOG_DIR, "excel_server.log"), maxBytes=5 * 1024 * 1024, backupCount=5, encoding="utf-8"
+    )
+    _log_handler.setFormatter(logging.Formatter("%(asctime)s %(message)s"))
+    _excel_server_logger.addHandler(_log_handler)
+
+class _StreamToLogger:
+    """ส่งต่อทุกบรรทัดที่เขียนไปยัง stdout/stderr (เช่นจาก print()) เข้า logger ไฟล์ด้วย"""
+    def __init__(self, logger, level, original_stream):
+        self.logger = logger
+        self.level = level
+        self.original_stream = original_stream
+        self._buffer = ""
+
+    def write(self, message):
+        self.original_stream.write(message)
+        self._buffer += message
+        while "\n" in self._buffer:
+            line, self._buffer = self._buffer.split("\n", 1)
+            if line.strip():
+                self.logger.log(self.level, line)
+
+    def flush(self):
+        self.original_stream.flush()
+
+    def isatty(self):
+        return hasattr(self.original_stream, 'isatty') and self.original_stream.isatty()
+
+    def fileno(self):
+        if hasattr(self.original_stream, 'fileno'):
+            return self.original_stream.fileno()
+        raise OSError("Stream has no fileno")
+
+sys.stdout = _StreamToLogger(_excel_server_logger, logging.INFO, sys.stdout)
+sys.stderr = _StreamToLogger(_excel_server_logger, logging.ERROR, sys.stderr)
+
+# ── Basic error monitoring: จับ exception ที่ไม่ได้ handle ไว้ทุกจุด ─────────
+# ถ้าไม่มีตัวนี้ exception ที่หลุดจาก route ใดๆ จะทำให้ client เห็น stack trace เต็มๆ
+# (เสี่ยงข้อมูลรั่ว) ตัวนี้ log รายละเอียด error เต็มๆ ลงไฟล์ แล้วตอบ client แบบสุภาพ
+@app.errorhandler(Exception)
+def handle_unhandled_exception(e):
+    _excel_server_logger.exception(f"[UnhandledError] {request.method} {request.path}: {e}")
+    return jsonify({"success": False, "error": "internal_error", "message": "เกิดข้อผิดพลาดที่ไม่คาดคิดในระบบ กรุณาลองใหม่อีกครั้ง"}), 500
 
 # ── โหลดการตั้งค่าจาก config.json ─────────────────────────────────────────
 CONFIG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.json")
@@ -45,6 +105,7 @@ GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwUkfB7te_1-o_u_2Zr
 PORT = 5001
 SLIPOK_API_KEY = ""
 SLIPOK_BRANCH_ID = ""
+APP_API_TOKEN = ""
 
 if os.path.exists(CONFIG_PATH):
     try:
@@ -59,11 +120,13 @@ if os.path.exists(CONFIG_PATH):
             PORT = config.get("PORT", PORT)
             SLIPOK_API_KEY = config.get("SLIPOK_API_KEY", "")
             SLIPOK_BRANCH_ID = config.get("SLIPOK_BRANCH_ID", "")
+            APP_API_TOKEN = config.get("APP_API_TOKEN", "")
             print(f"[Config] Loaded settings from config.json")
             print(f"[Config] Excel Path: {EXCEL_PATH}")
             print(f"[Config] LINE Token configured: {bool(LINE_CHANNEL_ACCESS_TOKEN)}")
             print(f"[Config] LINE Admin User ID configured: {bool(LINE_ADMIN_USER_ID)}")
             print(f"[Config] SlipOK configured: {bool(SLIPOK_API_KEY)}")
+            print(f"[Config] App API Token configured: {bool(APP_API_TOKEN)}")
             print(f"[Config] Web App URL: {WEB_APP_URL}")
             print(f"[Config] Google Script URL: {GOOGLE_SCRIPT_URL}")
     except Exception as e:
@@ -104,6 +167,79 @@ CUST_HEADERS = [
 QUEUE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pending_cust_writes.json")
 PROFILE_CACHE = {}
 
+# ── โปรโมโค้ด: เก็บรายชื่อ Line ID ที่ใช้สิทธิ์ไปแล้ว (server-side, กันการใช้ซ้ำผ่าน localStorage) ──
+PROMO_USED_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "promo_used.json")
+promo_lock = threading.Lock()  # กัน race condition เวลามีคำขอ redeem เข้ามาพร้อมกัน
+
+# ── การป้องกัน Endpoint ที่เขียนข้อมูล (Token + Rate Limit) ───────────────────
+# เนื่องจาก server นี้ถูก tunnel ออกอินเทอร์เน็ต (สำหรับ LINE webhook) endpoint
+# ที่ "เขียน" ข้อมูลจริง (/api/save-customer, /api/redeem-promo) จึงมีคนภายนอก
+# ยิง request ปลอมเข้ามาได้โดยตรง ถ้าไม่มีการป้องกันใดๆ เลย
+#
+# หมายเหตุสำคัญ: เว็บแอปนี้เป็น static frontend ล้วน (ไม่มี login/session) ดังนั้น
+# APP_API_TOKEN ที่ฝังไว้ใน booking.js จะ "มองเห็นได้" ผ่าน view-source เสมอ
+# มันจึงช่วยกัน bot/สคริปต์กราดสุ่มยิงได้ ไม่ใช่การยืนยันตัวตนที่ปลอดภัย 100%
+# ต่อผู้โจมตีที่ตั้งใจอ่านโค้ด JS ก่อน — ควบคู่กับ rate limit ด้านล่างจะช่วยลด
+# ความเสียหายจากการยิงถล่ม (spam) ได้ในระดับที่เหมาะกับสเกลปัจจุบัน
+_rate_limit_buckets = defaultdict(deque)
+_rate_limit_lock = threading.Lock()
+RATE_LIMIT_MAX_REQUESTS = 8      # จำนวนครั้งสูงสุดต่อหน้าต่างเวลา
+RATE_LIMIT_WINDOW_SECONDS = 60   # หน้าต่างเวลา (วินาที)
+
+def _get_client_ip():
+    """ดึง IP จริงของ client โดยรองรับกรณีอยู่หลัง tunnel/reverse proxy"""
+    forwarded = request.headers.get("X-Forwarded-For", "")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    return request.remote_addr or "unknown"
+
+def check_rate_limit(bucket_key):
+    """คืนค่า True ถ้ายังไม่เกิน rate limit, False ถ้าเกินแล้ว (ควรปฏิเสธ request)"""
+    now = time.time()
+    with _rate_limit_lock:
+        q = _rate_limit_buckets[bucket_key]
+        while q and now - q[0] > RATE_LIMIT_WINDOW_SECONDS:
+            q.popleft()
+        if len(q) >= RATE_LIMIT_MAX_REQUESTS:
+            return False
+        q.append(now)
+        return True
+
+def require_app_token_and_rate_limit(endpoint_name):
+    """
+    เช็ค token (ถ้าตั้งค่า APP_API_TOKEN ไว้) และ rate limit ต่อ IP
+    เรียกใช้ที่ต้นทุกฟังก์ชันของ endpoint ที่ "เขียน" ข้อมูล
+    คืนค่า None ถ้าผ่าน หรือ (response, status_code) ถ้าควรปฏิเสธ
+    """
+    client_ip = _get_client_ip()
+
+    if not check_rate_limit(f"{endpoint_name}:{client_ip}"):
+        print(f"[Security] Rate limit exceeded for {endpoint_name} from {client_ip}")
+        return jsonify({"success": False, "error": "rate_limited", "message": "ส่งคำขอถี่เกินไป กรุณาลองใหม่ภายหลัง"}), 429
+
+    if APP_API_TOKEN:
+        provided = request.headers.get("X-App-Token", "")
+        if provided != APP_API_TOKEN:
+            print(f"[Security] Invalid/missing app token for {endpoint_name} from {client_ip}")
+            return jsonify({"success": False, "error": "unauthorized"}), 401
+
+    return None
+
+# ── ป้องกัน Formula/CSV Injection ──────────────────────────────────────────
+# ข้อมูลทุกฟิลด์ที่มาจากลูกค้า (เว็บฟอร์ม หรือแชท LINE) ถือเป็น "ข้อมูลที่ไม่น่าเชื่อถือ"
+# หากลูกค้า (หรือบอท) ตั้งใจพิมพ์ค่าที่ขึ้นต้นด้วย =, +, -, @ เช่น
+# "=IMPORTXML(...)" หรือ "=cmd|'/c calc'!A1" แล้วแอดมินเปิดไฟล์ Excel ขึ้นมา
+# Excel/openpyxl อาจตีความค่านั้นเป็นสูตรและรันโค้ดอันตรายได้ (ช่องโหว่ที่รู้จักกันในชื่อ
+# CSV/Formula Injection) ฟังก์ชันนี้ป้องกันโดยการเติมเครื่องหมาย ' นำหน้า
+# ค่าที่ขึ้นต้นด้วยอักขระอันตราย เพื่อบังคับให้ openpyxl เก็บเป็นข้อความล้วน ไม่ใช่สูตร
+_DANGEROUS_LEADING_CHARS = ("=", "+", "-", "@", "\t", "\r")
+
+def sanitize_excel_value(val):
+    """แปลงค่าที่จะเขียนลง Excel cell ให้ปลอดภัยจาก formula injection"""
+    if isinstance(val, str) and val.startswith(_DANGEROUS_LEADING_CHARS):
+        return "'" + val
+    return val
+
 # ── ฟังก์ชันช่วยสำหรับไฟล์ Excel ───────────────────────────────────────────
 def get_or_create_workbook():
     """โหลดหรือสร้าง workbook สำหรับบันทึกข้อมูลจองคิวหลัก"""
@@ -125,6 +261,34 @@ def get_or_create_workbook():
         for col in range(1, len(HEADERS) + 1):
             ws.cell(1, col).font = openpyxl.styles.Font(bold=True)
     return wb
+
+# ── หาคอลัมน์ของชีต Bookings จากชื่อ header แทนเลข hardcode ────────────────
+# HEADERS ที่ประกาศไว้ด้านบนมี 16 คอลัมน์ (GCal Event ID = คอลัมน์ 15, Status = 16)
+# แต่โค้ดส่วน auto-confirm ที่เขียนไว้ก่อนหน้านี้กลับอ่าน/เขียนที่คอลัมน์ 20/21
+# ซึ่งแปลว่าถ้าไฟล์ Excel จริงของแอดมิน (G:\My Drive\...) ไม่เคยมีคอลัมน์เพิ่มเติม
+# ถูกแทรกไว้ ระบบ auto-confirm ของคิวที่จองตรงจากหน้าเว็บจะอ่าน/เขียนคอลัมน์ผิด
+# ตำแหน่งไปเงียบๆ โดยไม่มีใครรู้ ฟังก์ชันนี้แก้ปัญหาด้วยการหาคอลัมน์จาก "ชื่อ header"
+# ในแถวที่ 1 ก่อนเสมอ (ยืดหยุ่นตามไฟล์จริงไม่ว่าแอดมินจะสลับ/แทรกคอลัมน์อย่างไร)
+# ถ้าหาไม่เจอจริงๆ ค่อย fallback ไปที่เลข 20/21 เดิม พร้อม print แจ้งเตือนให้สังเกตเห็น
+def resolve_bookings_columns(ws):
+    """คืนค่า (col_gcal_event_id, col_status) ของชีต Bookings โดยหาจากชื่อ header ก่อน"""
+    header_map = {}
+    for col_idx in range(1, ws.max_column + 1):
+        val = ws.cell(row=1, column=col_idx).value
+        if val:
+            header_map[str(val).strip()] = col_idx
+
+    col_gcal = header_map.get("GCal Event ID")
+    col_status = header_map.get("Status")
+
+    if not col_gcal or not col_status:
+        print(
+            "[Bookings] คำเตือน: ไม่พบคอลัมน์ 'GCal Event ID' หรือ 'Status' จากชื่อ header "
+            "แถวที่ 1 ของชีต Bookings — ใช้เลขคอลัมน์ fallback (20/21) ไปก่อน "
+            "กรุณาตรวจสอบว่า header แถวแรกของไฟล์ Excel จริงตรงกับที่ระบบคาดไว้"
+        )
+
+    return col_gcal or 20, col_status or 21
 
 def get_cust_sheet(wb):
     """ดึงหรือสร้างชีต Cust สำหรับฐานข้อมูลลูกค้า LINE"""
@@ -235,27 +399,27 @@ def write_data_to_sheet(ws, data):
     print(f"[Excel] Writing new row to line {row_idx}")
     
     ws.cell(row=row_idx, column=1).value = f'=IF(C{row_idx}<>"",TEXT(ROW()-3,"0000"),"")'
-    ws.cell(row=row_idx, column=2).value = data.get("timestamp", datetime.now().strftime("%d/%m/%Y %H:%M"))
-    ws.cell(row=row_idx, column=3).value = data.get("display_name", "")
-    ws.cell(row=row_idx, column=4).value = data.get("user_id", "")
-    ws.cell(row=row_idx, column=5).value = data.get("status", "ใหม่")
-    ws.cell(row=row_idx, column=6).value = data.get("booking_date", "")
-    ws.cell(row=row_idx, column=7).value = data.get("customer_name", "")
-    ws.cell(row=row_idx, column=8).value = data.get("line_id", "")
-    ws.cell(row=row_idx, column=9).value = data.get("birth_date", "")
-    ws.cell(row=row_idx, column=10).value = data.get("birth_time", "")
-    ws.cell(row=row_idx, column=11).value = data.get("birth_country", "")
-    ws.cell(row=row_idx, column=12).value = data.get("birth_city", "")
-    ws.cell(row=row_idx, column=13).value = data.get("package", "")
-    ws.cell(row=row_idx, column=14).value = data.get("astrologer", "")
-    ws.cell(row=row_idx, column=15).value = data.get("booking_date_appointment", "")
-    ws.cell(row=row_idx, column=16).value = data.get("booking_slot", "")
-    ws.cell(row=row_idx, column=17).value = data.get("questions", "")
-    ws.cell(row=row_idx, column=18).value = data.get("queue_id", "")
-    ws.cell(row=row_idx, column=19).value = data.get("payment_status", "")
+    ws.cell(row=row_idx, column=2).value = sanitize_excel_value(data.get("timestamp", datetime.now().strftime("%d/%m/%Y %H:%M")))
+    ws.cell(row=row_idx, column=3).value = sanitize_excel_value(data.get("display_name", ""))
+    ws.cell(row=row_idx, column=4).value = sanitize_excel_value(data.get("user_id", ""))
+    ws.cell(row=row_idx, column=5).value = sanitize_excel_value(data.get("status", "ใหม่"))
+    ws.cell(row=row_idx, column=6).value = sanitize_excel_value(data.get("booking_date", ""))
+    ws.cell(row=row_idx, column=7).value = sanitize_excel_value(data.get("customer_name", ""))
+    ws.cell(row=row_idx, column=8).value = sanitize_excel_value(data.get("line_id", ""))
+    ws.cell(row=row_idx, column=9).value = sanitize_excel_value(data.get("birth_date", ""))
+    ws.cell(row=row_idx, column=10).value = sanitize_excel_value(data.get("birth_time", ""))
+    ws.cell(row=row_idx, column=11).value = sanitize_excel_value(data.get("birth_country", ""))
+    ws.cell(row=row_idx, column=12).value = sanitize_excel_value(data.get("birth_city", ""))
+    ws.cell(row=row_idx, column=13).value = sanitize_excel_value(data.get("package", ""))
+    ws.cell(row=row_idx, column=14).value = sanitize_excel_value(data.get("astrologer", ""))
+    ws.cell(row=row_idx, column=15).value = sanitize_excel_value(data.get("booking_date_appointment", ""))
+    ws.cell(row=row_idx, column=16).value = sanitize_excel_value(data.get("booking_slot", ""))
+    ws.cell(row=row_idx, column=17).value = sanitize_excel_value(data.get("questions", ""))
+    ws.cell(row=row_idx, column=18).value = sanitize_excel_value(data.get("queue_id", ""))
+    ws.cell(row=row_idx, column=19).value = sanitize_excel_value(data.get("payment_status", ""))
     ws.cell(row=row_idx, column=20).value = f'=IF(U{row_idx}>1,"ลูกค้าเก่า","ลูกค้าใหม่")'
     ws.cell(row=row_idx, column=21).value = f'=COUNTIF(D:D, D{row_idx})'
-    ws.cell(row=row_idx, column=22).value = data.get("notes", "")
+    ws.cell(row=row_idx, column=22).value = sanitize_excel_value(data.get("notes", ""))
     
     # Auto-fit columns
     for col_num in range(1, len(CUST_HEADERS) + 1):
@@ -278,9 +442,9 @@ def append_message_to_existing_user(ws, user_id, message_text):
         timestamp = datetime.now().strftime("%d/%m %H:%M")
         note_line = f"[{timestamp}] ลูกค้า: {message_text}"
         if old_val:
-            cell.value = f"{old_val}\n{note_line}"
+            cell.value = sanitize_excel_value(f"{old_val}\n{note_line}")
         else:
-            cell.value = note_line
+            cell.value = sanitize_excel_value(note_line)
         print(f"[Excel] Appended note to existing user at row {latest_row}")
         return latest_row
     return None
@@ -572,9 +736,10 @@ def confirm_and_gcal_booking(queue_id):
             # ย้ายข้อมูลและลบแถว
             move_row_to_confirmed_sheet(wb, ws, r)
         else: # Bookings
-            ws.cell(row=r, column=20).value = gcal_event_id
-            ws.cell(row=r, column=21).value = "ชำระแล้ว"
-            
+            col_gcal, col_status = resolve_bookings_columns(ws)
+            ws.cell(row=r, column=col_gcal).value = gcal_event_id
+            ws.cell(row=r, column=col_status).value = "ชำระแล้ว"
+
         save_success = save_workbook_safe(wb, EXCEL_PATH)
         if not save_success:
             return {"success": False, "message": "❌ บันทึกลง Excel ไม่สำเร็จ เนื่องจากไฟล์ถูกเปิดใช้งานอยู่"}
@@ -684,10 +849,11 @@ def process_excel_auto_confirmations():
         # 2. ตรวจสอบชีต Bookings (คิวจากหน้าเว็บ)
         if "Bookings" in wb.sheetnames:
             ws = wb["Bookings"]
+            col_gcal, col_status = resolve_bookings_columns(ws)
             for r in range(2, ws.max_row + 1):
-                status = ws.cell(row=r, column=21).value          # Column U (สถานะ)
-                gcal_id = ws.cell(row=r, column=20).value         # Column T (gcalEventId)
-                
+                status = ws.cell(row=r, column=col_status).value  # หา column จาก header "Status"
+                gcal_id = ws.cell(row=r, column=col_gcal).value   # หา column จาก header "GCal Event ID"
+
                 is_paid = (status == "ชำระแล้ว")
                 has_gcal = gcal_id is not None and str(gcal_id).strip() != ""
                 
@@ -716,7 +882,7 @@ def process_excel_auto_confirmations():
                     
                     if cal_result.get("success"):
                         gcal_event_id = cal_result.get("eventId")
-                        ws.cell(row=r, column=20).value = gcal_event_id
+                        ws.cell(row=r, column=col_gcal).value = gcal_event_id
                         changes_made = True
                         
                         if user_id:
@@ -1122,6 +1288,10 @@ def save_customer():
     if request.method == "OPTIONS":
         return "", 200
 
+    guard_result = require_app_token_and_rate_limit("save_customer")
+    if guard_result is not None:
+        return guard_result
+
     try:
         data = request.get_json(force=True)
         print(f"[Direct Web API] Received booking: {data.get('name')} / {data.get('queueId')}")
@@ -1135,20 +1305,20 @@ def save_customer():
 
         row = [
             datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            data.get("queueId",      ""),
-            data.get("name",         ""),
-            data.get("lineId",       ""),
-            data.get("astrologer",   ""),
-            data.get("service",      ""),
-            data.get("date",         ""),
-            data.get("slot",         ""),
-            data.get("questions",    ""),
-            data.get("birthDate",    ""),
-            data.get("birthHour",    ""),
-            data.get("birthMin",     ""),
-            data.get("birthCountry", ""),
-            data.get("birthCity",    ""),
-            data.get("gcalEventId",  ""),
+            sanitize_excel_value(data.get("queueId",      "")),
+            sanitize_excel_value(data.get("name",         "")),
+            sanitize_excel_value(data.get("lineId",       "")),
+            sanitize_excel_value(data.get("astrologer",   "")),
+            sanitize_excel_value(data.get("service",      "")),
+            sanitize_excel_value(data.get("date",         "")),
+            sanitize_excel_value(data.get("slot",         "")),
+            sanitize_excel_value(data.get("questions",    "")),
+            sanitize_excel_value(data.get("birthDate",    "")),
+            sanitize_excel_value(data.get("birthHour",    "")),
+            sanitize_excel_value(data.get("birthMin",     "")),
+            sanitize_excel_value(data.get("birthCountry", "")),
+            sanitize_excel_value(data.get("birthCity",    "")),
+            sanitize_excel_value(data.get("gcalEventId",  "")),
             "pending"
         ]
 
@@ -1488,6 +1658,205 @@ def line_webhook():
                 reply_line_message(reply_token, reply_text)
                 
     return "OK", 200
+
+def _load_promo_used():
+    """อ่านไฟล์ promo_used.json -> {"MUHUBFIRST": ["lineid1", "lineid2", ...]}"""
+    if os.path.exists(PROMO_USED_PATH):
+        try:
+            with open(PROMO_USED_PATH, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"[Promo] Warning: Failed to read promo_used.json: {e}")
+    return {}
+
+
+def _save_promo_used(data):
+    with open(PROMO_USED_PATH, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
+
+@app.route("/api/check-promo", methods=["GET"])
+def check_promo():
+    """
+    เช็คว่า Line ID นี้ยังมีสิทธิ์ใช้โค้ดโปรโมชั่นนี้อยู่หรือไม่ (read-only, ไม่ล็อกสิทธิ์)
+    เรียกตอนลูกค้ากด "ใช้งาน" โค้ด เพื่อโชว์ผลแบบทันที
+    """
+    code = (request.args.get("code") or "").strip().upper()
+    line_id = (request.args.get("lineId") or "").strip().lower()
+    if not code or not line_id:
+        return jsonify({"eligible": False, "reason": "missing_params"}), 400
+
+    with promo_lock:
+        used = _load_promo_used()
+        already_used = line_id in used.get(code, [])
+
+    return jsonify({"eligible": not already_used, "code": code})
+
+
+@app.route("/api/redeem-promo", methods=["POST"])
+def redeem_promo():
+    """
+    ล็อกสิทธิ์โค้ดโปรโมชั่นให้ Line ID นี้แบบถาวร (เขียนไฟล์จริง)
+    เรียกตอนลูกค้ากด "ยืนยันการชำระเงิน" ของการจองแบบใช้โค้ดฟรีเท่านั้น
+    เช็ค + เขียนอยู่ใน lock เดียวกันเพื่อกันสองคำขอพร้อมกันแย่งสิทธิ์เดียวกัน
+    """
+    guard_result = require_app_token_and_rate_limit("redeem_promo")
+    if guard_result is not None:
+        return guard_result
+
+    data = request.get_json(force=True) or {}
+    code = (data.get("code") or "").strip().upper()
+    line_id = (data.get("lineId") or "").strip().lower()
+    if not code or not line_id:
+        return jsonify({"success": False, "reason": "missing_params"}), 400
+
+    with promo_lock:
+        used = _load_promo_used()
+        used_list = used.setdefault(code, [])
+        if line_id in used_list:
+            return jsonify({"success": False, "reason": "already_used"})
+        used_list.append(line_id)
+        _save_promo_used(used)
+
+    return jsonify({"success": True})
+
+
+def _lookup_booking_status(queue_id: str):
+    """
+    ดึงสถานะการจองจริงจากไฟล์ Excel (แหล่งความจริงเดียว ที่แอดมินแก้ด้วยมือ)
+    ใช้เงื่อนไข "ยืนยันแล้ว" แบบเดียวกับที่ process_excel_auto_confirmations()
+    ใช้ตัดสินใจส่ง LINE ยืนยันลูกค้าจริง เพื่อให้ endpoint นี้ไม่มีวันบอกว่า
+    "คอนเฟิร์ม" ก่อนที่ระบบอัตโนมัติจริงจะยืนยันจริง
+
+    หมายเหตุ: คอลัมน์ "GCal Event ID"/"Status" ของชีต Bookings หาโดยอ่านชื่อ
+    header จากแถวที่ 1 ผ่าน resolve_bookings_columns() ก่อนเสมอ (ไม่ hardcode
+    เลขคอลัมน์แล้ว) เผื่อไว้ด้วยว่ายังเช็คคอลัมน์ 15/16 ตามที่ HEADERS ประกาศไว้
+    เป็นอีกชั้นหนึ่ง กรณีไฟล์จริงไม่มี header ตรงกับที่คาดไว้เลย
+    """
+    if not os.path.exists(EXCEL_PATH):
+        return None
+    try:
+        wb = load_workbook(EXCEL_PATH, data_only=True)
+    except Exception as e:
+        print(f"[BookingStatus] Failed to open workbook: {e}")
+        return None
+
+    # 1. ชีต "Bookings" (คิวที่จองตรงจากหน้าเว็บ)
+    if "Bookings" in wb.sheetnames:
+        ws = wb["Bookings"]
+        col_gcal, col_status = resolve_bookings_columns(ws)
+        for r in range(2, ws.max_row + 1):
+            if str(ws.cell(row=r, column=2).value or "").strip() == queue_id:
+                status_literal = str(ws.cell(row=r, column=16).value or "").strip()
+                status_u = str(ws.cell(row=r, column=col_status).value or "").strip()
+                gcal_t = str(ws.cell(row=r, column=col_gcal).value or "").strip()
+                gcal_declared = str(ws.cell(row=r, column=15).value or "").strip()
+                is_confirmed = (
+                    status_u == "ชำระแล้ว"
+                    or bool(gcal_t)
+                    or bool(gcal_declared)
+                    or status_literal.lower() in ("confirmed", "ยืนยัน", "ชำระแล้ว")
+                )
+                return {
+                    "found": True,
+                    "sheet": "Bookings",
+                    "status": "confirmed" if is_confirmed else "pending",
+                    "raw_status": status_u or status_literal
+                }
+
+    # 2. ชีต "Cust" (ย้ายมาจาก PendingCust เมื่อแอดมินยืนยันแล้ว)
+    if "Cust" in wb.sheetnames:
+        ws = wb["Cust"]
+        for r in range(2, ws.max_row + 1):
+            if str(ws.cell(row=r, column=18).value or "").strip() == queue_id:
+                pay_status = str(ws.cell(row=r, column=19).value or "").strip()
+                status = str(ws.cell(row=r, column=5).value or "").strip()
+                is_confirmed = (pay_status == "ชำระแล้ว") or (status == "ยืนยัน")
+                return {
+                    "found": True,
+                    "sheet": "Cust",
+                    "status": "confirmed" if is_confirmed else "pending",
+                    "raw_status": pay_status or status
+                }
+
+    # 3. ชีต "PendingCust" (คิวจากแชท ที่ยังรอตรวจ)
+    if "PendingCust" in wb.sheetnames:
+        ws = wb["PendingCust"]
+        for r in range(2, ws.max_row + 1):
+            if str(ws.cell(row=r, column=18).value or "").strip() == queue_id:
+                pay_status = str(ws.cell(row=r, column=19).value or "").strip()
+                status = str(ws.cell(row=r, column=5).value or "").strip()
+                is_confirmed = (pay_status == "ชำระแล้ว") or (status == "ยืนยัน")
+                return {
+                    "found": True,
+                    "sheet": "PendingCust",
+                    "status": "confirmed" if is_confirmed else "pending",
+                    "raw_status": pay_status or status
+                }
+
+    return {"found": False}
+
+
+@app.route("/api/booking-status", methods=["GET"])
+def booking_status():
+    """
+    ให้หน้าเว็บดึงสถานะการจองจริงมาแสดงตอนเปิดแท็บ "คิวของฉัน"
+    แทนการเดาสถานะเองแบบ setTimeout ฝั่ง browser
+    """
+    queue_id = (request.args.get("queueId") or "").strip()
+    if not queue_id:
+        return jsonify({"found": False, "error": "missing queueId"}), 400
+    result = _lookup_booking_status(queue_id)
+    if result is None:
+        return jsonify({"found": False, "error": "excel_unavailable"}), 503
+    return jsonify(result)
+
+
+EVENTS_LOG_PATH = os.path.join(LOG_DIR, "events_log.jsonl")
+_events_log_lock = threading.Lock()
+
+@app.route("/api/track-event", methods=["POST", "OPTIONS"])
+def track_event():
+    """
+    รับ event สั้นๆ จากหน้าเว็บ (เช่น calculator_used, booking_tab_opened) เพื่อ
+    เก็บสถิติ conversion funnel: มีคนใช้เครื่องคำนวณ/เปิดหน้าจองกี่คน เทียบกับ
+    จำนวนแถวจองจริงในชีต Bookings/Cust ที่มีอยู่แล้ว จะได้ conversion rate คร่าวๆ
+
+    หมายเหตุ: จงใจ "ไม่" เขียนลง MuHub_Customer_DB.xlsx เหมือนข้อมูลจองจริง เพราะ
+    event นี้อาจถูกยิงถี่ (ทุกครั้งที่กดผูกดวง/เปิดแท็บจอง) การเปิด-ปิด workbook
+    ลูกค้าจริงบ่อยๆ จะเพิ่มความเสี่ยง lock ไฟล์ชนกับตอนแอดมินเปิดไฟล์ดูอยู่ จึงเขียน
+    ลงไฟล์ .jsonl แยกต่างหาก (เบากว่ามาก) แล้วให้แอดมินนำไปสรุปเป็นระยะแทน
+    """
+    if request.method == "OPTIONS":
+        return "", 200
+
+    guard_result = require_app_token_and_rate_limit("track_event")
+    if guard_result is not None:
+        return guard_result
+
+    try:
+        data = request.get_json(force=True) or {}
+        event_name = str(data.get("event", ""))[:100].strip()
+        session_id = str(data.get("sessionId", ""))[:100].strip()
+        detail = data.get("detail", {})
+
+        if not event_name:
+            return jsonify({"success": False, "error": "missing_event"}), 400
+
+        record = {
+            "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "event": event_name,
+            "sessionId": session_id,
+            "detail": detail,
+        }
+        with _events_log_lock:
+            with open(EVENTS_LOG_PATH, "a", encoding="utf-8") as f:
+                f.write(json.dumps(record, ensure_ascii=False) + "\n")
+
+        return jsonify({"success": True})
+    except Exception as e:
+        print(f"[TrackEvent] Error (non-critical): {e}")
+        return jsonify({"success": False, "error": str(e)})
 
 @app.route("/api/health", methods=["GET"])
 def health():

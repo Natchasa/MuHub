@@ -121,15 +121,29 @@ LOCATION_DATABASE = {
   "AE": {
     "name": "สหรัฐอาหรับเอมิเรตส์",
     "enName": "United Arab Emirates",
-    "capital": "Abu Dhabi",
-    "lat": 24,
-    "lon": 54,
+    "capital": "อาบูดาบี",
+    "lat": 24.4539,
+    "lon": 54.3773,
     "cities": [
       {
-        "id": "capital",
-        "name": "Abu Dhabi",
-        "lat": 24,
-        "lon": 54,
+        "id": "abu_dhabi",
+        "name": "อาบูดาบี (Abu Dhabi)",
+        "lat": 24.4539,
+        "lon": 54.3773,
+        "tz": 4.0
+      },
+      {
+        "id": "dubai",
+        "name": "ดูไบ (Dubai)",
+        "lat": 25.2048,
+        "lon": 55.2708,
+        "tz": 4.0
+      },
+      {
+        "id": "sharjah",
+        "name": "ชาร์จาห์ (Sharjah)",
+        "lat": 25.3463,
+        "lon": 55.4208,
         "tz": 4.0
       }
     ],
@@ -232,37 +246,51 @@ LOCATION_DATABASE = {
   "AU": {
     "name": "ออสเตรเลีย",
     "enName": "Australia",
-    "capital": "Canberra",
-    "lat": -27,
-    "lon": 133,
+    "capital": "แคนเบอร์รา",
+    "lat": -35.2809,
+    "lon": 149.13,
     "cities": [
-      {
-        "id": "adelaide",
-        "name": "แอดิเลด (Adelaide)",
-        "lat": -34.9285,
-        "lon": 138.6007,
-        "tz": 9.5
-      },
-      {
-        "id": "brisbane",
-        "name": "บริสเบน (Brisbane)",
-        "lat": -27.4698,
-        "lon": 153.0251,
-        "tz": 10.0
-      },
-      {
-        "id": "cairns",
-        "name": "แคนส์ (Cairns)",
-        "lat": -16.9186,
-        "lon": 145.7781,
-        "tz": 10.0
-      },
       {
         "id": "canberra",
         "name": "แคนเบอร์รา (Canberra)",
         "lat": -35.2809,
         "lon": 149.13,
         "tz": 10.0
+      },
+      {
+        "id": "sydney",
+        "name": "ซิดนีย์ (Sydney)",
+        "lat": -33.8688,
+        "lon": 151.2093,
+        "tz": 10.0
+      },
+      {
+        "id": "melbourne",
+        "name": "เมลเบิร์น (Melbourne)",
+        "lat": -37.8136,
+        "lon": 144.9631,
+        "tz": 10.0
+      },
+      {
+        "id": "brisbane",
+        "name": "บริสเบน (Brisbane)",
+        "lat": -27.4705,
+        "lon": 153.026,
+        "tz": 10.0
+      },
+      {
+        "id": "perth",
+        "name": "เพิร์ท (Perth)",
+        "lat": -31.9505,
+        "lon": 115.8605,
+        "tz": 8.0
+      },
+      {
+        "id": "adelaide",
+        "name": "แอดิเลด (Adelaide)",
+        "lat": -34.9285,
+        "lon": 138.6007,
+        "tz": 9.5
       },
       {
         "id": "darwin",
@@ -279,28 +307,14 @@ LOCATION_DATABASE = {
         "tz": 10.0
       },
       {
-        "id": "melbourne",
-        "name": "เมลเบิร์น (Melbourne)",
-        "lat": -37.8136,
-        "lon": 144.9631,
-        "tz": 10.0
-      },
-      {
-        "id": "perth",
-        "name": "เพิร์ท (Perth)",
-        "lat": -31.9505,
-        "lon": 115.8605,
-        "tz": 8.0
-      },
-      {
-        "id": "sydney",
-        "name": "ซิดนีย์ (Sydney)",
-        "lat": -33.8688,
-        "lon": 151.2093,
+        "id": "gold_coast",
+        "name": "โกลด์โคสต์ (Gold Coast)",
+        "lat": -28.0167,
+        "lon": 153.4,
         "tz": 10.0
       }
     ],
-    "tz": 9.5
+    "tz": 10.0
   },
   "AT": {
     "name": "ออสเตรีย",
@@ -722,19 +736,61 @@ LOCATION_DATABASE = {
   "CA": {
     "name": "แคนาดา",
     "enName": "Canada",
-    "capital": "Ottawa",
-    "lat": 60,
-    "lon": -95,
+    "capital": "ออตตาวา",
+    "lat": 45.4215,
+    "lon": -75.6972,
     "cities": [
       {
-        "id": "capital",
-        "name": "Ottawa",
-        "lat": 60,
-        "lon": -95,
-        "tz": -6.0
+        "id": "ottawa",
+        "name": "ออตตาวา (Ottawa)",
+        "lat": 45.4215,
+        "lon": -75.6972,
+        "tz": -5.0
+      },
+      {
+        "id": "toronto",
+        "name": "โทรอนโต (Toronto)",
+        "lat": 43.6532,
+        "lon": -79.3832,
+        "tz": -5.0
+      },
+      {
+        "id": "montreal",
+        "name": "มอนทรีออล (Montreal)",
+        "lat": 45.5017,
+        "lon": -73.5673,
+        "tz": -5.0
+      },
+      {
+        "id": "vancouver",
+        "name": "แวนคูเวอร์ (Vancouver)",
+        "lat": 49.2827,
+        "lon": -123.1207,
+        "tz": -8.0
+      },
+      {
+        "id": "calgary",
+        "name": "คาลการี (Calgary)",
+        "lat": 51.0447,
+        "lon": -114.0719,
+        "tz": -7.0
+      },
+      {
+        "id": "edmonton",
+        "name": "เอดมันตัน (Edmonton)",
+        "lat": 53.5461,
+        "lon": -113.4938,
+        "tz": -7.0
+      },
+      {
+        "id": "quebec_city",
+        "name": "ควิเบกซิตี (Quebec City)",
+        "lat": 46.8139,
+        "lon": -71.2082,
+        "tz": -5.0
       }
     ],
-    "tz": -6.0
+    "tz": -5.0
   },
   "CC": {
     "name": "หมู่เกาะโคโคส",
@@ -756,15 +812,50 @@ LOCATION_DATABASE = {
   "CH": {
     "name": "สวิตเซอร์แลนด์",
     "enName": "Switzerland",
-    "capital": "Bern",
-    "lat": 47,
-    "lon": 8,
+    "capital": "เบิร์น",
+    "lat": 46.948,
+    "lon": 7.4474,
     "cities": [
       {
-        "id": "capital",
-        "name": "Bern",
-        "lat": 47,
-        "lon": 8,
+        "id": "bern",
+        "name": "เบิร์น (Bern)",
+        "lat": 46.948,
+        "lon": 7.4474,
+        "tz": 1.0
+      },
+      {
+        "id": "zurich",
+        "name": "ซูริก (Zurich)",
+        "lat": 47.3769,
+        "lon": 8.5417,
+        "tz": 1.0
+      },
+      {
+        "id": "geneva",
+        "name": "เจนีวา (Geneva)",
+        "lat": 46.2044,
+        "lon": 6.1432,
+        "tz": 1.0
+      },
+      {
+        "id": "basel",
+        "name": "บาเซิล (Basel)",
+        "lat": 47.5596,
+        "lon": 7.5886,
+        "tz": 1.0
+      },
+      {
+        "id": "lausanne",
+        "name": "โลซาน (Lausanne)",
+        "lat": 46.5197,
+        "lon": 6.6323,
+        "tz": 1.0
+      },
+      {
+        "id": "lucerne",
+        "name": "ลูเซิร์น (Lucerne)",
+        "lat": 47.0502,
+        "lon": 8.3093,
         "tz": 1.0
       }
     ],
@@ -1286,9 +1377,9 @@ LOCATION_DATABASE = {
   "DE": {
     "name": "เยอรมนี",
     "enName": "Germany",
-    "capital": "Berlin",
-    "lat": 51,
-    "lon": 9,
+    "capital": "เบอร์ลิน",
+    "lat": 52.52,
+    "lon": 13.405,
     "cities": [
       {
         "id": "berlin",
@@ -1298,17 +1389,10 @@ LOCATION_DATABASE = {
         "tz": 1.0
       },
       {
-        "id": "bremen",
-        "name": "เบรเมน (Bremen)",
-        "lat": 53.0793,
-        "lon": 8.8017,
-        "tz": 1.0
-      },
-      {
-        "id": "cologne",
-        "name": "โคโลญ (Cologne)",
-        "lat": 50.9375,
-        "lon": 6.9603,
+        "id": "munich",
+        "name": "มิวนิก (Munich)",
+        "lat": 48.1351,
+        "lon": 11.582,
         "tz": 1.0
       },
       {
@@ -1326,17 +1410,10 @@ LOCATION_DATABASE = {
         "tz": 1.0
       },
       {
-        "id": "leipzig",
-        "name": "ไลป์ซิก (Leipzig)",
-        "lat": 51.3401,
-        "lon": 12.3731,
-        "tz": 1.0
-      },
-      {
-        "id": "munich",
-        "name": "มิวนิก (Munich)",
-        "lat": 48.1351,
-        "lon": 11.582,
+        "id": "cologne",
+        "name": "โคโลญ (Cologne)",
+        "lat": 50.9375,
+        "lon": 6.9603,
         "tz": 1.0
       },
       {
@@ -1344,6 +1421,20 @@ LOCATION_DATABASE = {
         "name": "สตุตการ์ต (Stuttgart)",
         "lat": 48.7758,
         "lon": 9.1829,
+        "tz": 1.0
+      },
+      {
+        "id": "dusseldorf",
+        "name": "ดุสเซลดอร์ฟ (Dusseldorf)",
+        "lat": 51.2271,
+        "lon": 6.7735,
+        "tz": 1.0
+      },
+      {
+        "id": "leipzig",
+        "name": "ไลป์ซิก (Leipzig)",
+        "lat": 51.3397,
+        "lon": 12.3731,
         "tz": 1.0
       }
     ],
@@ -1505,15 +1596,50 @@ LOCATION_DATABASE = {
   "ES": {
     "name": "สเปน",
     "enName": "Spain",
-    "capital": "Madrid",
-    "lat": 40,
-    "lon": -4,
+    "capital": "มาดริด",
+    "lat": 40.4168,
+    "lon": -3.7038,
     "cities": [
       {
-        "id": "capital",
-        "name": "Madrid",
-        "lat": 40,
-        "lon": -4,
+        "id": "madrid",
+        "name": "มาดริด (Madrid)",
+        "lat": 40.4168,
+        "lon": -3.7038,
+        "tz": 1.0
+      },
+      {
+        "id": "barcelona",
+        "name": "บาร์เซโลนา (Barcelona)",
+        "lat": 41.3851,
+        "lon": 2.1734,
+        "tz": 1.0
+      },
+      {
+        "id": "valencia",
+        "name": "บาเลนเซีย (Valencia)",
+        "lat": 39.4699,
+        "lon": -0.3763,
+        "tz": 1.0
+      },
+      {
+        "id": "seville",
+        "name": "เซบียา (Seville)",
+        "lat": 37.3891,
+        "lon": -5.9845,
+        "tz": 1.0
+      },
+      {
+        "id": "zaragoza",
+        "name": "ซารโกซา (Zaragoza)",
+        "lat": 41.6488,
+        "lon": -0.8891,
+        "tz": 1.0
+      },
+      {
+        "id": "malaga",
+        "name": "มาลากา (Malaga)",
+        "lat": 36.7213,
+        "lon": -4.4214,
         "tz": 1.0
       }
     ],
@@ -1607,29 +1733,57 @@ LOCATION_DATABASE = {
   "FR": {
     "name": "ฝรั่งเศส",
     "enName": "France",
-    "capital": "Paris",
-    "lat": 46,
-    "lon": 2,
+    "capital": "ปารีส",
+    "lat": 48.8566,
+    "lon": 2.3522,
     "cities": [
       {
-        "id": "lyon",
-        "name": "Lyon",
-        "lat": 45.764,
-        "lon": 4.8357,
+        "id": "paris",
+        "name": "ปารีส (Paris)",
+        "lat": 48.8566,
+        "lon": 2.3522,
         "tz": 1.0
       },
       {
         "id": "marseille",
-        "name": "Marseille",
+        "name": "มาร์เซย (Marseille)",
         "lat": 43.2965,
         "lon": 5.3698,
         "tz": 1.0
       },
       {
-        "id": "paris",
-        "name": "Paris",
-        "lat": 48.8566,
-        "lon": 2.3522,
+        "id": "lyon",
+        "name": "ลียง (Lyon)",
+        "lat": 45.764,
+        "lon": 4.8357,
+        "tz": 1.0
+      },
+      {
+        "id": "toulouse",
+        "name": "ตูลูส (Toulouse)",
+        "lat": 43.6047,
+        "lon": 1.4442,
+        "tz": 1.0
+      },
+      {
+        "id": "nice",
+        "name": "นีซ (Nice)",
+        "lat": 43.7102,
+        "lon": 7.262,
+        "tz": 1.0
+      },
+      {
+        "id": "nantes",
+        "name": "น็องต์ (Nantes)",
+        "lat": 47.2184,
+        "lon": -1.5536,
+        "tz": 1.0
+      },
+      {
+        "id": "strasbourg",
+        "name": "สทราซบูร์ (Strasbourg)",
+        "lat": 48.5734,
+        "lon": 7.7521,
         "tz": 1.0
       }
     ],
@@ -1689,15 +1843,15 @@ LOCATION_DATABASE = {
   "GB": {
     "name": "สหราชอาณาจักร",
     "enName": "United Kingdom",
-    "capital": "London",
-    "lat": 54,
-    "lon": -2,
+    "capital": "ลอนดอน",
+    "lat": 51.5074,
+    "lon": -0.1278,
     "cities": [
       {
-        "id": "belfast",
-        "name": "เบลฟาสต์ (Belfast)",
-        "lat": 54.5973,
-        "lon": -5.9301,
+        "id": "london",
+        "name": "ลอนดอน (London)",
+        "lat": 51.5074,
+        "lon": -0.1278,
         "tz": 0.0
       },
       {
@@ -1705,6 +1859,41 @@ LOCATION_DATABASE = {
         "name": "เบอร์มิงแฮม (Birmingham)",
         "lat": 52.4862,
         "lon": -1.8904,
+        "tz": 0.0
+      },
+      {
+        "id": "manchester",
+        "name": "แมนเชสเตอร์ (Manchester)",
+        "lat": 53.4808,
+        "lon": -2.2426,
+        "tz": 0.0
+      },
+      {
+        "id": "glasgow",
+        "name": "กลาสโกว์ (Glasgow)",
+        "lat": 55.8642,
+        "lon": -4.2518,
+        "tz": 0.0
+      },
+      {
+        "id": "liverpool",
+        "name": "ลิเวอร์พูล (Liverpool)",
+        "lat": 53.4084,
+        "lon": -2.9916,
+        "tz": 0.0
+      },
+      {
+        "id": "leeds",
+        "name": "ลีดส์ (Leeds)",
+        "lat": 53.8008,
+        "lon": -1.5491,
+        "tz": 0.0
+      },
+      {
+        "id": "edinburgh",
+        "name": "เอดินบะระ (Edinburgh)",
+        "lat": 55.9533,
+        "lon": -3.1883,
         "tz": 0.0
       },
       {
@@ -1722,38 +1911,10 @@ LOCATION_DATABASE = {
         "tz": 0.0
       },
       {
-        "id": "edinburgh",
-        "name": "เอดินบะระ (Edinburgh)",
-        "lat": 55.9533,
-        "lon": -3.1883,
-        "tz": 0.0
-      },
-      {
-        "id": "glasgow",
-        "name": "กลาสโกว์ (Glasgow)",
-        "lat": 55.8642,
-        "lon": -4.2518,
-        "tz": 0.0
-      },
-      {
-        "id": "london",
-        "name": "ลอนดอน (London)",
-        "lat": 51.5074,
-        "lon": -0.1278,
-        "tz": 0.0
-      },
-      {
-        "id": "manchester",
-        "name": "แมนเชสเตอร์ (Manchester)",
-        "lat": 53.4808,
-        "lon": -2.2426,
-        "tz": 0.0
-      },
-      {
-        "id": "newcastle",
-        "name": "นิวคาสเซิล (Newcastle)",
-        "lat": 54.9783,
-        "lon": -1.6178,
+        "id": "belfast",
+        "name": "เบลฟาสต์ (Belfast)",
+        "lat": 54.5973,
+        "lon": -5.9301,
         "tz": 0.0
       }
     ],
@@ -2034,15 +2195,29 @@ LOCATION_DATABASE = {
   "HK": {
     "name": "ฮ่องกง",
     "enName": "Hong Kong",
-    "capital": "City of Victoria",
-    "lat": 22.267,
-    "lon": 114.188,
+    "capital": "ฮ่องกง",
+    "lat": 22.3193,
+    "lon": 114.1694,
     "cities": [
       {
-        "id": "capital",
-        "name": "City of Victoria",
-        "lat": 22.267,
-        "lon": 114.188,
+        "id": "hong_kong",
+        "name": "ฮ่องกง (Hong Kong)",
+        "lat": 22.3193,
+        "lon": 114.1694,
+        "tz": 8.0
+      },
+      {
+        "id": "kowloon",
+        "name": "เกาลูน (Kowloon)",
+        "lat": 22.3193,
+        "lon": 114.1694,
+        "tz": 8.0
+      },
+      {
+        "id": "new_territories",
+        "name": "นิวเทร์ริทอรีส์ (New Territories)",
+        "lat": 22.4176,
+        "lon": 114.1294,
         "tz": 8.0
       }
     ],
@@ -2128,19 +2303,61 @@ LOCATION_DATABASE = {
   "ID": {
     "name": "อินโดนีเซีย",
     "enName": "Indonesia",
-    "capital": "Jakarta",
-    "lat": -5,
-    "lon": 120,
+    "capital": "จาการ์ตา",
+    "lat": -6.2088,
+    "lon": 106.8456,
     "cities": [
       {
-        "id": "capital",
-        "name": "Jakarta",
-        "lat": -5,
-        "lon": 120,
+        "id": "jakarta",
+        "name": "จาการ์ตา (Jakarta)",
+        "lat": -6.2088,
+        "lon": 106.8456,
+        "tz": 7.0
+      },
+      {
+        "id": "surabaya",
+        "name": "สุราบายา (Surabaya)",
+        "lat": -7.2575,
+        "lon": 112.7521,
+        "tz": 7.0
+      },
+      {
+        "id": "bandung",
+        "name": "บันดุง (Bandung)",
+        "lat": -6.9175,
+        "lon": 107.6191,
+        "tz": 7.0
+      },
+      {
+        "id": "medan",
+        "name": "เมดาน (Medan)",
+        "lat": 3.5952,
+        "lon": 98.6722,
+        "tz": 7.0
+      },
+      {
+        "id": "denpasar",
+        "name": "เดนปาซาร์/บาหลี (Denpasar/Bali)",
+        "lat": -8.6705,
+        "lon": 115.2126,
         "tz": 8.0
+      },
+      {
+        "id": "yogyakarta",
+        "name": "ยอกยาการ์ตา (Yogyakarta)",
+        "lat": -7.7956,
+        "lon": 110.3695,
+        "tz": 7.0
+      },
+      {
+        "id": "semarang",
+        "name": "เซมารัง (Semarang)",
+        "lat": -6.9667,
+        "lon": 110.4167,
+        "tz": 7.0
       }
     ],
-    "tz": 8.0
+    "tz": 7.0
   },
   "IM": {
     "name": "ไอล์ออฟแมน",
@@ -2162,43 +2379,71 @@ LOCATION_DATABASE = {
   "IN": {
     "name": "อินเดีย",
     "enName": "India",
-    "capital": "New Delhi",
-    "lat": 20,
-    "lon": 77,
+    "capital": "นิวเดลี",
+    "lat": 28.6139,
+    "lon": 77.209,
     "cities": [
       {
-        "id": "bangalore",
-        "name": "Bangalore",
-        "lat": 12.9716,
-        "lon": 77.5946,
-        "tz": 5.5
-      },
-      {
-        "id": "chennai",
-        "name": "Chennai",
-        "lat": 13.0827,
-        "lon": 80.2707,
-        "tz": 5.5
-      },
-      {
-        "id": "kolkata",
-        "name": "Kolkata",
-        "lat": 22.5726,
-        "lon": 88.3639,
+        "id": "new_delhi",
+        "name": "นิวเดลี (New Delhi)",
+        "lat": 28.6139,
+        "lon": 77.209,
         "tz": 5.5
       },
       {
         "id": "mumbai",
-        "name": "Mumbai",
+        "name": "มุมไบ (Mumbai)",
         "lat": 19.076,
         "lon": 72.8777,
         "tz": 5.5
       },
       {
-        "id": "delhi",
-        "name": "New Delhi",
-        "lat": 28.6139,
-        "lon": 77.209,
+        "id": "kolkata",
+        "name": "โกลกาตา (Kolkata)",
+        "lat": 22.5726,
+        "lon": 88.3639,
+        "tz": 5.5
+      },
+      {
+        "id": "chennai",
+        "name": "เจนไน (Chennai)",
+        "lat": 13.0827,
+        "lon": 80.2707,
+        "tz": 5.5
+      },
+      {
+        "id": "bangalore",
+        "name": "เบงกาลูรู (Bangalore)",
+        "lat": 12.9716,
+        "lon": 77.5946,
+        "tz": 5.5
+      },
+      {
+        "id": "hyderabad",
+        "name": "ไฮเดอราบัด (Hyderabad)",
+        "lat": 17.385,
+        "lon": 78.4867,
+        "tz": 5.5
+      },
+      {
+        "id": "ahmedabad",
+        "name": "อาห์เมดาบัด (Ahmedabad)",
+        "lat": 23.0225,
+        "lon": 72.5714,
+        "tz": 5.5
+      },
+      {
+        "id": "pune",
+        "name": "ปูเน่ (Pune)",
+        "lat": 18.5204,
+        "lon": 73.8567,
+        "tz": 5.5
+      },
+      {
+        "id": "jaipur",
+        "name": "ชัยปุระ (Jaipur)",
+        "lat": 26.9124,
+        "lon": 75.7873,
         "tz": 5.5
       }
     ],
@@ -2309,15 +2554,57 @@ LOCATION_DATABASE = {
   "IT": {
     "name": "อิตาลี",
     "enName": "Italy",
-    "capital": "Rome",
-    "lat": 42.83333333,
-    "lon": 12.83333333,
+    "capital": "โรม",
+    "lat": 41.9028,
+    "lon": 12.4964,
     "cities": [
       {
-        "id": "capital",
-        "name": "Rome",
-        "lat": 42.83333333,
-        "lon": 12.83333333,
+        "id": "rome",
+        "name": "โรม (Rome)",
+        "lat": 41.9028,
+        "lon": 12.4964,
+        "tz": 1.0
+      },
+      {
+        "id": "milan",
+        "name": "มิลาน (Milan)",
+        "lat": 45.4642,
+        "lon": 9.19,
+        "tz": 1.0
+      },
+      {
+        "id": "naples",
+        "name": "เนเปิลส์ (Naples)",
+        "lat": 40.8518,
+        "lon": 14.2681,
+        "tz": 1.0
+      },
+      {
+        "id": "turin",
+        "name": "ตูริน (Turin)",
+        "lat": 45.0703,
+        "lon": 7.6869,
+        "tz": 1.0
+      },
+      {
+        "id": "florence",
+        "name": "ฟลอเรนซ์ (Florence)",
+        "lat": 43.7696,
+        "lon": 11.2558,
+        "tz": 1.0
+      },
+      {
+        "id": "venice",
+        "name": "เวนิส (Venice)",
+        "lat": 45.4408,
+        "lon": 12.3155,
+        "tz": 1.0
+      },
+      {
+        "id": "genoa",
+        "name": "เจนัว (Genoa)",
+        "lat": 44.4056,
+        "lon": 8.9463,
         "tz": 1.0
       }
     ],
@@ -2377,80 +2664,10 @@ LOCATION_DATABASE = {
   "JP": {
     "name": "ญี่ปุ่น",
     "enName": "Japan",
-    "capital": "Tokyo",
-    "lat": 36,
-    "lon": 138,
+    "capital": "โตเกียว",
+    "lat": 35.6762,
+    "lon": 139.6503,
     "cities": [
-      {
-        "id": "fukuoka",
-        "name": "ฟุกุโอกะ (Fukuoka)",
-        "lat": 33.5902,
-        "lon": 130.4017,
-        "tz": 9.0
-      },
-      {
-        "id": "hiroshima",
-        "name": "ฮิโรชิม่า (Hiroshima)",
-        "lat": 34.3853,
-        "lon": 132.4553,
-        "tz": 9.0
-      },
-      {
-        "id": "kyoto",
-        "name": "เกียวโต (Kyoto)",
-        "lat": 35.0116,
-        "lon": 135.7681,
-        "tz": 9.0
-      },
-      {
-        "id": "matsuyama",
-        "name": "มัตสึยามะ (Matsuyama)",
-        "lat": 33.8392,
-        "lon": 132.7653,
-        "tz": 9.0
-      },
-      {
-        "id": "nagoya",
-        "name": "นาโกย่า (Nagoya)",
-        "lat": 35.1815,
-        "lon": 136.9066,
-        "tz": 9.0
-      },
-      {
-        "id": "naha",
-        "name": "นาฮา (Naha)",
-        "lat": 26.2124,
-        "lon": 127.6809,
-        "tz": 9.0
-      },
-      {
-        "id": "niigata",
-        "name": "นีงาตะ (Niigata)",
-        "lat": 37.9162,
-        "lon": 139.0364,
-        "tz": 9.0
-      },
-      {
-        "id": "osaka",
-        "name": "โอซาก้า (Osaka)",
-        "lat": 34.6937,
-        "lon": 135.5023,
-        "tz": 9.0
-      },
-      {
-        "id": "sapporo",
-        "name": "ซัปโปโร (Sapporo)",
-        "lat": 43.0618,
-        "lon": 141.3545,
-        "tz": 9.0
-      },
-      {
-        "id": "sendai",
-        "name": "เซนได (Sendai)",
-        "lat": 38.2682,
-        "lon": 140.8694,
-        "tz": 9.0
-      },
       {
         "id": "tokyo",
         "name": "โตเกียว (Tokyo)",
@@ -2463,6 +2680,76 @@ LOCATION_DATABASE = {
         "name": "โยโกฮาม่า (Yokohama)",
         "lat": 35.4437,
         "lon": 139.638,
+        "tz": 9.0
+      },
+      {
+        "id": "osaka",
+        "name": "โอซาก้า (Osaka)",
+        "lat": 34.6937,
+        "lon": 135.5023,
+        "tz": 9.0
+      },
+      {
+        "id": "nagoya",
+        "name": "นาโกย่า (Nagoya)",
+        "lat": 35.1814,
+        "lon": 136.9064,
+        "tz": 9.0
+      },
+      {
+        "id": "sapporo",
+        "name": "ซัปโปโร (Sapporo)",
+        "lat": 43.0618,
+        "lon": 141.3545,
+        "tz": 9.0
+      },
+      {
+        "id": "kobe",
+        "name": "โกเบ (Kobe)",
+        "lat": 34.6901,
+        "lon": 135.1955,
+        "tz": 9.0
+      },
+      {
+        "id": "fukuoka",
+        "name": "ฟุกุโอกะ (Fukuoka)",
+        "lat": 33.5904,
+        "lon": 130.4017,
+        "tz": 9.0
+      },
+      {
+        "id": "kyoto",
+        "name": "เกียวโต (Kyoto)",
+        "lat": 35.0116,
+        "lon": 135.7681,
+        "tz": 9.0
+      },
+      {
+        "id": "kawasaki",
+        "name": "คาวาซากิ (Kawasaki)",
+        "lat": 35.5308,
+        "lon": 139.7029,
+        "tz": 9.0
+      },
+      {
+        "id": "saitama",
+        "name": "ไซตามะ (Saitama)",
+        "lat": 35.8617,
+        "lon": 139.6455,
+        "tz": 9.0
+      },
+      {
+        "id": "hiroshima",
+        "name": "ฮิโรชิม่า (Hiroshima)",
+        "lat": 34.3853,
+        "lon": 132.4553,
+        "tz": 9.0
+      },
+      {
+        "id": "sendai",
+        "name": "เซนได (Sendai)",
+        "lat": 38.2682,
+        "lon": 140.8694,
         "tz": 9.0
       }
     ],
@@ -2522,22 +2809,50 @@ LOCATION_DATABASE = {
   "KH": {
     "name": "กัมพูชา",
     "enName": "Cambodia",
-    "capital": "Phnom Penh",
-    "lat": 13,
-    "lon": 105,
+    "capital": "พนมเปญ",
+    "lat": 11.55,
+    "lon": 104.9167,
     "cities": [
       {
         "id": "phnom_penh",
-        "name": "Phnom Penh",
-        "lat": 11.5564,
-        "lon": 104.9282,
+        "name": "พนมเปญ (Phnom Penh)",
+        "lat": 11.55,
+        "lon": 104.9167,
         "tz": 7.0
       },
       {
         "id": "siem_reap",
-        "name": "Siem Reap",
-        "lat": 13.3633,
-        "lon": 103.8564,
+        "name": "เสียมราฐ (Siem Reap)",
+        "lat": 13.3667,
+        "lon": 103.85,
+        "tz": 7.0
+      },
+      {
+        "id": "battambang",
+        "name": "พระตะบอง (Battambang)",
+        "lat": 13.1,
+        "lon": 103.2,
+        "tz": 7.0
+      },
+      {
+        "id": "sihanoukville",
+        "name": "สีหนุวิลล์ (Sihanoukville)",
+        "lat": 10.64,
+        "lon": 103.53,
+        "tz": 7.0
+      },
+      {
+        "id": "poipet",
+        "name": "ปอยเปต (Poipet)",
+        "lat": 13.6556,
+        "lon": 102.5625,
+        "tz": 7.0
+      },
+      {
+        "id": "kampot",
+        "name": "กัมปอต (Kampot)",
+        "lat": 10.5929,
+        "lon": 104.1814,
         "tz": 7.0
       }
     ],
@@ -2580,29 +2895,57 @@ LOCATION_DATABASE = {
   "KR": {
     "name": "เกาหลีใต้",
     "enName": "South Korea",
-    "capital": "Seoul",
-    "lat": 37,
-    "lon": 127.5,
+    "capital": "โซล",
+    "lat": 37.5665,
+    "lon": 126.978,
     "cities": [
       {
+        "id": "seoul",
+        "name": "โซล (Seoul)",
+        "lat": 37.5665,
+        "lon": 126.978,
+        "tz": 9.0
+      },
+      {
         "id": "busan",
-        "name": "Busan",
+        "name": "ปูซาน (Busan)",
         "lat": 35.1796,
         "lon": 129.0756,
         "tz": 9.0
       },
       {
         "id": "incheon",
-        "name": "Incheon",
+        "name": "อินชอน (Incheon)",
         "lat": 37.4563,
         "lon": 126.7052,
         "tz": 9.0
       },
       {
-        "id": "seoul",
-        "name": "Seoul",
-        "lat": 37.5665,
-        "lon": 126.978,
+        "id": "daegu",
+        "name": "แดกู (Daegu)",
+        "lat": 35.8714,
+        "lon": 128.6014,
+        "tz": 9.0
+      },
+      {
+        "id": "daejeon",
+        "name": "แทจ็อน (Daejeon)",
+        "lat": 36.3504,
+        "lon": 127.3845,
+        "tz": 9.0
+      },
+      {
+        "id": "gwangju",
+        "name": "กวางจู (Gwangju)",
+        "lat": 35.1595,
+        "lon": 126.8526,
+        "tz": 9.0
+      },
+      {
+        "id": "jeju",
+        "name": "เชจู (Jeju)",
+        "lat": 33.4996,
+        "lon": 126.5312,
         "tz": 9.0
       }
     ],
@@ -2645,22 +2988,57 @@ LOCATION_DATABASE = {
   "LA": {
     "name": "ลาว",
     "enName": "Laos",
-    "capital": "Vientiane",
-    "lat": 18,
-    "lon": 105,
+    "capital": "เวียงจันทน์",
+    "lat": 17.9667,
+    "lon": 102.6,
     "cities": [
       {
-        "id": "luang_prabang",
-        "name": "Luang Prabang",
-        "lat": 19.8856,
-        "lon": 102.1347,
+        "id": "vientiane",
+        "name": "เวียงจันทน์ (Vientiane)",
+        "lat": 17.9667,
+        "lon": 102.6,
         "tz": 7.0
       },
       {
-        "id": "vientiane",
-        "name": "Vientiane",
-        "lat": 17.9757,
-        "lon": 102.6331,
+        "id": "luang_prabang",
+        "name": "หลวงพระบาง (Luang Prabang)",
+        "lat": 19.8833,
+        "lon": 102.1333,
+        "tz": 7.0
+      },
+      {
+        "id": "pakse",
+        "name": "ปากเซ (Pakse)",
+        "lat": 15.1167,
+        "lon": 105.7833,
+        "tz": 7.0
+      },
+      {
+        "id": "savannakhet",
+        "name": "สะหวันนะเขต (Savannakhet)",
+        "lat": 16.5667,
+        "lon": 104.75,
+        "tz": 7.0
+      },
+      {
+        "id": "vang_vieng",
+        "name": "วังเวียง (Vang Vieng)",
+        "lat": 18.9333,
+        "lon": 102.45,
+        "tz": 7.0
+      },
+      {
+        "id": "thakhek",
+        "name": "ท่าแขก (Thakhek)",
+        "lat": 17.4103,
+        "lon": 104.8056,
+        "tz": 7.0
+      },
+      {
+        "id": "champasak",
+        "name": "จำปาสัก (Champasak)",
+        "lat": 14.8914,
+        "lon": 105.8783,
         "tz": 7.0
       }
     ],
@@ -2839,10 +3217,18 @@ LOCATION_DATABASE = {
   "MO": {
     "name": "มาเก๊า",
     "enName": "Macau",
-    "capital": "",
-    "lat": 22.16666666,
-    "lon": 113.55,
-    "cities": [],
+    "capital": "มาเก๊า",
+    "lat": 22.1987,
+    "lon": 113.5439,
+    "cities": [
+      {
+        "id": "macau",
+        "name": "มาเก๊า (Macau)",
+        "lat": 22.1987,
+        "lon": 113.5439,
+        "tz": 8.0
+      }
+    ],
     "tz": 8.0
   },
   "MF": {
@@ -2933,15 +3319,22 @@ LOCATION_DATABASE = {
   "MV": {
     "name": "มัลดีฟส์",
     "enName": "Maldives",
-    "capital": "Malé",
-    "lat": 3.25,
-    "lon": 73,
+    "capital": "มาเล",
+    "lat": 4.1753,
+    "lon": 73.5089,
     "cities": [
       {
-        "id": "capital",
-        "name": "Malé",
-        "lat": 3.25,
-        "lon": 73,
+        "id": "male",
+        "name": "มาเล (Male)",
+        "lat": 4.1753,
+        "lon": 73.5089,
+        "tz": 5.0
+      },
+      {
+        "id": "addu_city",
+        "name": "อัดดูซิตี (Addu City)",
+        "lat": -0.6301,
+        "lon": 73.0932,
         "tz": 5.0
       }
     ],
@@ -3219,29 +3612,57 @@ LOCATION_DATABASE = {
   "MY": {
     "name": "มาเลเซีย",
     "enName": "Malaysia",
-    "capital": "Kuala Lumpur",
-    "lat": 2.5,
-    "lon": 112.5,
+    "capital": "กัวลาลัมเปอร์",
+    "lat": 3.139,
+    "lon": 101.6869,
     "cities": [
       {
-        "id": "johor_bahru",
-        "name": "Johor Bahru",
-        "lat": 1.4854,
-        "lon": 103.7618,
-        "tz": 8.0
-      },
-      {
         "id": "kuala_lumpur",
-        "name": "Kuala Lumpur",
+        "name": "กัวลาลัมเปอร์ (Kuala Lumpur)",
         "lat": 3.139,
         "lon": 101.6869,
         "tz": 8.0
       },
       {
         "id": "penang",
-        "name": "Penang",
-        "lat": 5.4141,
+        "name": "ปีนัง (Penang)",
+        "lat": 5.4143,
         "lon": 100.3288,
+        "tz": 8.0
+      },
+      {
+        "id": "johor_bahru",
+        "name": "ยะโฮร์บาฮรู (Johor Bahru)",
+        "lat": 1.4897,
+        "lon": 103.7435,
+        "tz": 8.0
+      },
+      {
+        "id": "malacca",
+        "name": "มะละกา (Malacca)",
+        "lat": 2.1896,
+        "lon": 102.2501,
+        "tz": 8.0
+      },
+      {
+        "id": "ipoh",
+        "name": "อิโปห์ (Ipoh)",
+        "lat": 4.5975,
+        "lon": 101.0901,
+        "tz": 8.0
+      },
+      {
+        "id": "kota_kinabalu",
+        "name": "โกตาคินาบาลู (Kota Kinabalu)",
+        "lat": 5.9804,
+        "lon": 116.0753,
+        "tz": 8.0
+      },
+      {
+        "id": "kuching",
+        "name": "กูชิง (Kuching)",
+        "lat": 1.5533,
+        "lon": 110.3592,
         "tz": 8.0
       }
     ],
@@ -3454,15 +3875,36 @@ LOCATION_DATABASE = {
   "NZ": {
     "name": "นิวซีแลนด์",
     "enName": "New Zealand",
-    "capital": "Wellington",
-    "lat": -41,
-    "lon": 174,
+    "capital": "เวลลิงตัน",
+    "lat": -41.2865,
+    "lon": 174.7762,
     "cities": [
       {
-        "id": "capital",
-        "name": "Wellington",
-        "lat": -41,
-        "lon": 174,
+        "id": "wellington",
+        "name": "เวลลิงตัน (Wellington)",
+        "lat": -41.2865,
+        "lon": 174.7762,
+        "tz": 12.0
+      },
+      {
+        "id": "auckland",
+        "name": "โอ๊คแลนด์ (Auckland)",
+        "lat": -36.8485,
+        "lon": 174.7633,
+        "tz": 12.0
+      },
+      {
+        "id": "christchurch",
+        "name": "ไครสต์เชิร์ช (Christchurch)",
+        "lat": -43.5321,
+        "lon": 172.6362,
+        "tz": 12.0
+      },
+      {
+        "id": "queenstown",
+        "name": "ควีนส์ทาวน์ (Queenstown)",
+        "lat": -45.0312,
+        "lon": 168.6626,
         "tz": 12.0
       }
     ],
@@ -3556,15 +3998,50 @@ LOCATION_DATABASE = {
   "PH": {
     "name": "ฟิลิปปินส์",
     "enName": "Philippines",
-    "capital": "Manila",
-    "lat": 13,
-    "lon": 122,
+    "capital": "มะนิลา",
+    "lat": 14.5995,
+    "lon": 120.9842,
     "cities": [
       {
-        "id": "capital",
-        "name": "Manila",
-        "lat": 13,
-        "lon": 122,
+        "id": "manila",
+        "name": "มะนิลา (Manila)",
+        "lat": 14.5995,
+        "lon": 120.9842,
+        "tz": 8.0
+      },
+      {
+        "id": "quezon_city",
+        "name": "เคซอนซิตี (Quezon City)",
+        "lat": 14.676,
+        "lon": 121.0437,
+        "tz": 8.0
+      },
+      {
+        "id": "cebu_city",
+        "name": "เซบู (Cebu City)",
+        "lat": 10.3157,
+        "lon": 123.8854,
+        "tz": 8.0
+      },
+      {
+        "id": "davao_city",
+        "name": "ดาเวา (Davao City)",
+        "lat": 7.1907,
+        "lon": 125.4553,
+        "tz": 8.0
+      },
+      {
+        "id": "zamboanga_city",
+        "name": "ซัมบวงกา (Zamboanga)",
+        "lat": 6.9214,
+        "lon": 122.0797,
+        "tz": 8.0
+      },
+      {
+        "id": "baguio",
+        "name": "บาเกียว (Baguio)",
+        "lat": 16.4023,
+        "lon": 120.596,
         "tz": 8.0
       }
     ],
@@ -3777,19 +4254,47 @@ LOCATION_DATABASE = {
   "RU": {
     "name": "รัสเซีย",
     "enName": "Russia",
-    "capital": "Moscow",
-    "lat": 60,
-    "lon": 100,
+    "capital": "มอสโก",
+    "lat": 55.7558,
+    "lon": 37.6173,
     "cities": [
       {
-        "id": "capital",
-        "name": "Moscow",
-        "lat": 60,
-        "lon": 100,
+        "id": "moscow",
+        "name": "มอสโก (Moscow)",
+        "lat": 55.7558,
+        "lon": 37.6173,
+        "tz": 3.0
+      },
+      {
+        "id": "saint_petersburg",
+        "name": "เซนต์ปีเตอร์สเบิร์ก (Saint Petersburg)",
+        "lat": 59.9343,
+        "lon": 30.3351,
+        "tz": 3.0
+      },
+      {
+        "id": "novosibirsk",
+        "name": "โนโวซีบีร์สค์ (Novosibirsk)",
+        "lat": 55.0084,
+        "lon": 82.9357,
         "tz": 7.0
+      },
+      {
+        "id": "yekaterinburg",
+        "name": "เยกาเตรินบุร์ก (Yekaterinburg)",
+        "lat": 56.8389,
+        "lon": 60.6057,
+        "tz": 5.0
+      },
+      {
+        "id": "vladivostok",
+        "name": "วลาดีวอสตอค (Vladivostok)",
+        "lat": 43.1198,
+        "lon": 131.8869,
+        "tz": 10.0
       }
     ],
-    "tz": 7.0
+    "tz": 3.0
   },
   "RW": {
     "name": "รวันดา",
@@ -3811,15 +4316,36 @@ LOCATION_DATABASE = {
   "SA": {
     "name": "ซาอุดีอาระเบีย",
     "enName": "Saudi Arabia",
-    "capital": "Riyadh",
-    "lat": 25,
-    "lon": 45,
+    "capital": "ริยาด",
+    "lat": 24.7136,
+    "lon": 46.6753,
     "cities": [
       {
-        "id": "capital",
-        "name": "Riyadh",
-        "lat": 25,
-        "lon": 45,
+        "id": "riyadh",
+        "name": "ริยาด (Riyadh)",
+        "lat": 24.7136,
+        "lon": 46.6753,
+        "tz": 3.0
+      },
+      {
+        "id": "jeddah",
+        "name": "เจดดาห์ (Jeddah)",
+        "lat": 21.5433,
+        "lon": 39.1728,
+        "tz": 3.0
+      },
+      {
+        "id": "mecca",
+        "name": "เมกกะ (Mecca)",
+        "lat": 21.3891,
+        "lon": 39.8579,
+        "tz": 3.0
+      },
+      {
+        "id": "medina",
+        "name": "มะดีนะฮ์ (Medina)",
+        "lat": 24.5247,
+        "lon": 39.5692,
         "tz": 3.0
       }
     ],
@@ -3862,15 +4388,15 @@ LOCATION_DATABASE = {
   "SG": {
     "name": "สิงคโปร์",
     "enName": "Singapore",
-    "capital": "Singapore",
-    "lat": 1.36666666,
-    "lon": 103.8,
+    "capital": "สิงคโปร์",
+    "lat": 1.2864,
+    "lon": 103.851,
     "cities": [
       {
         "id": "singapore",
-        "name": "Singapore",
-        "lat": 1.3521,
-        "lon": 103.8198,
+        "name": "สิงคโปร์ (Singapore)",
+        "lat": 1.2864,
+        "lon": 103.851,
         "tz": 8.0
       }
     ],
@@ -4921,15 +5447,36 @@ LOCATION_DATABASE = {
   "TR": {
     "name": "ตุรกี",
     "enName": "Türkiye",
-    "capital": "Ankara",
-    "lat": 39,
-    "lon": 35,
+    "capital": "อังการา",
+    "lat": 39.9334,
+    "lon": 32.8597,
     "cities": [
       {
-        "id": "capital",
-        "name": "Ankara",
-        "lat": 39,
-        "lon": 35,
+        "id": "ankara",
+        "name": "อังการา (Ankara)",
+        "lat": 39.9334,
+        "lon": 32.8597,
+        "tz": 3.0
+      },
+      {
+        "id": "istanbul",
+        "name": "อิสตันบูล (Istanbul)",
+        "lat": 41.0082,
+        "lon": 28.9784,
+        "tz": 3.0
+      },
+      {
+        "id": "izmir",
+        "name": "อิซเมียร์ (Izmir)",
+        "lat": 38.4237,
+        "lon": 27.1428,
+        "tz": 3.0
+      },
+      {
+        "id": "antalya",
+        "name": "อันตัลยา (Antalya)",
+        "lat": 36.8969,
+        "lon": 30.7133,
         "tz": 3.0
       }
     ],
@@ -4955,15 +5502,50 @@ LOCATION_DATABASE = {
   "TW": {
     "name": "ไต้หวัน",
     "enName": "Taiwan",
-    "capital": "Taipei",
-    "lat": 23.5,
-    "lon": 121,
+    "capital": "ไทเป",
+    "lat": 25.033,
+    "lon": 121.5654,
     "cities": [
       {
-        "id": "capital",
-        "name": "Taipei",
-        "lat": 23.5,
-        "lon": 121,
+        "id": "taipei",
+        "name": "ไทเป (Taipei)",
+        "lat": 25.033,
+        "lon": 121.5654,
+        "tz": 8.0
+      },
+      {
+        "id": "kaohsiung",
+        "name": "เกาสง (Kaohsiung)",
+        "lat": 22.6273,
+        "lon": 120.3014,
+        "tz": 8.0
+      },
+      {
+        "id": "taichung",
+        "name": "ไทจง (Taichung)",
+        "lat": 24.1477,
+        "lon": 120.6736,
+        "tz": 8.0
+      },
+      {
+        "id": "tainan",
+        "name": "ไถหนาน (Tainan)",
+        "lat": 22.9997,
+        "lon": 120.227,
+        "tz": 8.0
+      },
+      {
+        "id": "hsinchu",
+        "name": "ซินจู๋ (Hsinchu)",
+        "lat": 24.8138,
+        "lon": 120.9675,
+        "tz": 8.0
+      },
+      {
+        "id": "keelung",
+        "name": "จีหลง (Keelung)",
+        "lat": 25.1283,
+        "lon": 121.7419,
         "tz": 8.0
       }
     ],
@@ -5518,29 +6100,64 @@ LOCATION_DATABASE = {
   "VN": {
     "name": "เวียดนาม",
     "enName": "Vietnam",
-    "capital": "Hanoi",
-    "lat": 16.16666666,
-    "lon": 107.83333333,
+    "capital": "ฮานอย",
+    "lat": 21.0285,
+    "lon": 105.8542,
     "cities": [
       {
-        "id": "da_nang",
-        "name": "Da Nang",
-        "lat": 16.0544,
-        "lon": 108.2022,
-        "tz": 7.0
-      },
-      {
         "id": "hanoi",
-        "name": "Hanoi",
+        "name": "ฮานอย (Hanoi)",
         "lat": 21.0285,
         "lon": 105.8542,
         "tz": 7.0
       },
       {
         "id": "ho_chi_minh",
-        "name": "Ho Chi Minh City",
-        "lat": 10.8231,
-        "lon": 106.6297,
+        "name": "โฮจิมินห์ซิตี้ (Ho Chi Minh City)",
+        "lat": 10.7627,
+        "lon": 106.6602,
+        "tz": 7.0
+      },
+      {
+        "id": "da_nang",
+        "name": "ดานัง (Da Nang)",
+        "lat": 16.0544,
+        "lon": 108.2022,
+        "tz": 7.0
+      },
+      {
+        "id": "nha_trang",
+        "name": "ญาจาง (Nha Trang)",
+        "lat": 12.2388,
+        "lon": 109.1967,
+        "tz": 7.0
+      },
+      {
+        "id": "hue",
+        "name": "เว้ (Hue)",
+        "lat": 16.4637,
+        "lon": 107.5909,
+        "tz": 7.0
+      },
+      {
+        "id": "can_tho",
+        "name": "เกิ่นเทอ (Can Tho)",
+        "lat": 10.0452,
+        "lon": 105.7469,
+        "tz": 7.0
+      },
+      {
+        "id": "da_lat",
+        "name": "ดาลัด (Da Lat)",
+        "lat": 11.9404,
+        "lon": 108.4583,
+        "tz": 7.0
+      },
+      {
+        "id": "haiphong",
+        "name": "ไฮฟอง (Haiphong)",
+        "lat": 20.8476,
+        "lon": 106.6806,
         "tz": 7.0
       }
     ],

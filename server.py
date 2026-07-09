@@ -14,13 +14,79 @@ import csv
 import math
 import datetime
 import zipfile
+import json
+import logging
+from logging.handlers import RotatingFileHandler
+import urllib.request
+import urllib.parse
 from typing import Dict, Any
-from fastapi import FastAPI, HTTPException, Query
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, HTTPException, Query, Request
+from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from timezonefinder import TimezoneFinder
 import pytz
+from pydantic import BaseModel
+
+# Load config.json
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# ── Logging: บันทึกทุกอย่างที่เคย print() ลงไฟล์ log แบบ rotate อัตโนมัติ ──────
+# โค้ดเดิมใช้ print() เป็น logger อยู่แล้วทั้งไฟล์ แทนที่จะไปแก้ print() ทีละจุด
+# (เสี่ยงพลาด/ตกหล่น) เราแค่ "ดักฟัง" stdout/stderr แล้วเขียนสำเนาออกไฟล์ log ด้วย
+# วิธีนี้ทำให้ log เดิมทั้งหมดถูกเก็บถาวรลงไฟล์ (ไม่หายไปเมื่อปิด terminal) โดยไม่ต้อง
+# แก้โค้ด business logic เลยแม้แต่บรรทัดเดียว
+LOG_DIR = os.path.join(BASE_DIR, "logs")
+os.makedirs(LOG_DIR, exist_ok=True)
+
+_server_logger = logging.getLogger("muhub_server")
+_server_logger.setLevel(logging.INFO)
+_server_logger.propagate = False
+if not _server_logger.handlers:
+    _log_handler = RotatingFileHandler(
+        os.path.join(LOG_DIR, "server.log"), maxBytes=5 * 1024 * 1024, backupCount=5, encoding="utf-8"
+    )
+    _log_handler.setFormatter(logging.Formatter("%(asctime)s %(message)s"))
+    _server_logger.addHandler(_log_handler)
+
+class _StreamToLogger:
+    """ส่งต่อทุกบรรทัดที่เขียนไปยัง stdout/stderr (เช่นจาก print()) เข้า logger ไฟล์ด้วย"""
+    def __init__(self, logger, level, original_stream):
+        self.logger = logger
+        self.level = level
+        self.original_stream = original_stream
+        self._buffer = ""
+
+    def write(self, message):
+        self.original_stream.write(message)
+        self._buffer += message
+        while "\n" in self._buffer:
+            line, self._buffer = self._buffer.split("\n", 1)
+            if line.strip():
+                self.logger.log(self.level, line)
+
+    def flush(self):
+        self.original_stream.flush()
+
+    def isatty(self):
+        return hasattr(self.original_stream, 'isatty') and self.original_stream.isatty()
+
+    def fileno(self):
+        if hasattr(self.original_stream, 'fileno'):
+            return self.original_stream.fileno()
+        raise OSError("Stream has no fileno")
+
+sys.stdout = _StreamToLogger(_server_logger, logging.INFO, sys.stdout)
+sys.stderr = _StreamToLogger(_server_logger, logging.ERROR, sys.stderr)
+CONFIG = {}
+config_path = os.path.join(BASE_DIR, "config.json")
+if os.path.exists(config_path):
+    try:
+        with open(config_path, "r", encoding="utf-8") as f:
+            CONFIG = json.load(f)
+    except Exception as e:
+        print(f"Error reading config.json: {e}")
+
 
 # Initialize Timezone Finder
 tf = TimezoneFinder()
@@ -39,6 +105,48 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# ── Block sensitive files from being served ─────────────────────────────
+# This app is served with app.mount("/", StaticFiles(directory=BASE_DIR))
+# below, which by default would expose EVERY file in the project folder
+# over HTTP -- including config.json (LINE tokens, Google Script URL,
+# SlipOK key) and the non-github/ folder (real secrets, payment QR,
+# server scripts). This middleware runs before the static handler and
+# returns 404 for any request path that touches a sensitive file/folder,
+# so secrets can never be downloaded via a browser or curl even if this
+# server is later exposed on a LAN or tunneled to the internet.
+BLOCKED_PATH_SEGMENTS = [
+    "config.json",      # LINE_CHANNEL_ACCESS_TOKEN / LINE_CHANNEL_SECRET / SLIPOK_API_KEY / GOOGLE_SCRIPT_URL
+    "non-github",        # real secrets, payment QR, backup index.html, server scripts
+    ".env",
+    ".git",
+    "__pycache__",
+    ".venv",
+    ".claude",
+]
+
+@app.middleware("http")
+async def block_sensitive_files(request: Request, call_next):
+    path = request.url.path.lower()
+    if any(seg in path for seg in BLOCKED_PATH_SEGMENTS):
+        return JSONResponse(status_code=404, content={"detail": "Not Found"})
+    return await call_next(request)
+
+# ── Basic error monitoring: จับ exception ที่ไม่ได้ handle ไว้ทุกจุด ─────────
+# ถ้าไม่มีตัวนี้ exception ที่หลุดจาก endpoint ใดๆ จะทำให้ client เห็น stack trace
+# เต็มๆ (เสี่ยงข้อมูลรั่ว) และเราจะไม่รู้เลยว่ามันเกิดขึ้นเว้นแต่จะเปิด terminal ทิ้งไว้ดู
+# ตัวนี้จะ log รายละเอียด error เต็มๆ ลงไฟล์ (ผ่าน logging ด้านบน) แล้วตอบ client
+# กลับไปแบบสุภาพ ไม่หลุดรายละเอียดภายในออกไป
+@app.middleware("http")
+async def catch_unhandled_errors(request: Request, call_next):
+    try:
+        return await call_next(request)
+    except Exception as e:
+        _server_logger.exception(f"[UnhandledError] {request.method} {request.url.path}: {e}")
+        return JSONResponse(
+            status_code=500,
+            content={"detail": "เกิดข้อผิดพลาดที่ไม่คาดคิดในระบบ กรุณาลองใหม่อีกครั้ง"}
+        )
 
 # Global variables
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -291,6 +399,174 @@ def get_index():
     if os.path.exists(index_path):
         return FileResponse(index_path)
     return FileResponse(os.path.join(BASE_DIR, "index.html"))
+
+@app.get("/api/calendar/busy")
+async def get_busy_slots(date: str):
+    api_key = CONFIG.get("GOOGLE_CALENDAR_API_KEY", "")
+    if not api_key:
+        try:
+            day = int(date.split("-")[2])
+        except Exception:
+            day = 1
+        return {"busy_slots": [{"startHour": day % 8, "endHour": (day % 8) + 1}, {"startHour": (day + 3) % 8, "endHour": ((day + 3) % 8) + 1}], "simulated": True}
+        
+    calendar_id = "muhub54@gmail.com"
+    time_min = f"{date}T00:00:00Z"
+    time_max = f"{date}T23:59:59Z"
+    url = f"https://www.googleapis.com/calendar/v3/calendars/{urllib.parse.quote(calendar_id)}/events?key={api_key}&timeMin={time_min}&timeMax={time_max}&singleEvents=true"
+    
+    try:
+        req = urllib.request.Request(url, method="GET")
+        with urllib.request.urlopen(req, timeout=10) as response:
+            data = json.loads(response.read().decode("utf-8"))
+            
+        busy_slots = []
+        for event in data.get("items", []):
+            start_val = event.get("start", {}).get("dateTime") or event.get("start", {}).get("date")
+            end_val = event.get("end", {}).get("dateTime") or event.get("end", {}).get("date")
+            if not start_val or not end_val:
+                continue
+            try:
+                # Handle all day events
+                if "T" not in start_val:
+                    busy_slots.append({"startHour": 0.0, "endHour": 24.0})
+                    continue
+                
+                # Parse ISO date with timezone
+                dt_start = datetime.datetime.fromisoformat(start_val.replace("Z", "+00:00"))
+                dt_end = datetime.datetime.fromisoformat(end_val.replace("Z", "+00:00"))
+                
+                # Convert timezone to Thailand (UTC+7)
+                tz_thai = datetime.timezone(datetime.timedelta(hours=7))
+                if dt_start.tzinfo is not None:
+                    dt_start = dt_start.astimezone(tz_thai)
+                if dt_end.tzinfo is not None:
+                    dt_end = dt_end.astimezone(tz_thai)
+                    
+                start_h = dt_start.hour + dt_start.minute / 60.0
+                end_h = dt_end.hour + dt_end.minute / 60.0
+                busy_slots.append({"startHour": start_h, "endHour": end_h})
+            except Exception as ex:
+                print(f"Error parsing event: {ex} (start={start_val}, end={end_val})")
+        return {"busy_slots": busy_slots, "simulated": False}
+    except Exception as e:
+        try:
+            day = int(date.split("-")[2])
+        except Exception:
+            day = 1
+        return {"busy_slots": [{"startHour": day % 8, "endHour": (day % 8) + 1}, {"startHour": (day + 3) % 8, "endHour": ((day + 3) % 8) + 1}], "simulated": True, "error": str(e)}
+
+class BlockPayload(BaseModel):
+    dateStr: str
+    slotStr: str
+    name: str
+    lineId: str
+    serviceName: str
+    astrologerName: str
+    questions: str = ""
+
+@app.post("/api/calendar/block")
+async def block_calendar_event(payload: BlockPayload):
+    script_url = CONFIG.get("GOOGLE_SCRIPT_URL", "")
+    if not script_url:
+        return {"success": True, "simulated": True, "data": {"eventId": f"mock-gcal-{datetime.datetime.now().microsecond}"}}
+        
+    parts = payload.slotStr.split("-")
+    start_part = parts[0].strip()
+    end_part = parts[1].strip() if len(parts) > 1 else ""
+    start_hour = start_part[:2]
+    end_hour = end_part[:2] if end_part else f"{int(start_hour) + 1:02d}"
+    end_minute = end_part[3:5] if end_part else "00"
+    
+    start_str = f"{payload.dateStr}T{start_hour}:00:00+07:00"
+    end_str = f"{payload.dateStr}T{end_hour}:{end_minute}:00+07:00"
+    
+    gas_payload = {
+        "action": "create",
+        "summary": f"MuHub จองคิว: คุณ {payload.name} (Line: {payload.lineId or 'ไม่ระบุ'})",
+        "description": f"บริการ: {payload.serviceName}\nนักพยากรณ์: {payload.astrologerName}\nLine ID: {payload.lineId or 'ไม่ระบุ'}\nคำถามที่สนใจ: {payload.questions or 'ไม่มี'}\nบันทึกจากระบบ MuHub Booking",
+        "startTime": start_str,
+        "endTime": end_str
+    }
+    
+    try:
+        data_json = json.dumps(gas_payload).encode("utf-8")
+        req = urllib.request.Request(
+            script_url,
+            data=data_json,
+            headers={"Content-Type": "text/plain;charset=utf-8"},
+            method="POST"
+        )
+        with urllib.request.urlopen(req, timeout=15) as response:
+            res_data = json.loads(response.read().decode("utf-8"))
+        if res_data and res_data.get("success") is False:
+            raise Exception(res_data.get("error") or "Google Apps Script error")
+        return {"success": True, "simulated": False, "data": res_data}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+class DeletePayload(BaseModel):
+    eventId: str
+
+@app.post("/api/calendar/delete")
+async def delete_calendar_event(payload: DeletePayload):
+    script_url = CONFIG.get("GOOGLE_SCRIPT_URL", "")
+    if not script_url or payload.eventId.startswith("mock-") or payload.eventId.startswith("mock_"):
+        return {"success": True, "simulated": True, "message": "ลบกิจกรรมจำลองสำเร็จ"}
+        
+    gas_payload = {
+        "action": "delete",
+        "eventId": payload.eventId
+    }
+    
+    try:
+        data_json = json.dumps(gas_payload).encode("utf-8")
+        req = urllib.request.Request(
+            script_url,
+            data=data_json,
+            headers={"Content-Type": "text/plain;charset=utf-8"},
+            method="POST"
+        )
+        with urllib.request.urlopen(req, timeout=15) as response:
+            res_data = json.loads(response.read().decode("utf-8"))
+        return {"success": True, "data": res_data}
+    except Exception as e:
+        return {"success": False, "error": str(e)}
+
+class UploadPayload(BaseModel):
+    base64Data: str
+    mimeType: str
+    filename: str
+
+@app.post("/api/calendar/upload-slip")
+async def upload_slip_event(payload: UploadPayload):
+    script_url = CONFIG.get("GOOGLE_SCRIPT_URL", "")
+    if not script_url:
+        return {"success": True, "simulated": True, "fileUrl": "https://drive.google.com/open?id=mock-drive-file-id"}
+        
+    gas_payload = {
+        "action": "uploadSlip",
+        "folderId": "1RtwEoH4ES9QJT2oB8JobUQw1rncnETYF",
+        "filename": payload.filename,
+        "mimeType": payload.mimeType,
+        "base64Data": payload.base64Data
+    }
+    
+    try:
+        data_json = json.dumps(gas_payload).encode("utf-8")
+        req = urllib.request.Request(
+            script_url,
+            data=data_json,
+            headers={"Content-Type": "text/plain;charset=utf-8"},
+            method="POST"
+        )
+        with urllib.request.urlopen(req, timeout=30) as response:
+            res_data = json.loads(response.read().decode("utf-8"))
+        if res_data and res_data.get("success") is False:
+            raise Exception(res_data.get("error") or "Google Apps Script error")
+        return {"success": True, "simulated": False, "fileUrl": res_data.get("fileUrl")}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 # Serve other static files (like javascript, css, etc.)
 app.mount("/", StaticFiles(directory=BASE_DIR), name="static")
