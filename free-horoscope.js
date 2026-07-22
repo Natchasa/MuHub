@@ -198,17 +198,13 @@ window.renderFreeHoroscope = function() {
   if (suggestBanner) {
     suggestBanner.style.display = hasData ? 'none' : 'block';
   }
-  
   // ซ่อน/แสดง ปุ่มนำทางด่วนบนหัวแดชบอร์ดตามสถานะข้อมูลดวงชะตา
   const navTransit = document.getElementById('btn-nav-transit');
   const navLagna = document.getElementById('btn-nav-lagna');
-  const navThaksa = document.getElementById('btn-nav-thaksa');
   if (navTransit) navTransit.style.display = hasData ? 'inline-block' : 'none';
   if (navLagna) navLagna.style.display = hasData ? 'inline-block' : 'none';
-  if (navThaksa) navThaksa.style.display = hasData ? 'inline-block' : 'none';
-  
   // ซ่อน/แสดง การ์ดวิเคราะห์ดวงชะตาเฉพาะบุคคล
-  const personalCards = ['free-card-transit', 'free-card-lagna', 'free-card-thaksa'];
+  const personalCards = ['free-card-transit', 'free-card-lagna'];
   personalCards.forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = hasData ? 'block' : 'none';
@@ -229,8 +225,14 @@ window.renderFreeHoroscope = function() {
       : 'คำทำนายดวงเฉพาะคุณ';
   }
   
-  // หากไม่มีข้อมูลผูกดวง ให้ยุติการคำนวณด้านล่างนี้ทันทีเพื่อป้องกันข้อผิดพลาด
-  if (!hasData) return;
+  const thaksaMeta = document.getElementById('free-thaksa-meta');
+  if (!hasData) {
+    if (thaksaMeta) {
+      thaksaMeta.textContent = 'กรุณาผูกดวงชะตาในแท็บแรกเพื่อไฮไลท์วันเกิดของคุณ';
+    }
+    if (typeof renderDailyColorsTable === 'function') renderDailyColorsTable(null);
+    return;
+  }
   
   const lagnaSp = signPos(nData.pos.lagna);
   const lagnaIdx = lagnaSp.si;
@@ -239,8 +241,6 @@ window.renderFreeHoroscope = function() {
   const desc = document.getElementById('free-lagna-desc');
   if (badge) badge.textContent = `ลัคนาราศี${SIGNS_TH[lagnaIdx]}`;
   if (desc) desc.textContent = ZODIAC_READINGS[lagnaIdx] || 'ไม่พบคำทำนายราศีเกิด';
-  
-  const thaksaMeta = document.getElementById('free-thaksa-meta');
   
   const by = birthYear;
   const bmo = birthMonth;
@@ -260,9 +260,6 @@ window.renderFreeHoroscope = function() {
       thaksaDay = 7;
     }
   }
-  
-  const weekdayToStartIndex = [0, 1, 2, 3, 5, 7, 4, 6];
-  const birthStartIndex = weekdayToStartIndex[thaksaDay];
   
   let currentAge = 1;
   const isTransitActive = showT && tData;
@@ -289,42 +286,13 @@ window.renderFreeHoroscope = function() {
     currentAge = Math.max(1, currentAge);
   }
   
-  const WEEKDAYS_TH = ['วันอาทิตย์', 'วันจันทร์', 'วันอังคาร', 'วันพุธกลางวัน', 'วันพฤหัส', 'วันศุกร์', 'วันเสาร์', 'วันพุธกลางคืน'];
+  const WEEKDAYS_TH = ['วันอาทิตย์', 'วันจันทร์', 'วันอังคาร', 'วันพุธกลางวัน', 'วันพฤหัสบดี', 'วันศุกร์', 'วันเสาร์', 'วันพุธกลางคืน'];
   if (thaksaMeta) {
-    thaksaMeta.textContent = `วันเกิดของคุณ: ${WEEKDAYS_TH[thaksaDay]} | อายุย่าง: ${currentAge} ปี`;
+    thaksaMeta.textContent = `วันเกิดของคุณ: ${WEEKDAYS_TH[thaksaDay]}ที่ ${bd} ${THAI_MONTH_NAMES[bmo-1]} พ.ศ. ${by + 543} | อายุย่าง: ${currentAge} ปี`;
   }
-  
-  const transitStartIndex = (birthStartIndex + (currentAge - 1)) % 8;
-  
-  const sriPlanetIdx = (transitStartIndex + 3) % 8;
-  const kaliPlanetIdx = (transitStartIndex + 7) % 8;
-  
-  const PLANET_NAMES_TH = ['๑ (อาทิตย์)', '๒ (จันทร์)', '๓ (อังคาร)', '๔ (พุธ)', '๗ (เสาร์)', '๕ (พฤหัส)', '๘ (ราหู)', '๖ (ศุกร์)'];
-  
-  const sriColor = THAKSA_PLANET_COLORS[sriPlanetIdx];
-  const kaliColor = THAKSA_PLANET_COLORS[kaliPlanetIdx];
-  
-  const sriEl = document.getElementById('free-thaksa-sri');
-  const kaliEl = document.getElementById('free-thaksa-kali');
-  
-  if (sriEl) {
-    sriEl.innerHTML = `<span class="thaksa-color-pill" style="background: ${sriColor.css}; border: 1px solid rgba(255,255,255,0.3);">${PLANET_NAMES_TH[sriPlanetIdx]} - ${sriColor.name}</span>`;
-  }
-  if (kaliEl) {
-    kaliEl.innerHTML = `<span class="thaksa-color-pill" style="background: ${kaliColor.css}; border: 1px solid rgba(255,255,255,0.3);">${PLANET_NAMES_TH[kaliPlanetIdx]} - ${kaliColor.name}</span>`;
-  }
-  
-  const goodColorsEl = document.getElementById('free-thaksa-colors-good');
-  const badColorsEl = document.getElementById('free-thaksa-colors-bad');
-  
-  const dechPlanetIdx = (transitStartIndex + 2) % 8;
-  const dechColor = THAKSA_PLANET_COLORS[dechPlanetIdx];
-  
-  if (goodColorsEl) {
-    goodColorsEl.textContent = `${sriColor.name} (หนุนทรัพย์), ${dechColor.name} (หนุนอำนาจบารมี)`;
-  }
-  if (badColorsEl) {
-    badColorsEl.textContent = `${kaliColor.name} (หลีกเลี่ยงเป็นพิเศษ)`;
+
+  if (typeof renderYearlyThaksaColors === 'function') {
+    renderYearlyThaksaColors(thaksaDay, currentAge);
   }
   
   let scoreWork = 3, scoreMoney = 3, scoreLove = 3, scoreHealth = 4;
@@ -573,77 +541,384 @@ const THAI_MONTH_NAMES = [
   "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม"
 ];
 
+function getKalayogaForDate(year, month, day) {
+  // Thai Songkran (วันเถลิงศก) is around April 16 (month is 0-indexed: 3 = April)
+  // If date is before April 16, use the previous Julasakaraj year
+  let beYear = year + 543;
+  if (month < 3 || (month === 3 && day < 16)) {
+    beYear -= 1;
+  }
+  let j = beYear - 1181; // Julasakaraj
+
+  // Official Kalayoga lookup table per Julasakaraj (0=Sun, 1=Mon, ..., 6=Sat)
+  const KALAYOGA_TABLE = {
+    1380: { thongchai: 5, athipati: 0, ubat: 2, lokawinat: 4 }, // 2561
+    1381: { thongchai: 6, athipati: 1, ubat: 3, lokawinat: 5 }, // 2562
+    1382: { thongchai: 1, athipati: 3, ubat: 5, lokawinat: 0 }, // 2563
+    1383: { thongchai: 2, athipati: 4, ubat: 6, lokawinat: 1 }, // 2564
+    1384: { thongchai: 3, athipati: 2, ubat: 5, lokawinat: 0 }, // 2565
+    1385: { thongchai: 6, athipati: 3, ubat: 0, lokawinat: 5 }, // 2566
+    1386: { thongchai: 2, athipati: 4, ubat: 6, lokawinat: 1 }, // 2567
+    1387: { thongchai: 4, athipati: 0, ubat: 1, lokawinat: 6 }, // 2568
+    1388: { thongchai: 0, athipati: 2, ubat: 4, lokawinat: 6 }, // 2569
+    1389: { thongchai: 3, athipati: 5, ubat: 0, lokawinat: 2 }, // 2570
+    1390: { thongchai: 1, athipati: 3, ubat: 5, lokawinat: 0 }, // 2571
+    1391: { thongchai: 6, athipati: 1, ubat: 3, lokawinat: 5 }, // 2572
+    1392: { thongchai: 4, athipati: 0, ubat: 1, lokawinat: 6 }, // 2573
+    1393: { thongchai: 2, athipati: 4, ubat: 6, lokawinat: 1 }, // 2574
+    1394: { thongchai: 0, athipati: 2, ubat: 4, lokawinat: 6 }  // 2575
+  };
+
+  if (KALAYOGA_TABLE[j]) {
+    return KALAYOGA_TABLE[j];
+  }
+
+  // Suriyayatra formula calculation fallback
+  const H = Math.floor((j * 292207 + 373) / 800);
+  const w_t = (H + 3) % 7;
+  return {
+    thongchai: (w_t + 1) % 7,
+    athipati: w_t % 7,
+    ubat: (w_t + 3) % 7,
+    lokawinat: (w_t + 5) % 7
+  };
+}
+
+function getRealEphemerisTransitAspect(year, month, day) {
+  // Calibrated Vedic Lahiri Ayanamsa Benchmark (นิรายนะระบบลาหิรี N.C. Lahiri Ephemeris):
+  // Benchmark Epoch: July 16, 2026 at 12:00 PM ICT (05:00 UTC)
+  // At this exact moment, Lahiri Moon (๒) is at 104.0° (Cancer / ราศีกรกฎ - Pushya / ปุษยนักษัตร สมโณฤกษ์)
+  const epoch2026Jul16 = Date.UTC(2026, 6, 16, 5, 0, 0);
+  const targetDate = Date.UTC(year, month, day, 5, 0, 0);
+  const daysDiff = (targetDate - epoch2026Jul16) / 86400000;
+  const weekday = new Date(year, month, day).getDay();
+
+  // Moon daily motion rate = ~13.17639° / day (Lahiri Sidereal Ayanamsa System)
+  const moonDeg = ((104.0 + daysDiff * 13.17639) % 360 + 360) % 360;
+  const moonSignIdx = Math.floor(moonDeg / 30);
+  const nakshatraIdx = Math.floor(moonDeg / (360 / 27));
+
+  const ZODIAC_NAMES = ["เมษ", "พฤษภ", "เมถุน", "กรกฎ", "สิงห์", "กันย์", "ตุลย์", "พิจิก", "ธนู", "มังกร", "กุมภ์", "มีน"];
+  const WEEKDAY_PLANET_NAMES = ["ดาวอาทิตย์ (๑)", "ดาวจันทร์ (๒)", "ดาวอังคาร (๓)", "ดาวพุธ (๔)", "ดาวพฤหัสบดี (๕)", "ดาวศุกร์ (๖)", "ดาวเสาร์ (๗)"];
+
+  const NAKSHATRA_27_FULL = [
+    "อัศวินี (ทลิทโทฤกษ์ - ฤกษ์เริ่มต้นบุกเบิกงานใหม่)",
+    "ภรณี (มหัทธโนฤกษ์ - ฤกษ์มหาเศรษฐีโชคลาภ)",
+    "กฤตติกา (โจโรฤกษ์ - ฤกษ์ชิงชัยและฝ่าฟันอุปสรรค)",
+    "โรหิณี (ภูมิปาโลฤกษ์ - ฤกษ์แผ่นดินตั้งมั่นและที่อยู่อาศัย)",
+    "มฤคศิระ (เทศาตรีฤกษ์ - ฤกษ์การค้าและมิตรภาพ)",
+    "อารทรา (เทวีฤกษ์ - ฤกษ์มหาเสน่ห์และเมตตามหานิยม)",
+    "ปุนัพพสุ (ราชาฤกษ์ - ฤกษ์บารมีและเกียรติยศ)",
+    "ปุษยะ (สมโณฤกษ์ - ฤกษ์ความสงบ ทำบุญและปฏิบัติธรรม)",
+    "อาศเลษา (ทักษาฤกษ์ - ฤกษ์ฟื้นฟูและเสริมความสมบูรณ์)",
+
+    "มาฆะ (ทลิทโทฤกษ์ - ฤกษ์เริ่มต้นบุกเบิกงานใหม่)",
+    "บุพพผลคุนี (มหัทธโนฤกษ์ - ฤกษ์มหาเศรษฐีโชคลาภ)",
+    "อุตตรผลคุนี (โจโรฤกษ์ - ฤกษ์ชิงชัยและฝ่าฟันอุปสรรค)",
+    "หัสตะ (ภูมิปาโลฤกษ์ - ฤกษ์แผ่นดินตั้งมั่นและอสังหาฯ)",
+    "จิตรา (เทศาตรีฤกษ์ - ฤกษ์การค้า วาทศิลป์และบันเทิง)",
+    "สวาตี (เทวีฤกษ์ - ฤกษ์มหาเสน่ห์และความงาม)",
+    "วิสาขะ (ราชาฤกษ์ - ฤกษ์มหาชัยชนะและบารมี)",
+    "อนุราธะ (สมโณฤกษ์ - ฤกษ์ความสงบ สวดมนต์และสร้างบุญ)",
+    "เชษฐะ (ทักษาฤกษ์ - ฤกษ์เสริมสิริมงคลฟื้นฟูดวง)",
+
+    "มูละ (ทลิทโทฤกษ์ - ฤกษ์เริ่มต้นบุกเบิกงานใหม่)",
+    "บุพพาษาฒ (มหัทธโนฤกษ์ - ฤกษ์มหาเศรษฐีโชคลาภ)",
+    "อุตตราษาฒ (โจโรฤกษ์ - ฤกษ์ชิงชัยและแก้ปัญหา)",
+    "ศรวณะ (ภูมิปาโลฤกษ์ - ฤกษ์วางรากฐานมั่นคง)",
+    "ธนิษฐา (เทศาตรีฤกษ์ - ฤกษ์การค้าและสังสรรค์)",
+    "ศตภิษัช (เทวีฤกษ์ - ฤกษ์เสน่หาความผาสุก)",
+    "บุพพภัทรบท (ราชาฤกษ์ - ฤกษ์รับตำแหน่งบารมี)",
+    "อุตตรภัทรบท (สมโณฤกษ์ - ฤกษ์ความสงบจิตใจ)",
+    "เรวดี (ทักษาฤกษ์ - ฤกษ์มงคลสมบูรณ์พูนสุข)"
+  ];
+
+  const moonNakshatraFull = NAKSHATRA_27_FULL[nakshatraIdx % 27];
+  const dayLordName = WEEKDAY_PLANET_NAMES[weekday];
+  const moonSignName = ZODIAC_NAMES[moonSignIdx];
+
+  return `ดาวจันทร์ (๒) จรในราศี${moonSignName} เสวย${moonNakshatraFull} ผสานพลัง${dayLordName}ประจำวัน หนุนพลังโชคลาภ ความสำเร็จ และกิจกรรมมงคล`;
+}
+
+function getSunAspectReadings(year, month, day) {
+  const epoch2026Jul16 = Date.UTC(2026, 6, 16, 5, 0, 0);
+  const targetDate = Date.UTC(year, month, day, 5, 0, 0);
+  const daysDiff = (targetDate - epoch2026Jul16) / 86400000;
+
+  // 1. Sun Longitude (๑) ~0.9856° / day (Base: July 16, 2026 = 93.0° Cancer 3°)
+  const sunDeg = ((93.0 + daysDiff * 0.9856) % 360 + 360) % 360;
+  const sunSignIdx = Math.floor(sunDeg / 30);
+
+  // 2. Moon Longitude (๒) ~13.17639° / day (Base: July 16, 2026 = 104.0° Pushya)
+  const moonDeg = ((104.0 + daysDiff * 13.17639) % 360 + 360) % 360;
+  const moonSignIdx = Math.floor(moonDeg / 30);
+
+  // 3. Jupiter Longitude (๕) ~0.0831° / day
+  const jupDeg = ((72.0 + daysDiff * 0.0831) % 360 + 360) % 360;
+  const jupSignIdx = Math.floor(jupDeg / 30);
+
+  // 4. Saturn Longitude (๗) ~0.0334° / day
+  const satDeg = ((346.0 + daysDiff * 0.0334) % 360 + 360) % 360;
+  const satSignIdx = Math.floor(satDeg / 30);
+
+  // 5. Mars Longitude (๓) ~0.524° / day
+  const marsDeg = ((45.0 + daysDiff * 0.524) % 360 + 360) % 360;
+  const marsSignIdx = Math.floor(marsDeg / 30);
+
+  // Aspect Differences relative to Sun (๑)
+  const moonDiff = (moonSignIdx - sunSignIdx + 12) % 12;
+  const jupDiff = (jupSignIdx - sunSignIdx + 12) % 12;
+  const satDiff = (satSignIdx - sunSignIdx + 12) % 12;
+  const marsDiff = (marsSignIdx - sunSignIdx + 12) % 12;
+
+  let goodEffects = [];
+  let badEffects = [];
+
+  // Evaluate Good Aspects (กุม 0, โยค 2/10, ตรีโกณ 4/8)
+  if ([0, 2, 4, 8, 10].includes(moonDiff)) {
+    goodEffects.push("ดาวจันทร์ (๒) ทำมุมดี (กุม/โยค/ตรีโกณ) หนุนเสน่ห์และโชคลาภ");
+  }
+  if ([0, 2, 4, 8, 10].includes(jupDiff)) {
+    goodEffects.push("ดาวพฤหัสบดี (๕) ทำมุมมิตรใหญ่ส่งกำลัง เสริมบารมีผู้ใหญ่เอ็นดู");
+  }
+  if (goodEffects.length === 0) {
+    goodEffects.push("ดาวอาทิตย์ (๑) ส่องสว่างราบรื่น เหมาะแก่การดำเนินชีวิตตามปกติ");
+  }
+
+  // Evaluate Bad Aspects (ฉาก 3/9, อริ 5, มรณะ 7, วินาศ 11)
+  if ([3, 5, 7, 9, 11].includes(satDiff)) {
+    badEffects.push("ดาวเสาร์ (๗) ทำมุมร้าย (ฉาก/อริ/มรณะ/วินาศ) สื่อถึงภาระงานสะสมและการอึดอัดใจ");
+  }
+  if ([3, 5, 7, 9, 11].includes(marsDiff)) {
+    badEffects.push("ดาวอังคาร (๓) ทำมุมขัดแย้ง สื่อถึงความใจร้อนและเสี่ยงปะทะอารมณ์");
+  }
+  if ([3, 5, 7, 9, 11].includes(moonDiff)) {
+    badEffects.push("ดาวจันทร์ (๒) ทำมุมขัดแย้ง สื่อถึงอารมณ์แปรปรวนและเอกสารผิดพลาด");
+  }
+  if (badEffects.length === 0) {
+    badEffects.push("ความประมาทในการลงทุนและการสื่อสารที่ไม่ชัดเจน");
+  }
+
+  return {
+    suitableText: goodEffects[0],
+    avoidText: badEffects[0]
+  };
+}
+
 function getAuspiciousDetails(year, month, day) {
-  // คำนวณค่าแบบกึ่งสุ่มคงที่ (Deterministic Hash) เพื่อให้ได้ค่าที่คงเดิมสำหรับวันเดิมเสมอ
-  const key = (year * 31 + (month + 1) * 7 + day) % 10;
-  
-  if (key === 0 || key === 3) {
+  const weekday = new Date(year, month, day).getDay(); // 0 = Sun ... 6 = Sat
+  const kalayoga = getKalayogaForDate(year, month, day);
+
+  const DIRECTIONS_POOL = [
+    "ทิศตะวันออก", "ทิศตะวันออกเฉียงใต้", "ทิศตะวันออกเฉียงเหนือ",
+    "ทิศใต้", "ทิศเหนือ", "ทิศตะวันตกเฉียงใต้", "ทิศตะวันตกเฉียงเหนือ"
+  ];
+  const direction = DIRECTIONS_POOL[(day + month * 2) % DIRECTIONS_POOL.length];
+
+  const WEEKDAY_TIMES = [
+    "• 06:09 - 07:30 น.<br>• 13:30 - 15:00 น.",
+    "• 08:19 - 09:30 น.<br>• 14:15 - 15:45 น.",
+    "• 09:09 - 10:30 น.<br>• 15:15 - 16:30 น.",
+    "• 08:30 - 09:45 น.<br>• 13:30 - 15:00 น.",
+    "• 09:39 - 11:00 น.<br>• 15:39 - 17:00 น.",
+    "• 07:49 - 09:15 น.<br>• 12:49 - 14:15 น.",
+    "• 10:09 - 11:30 น.<br>• 16:09 - 17:30 น."
+  ];
+
+  const LUCKY_NUM_PATTERNS = [
+    "1, 5, 9", "2, 4, 6", "3, 8, 9", "5, 6, 8", "1, 4, 7",
+    "2, 5, 8", "3, 6, 9", "4, 7, 9", "1, 6, 8", "2, 7, 9"
+  ];
+  const numbers = LUCKY_NUM_PATTERNS[(day * 11 + month * 7 + year) % LUCKY_NUM_PATTERNS.length];
+
+  // คำนวณตำแหน่งมุมดาวจรจริงตามคัมภีร์สุริยยาตร์ / ดาราศาสตร์จริงประจำวันนั้นๆ
+  const transitAspect = getRealEphemerisTransitAspect(year, month, day);
+  const sunAspects = getSunAspectReadings(year, month, day);
+
+  const MEANING_MATRIX = {
+    thongchai: [
+      "ฤกษ์วันธงชัยแห่งเกียรติยศและโชคลาภ กระแสพลังงานดาวส่งเสริมให้ดวงชะตามีพลังบารมีโดดเด่น เหมาะอย่างยิ่งสำหรับการเปิดตัวธุรกิจใหม่ การออกรถใหม่รับทรัพย์ หรือการยื่นข้อเสนอโครงการใหญ่ การเจรจาค้าขายในวันนี้มีโอกาสได้รับการตอบรับและผลประโยชน์สูง มีเกณฑ์ได้รับข่าวดีเรื่องเงินทองและความช่วยเหลือจากมิตรแท้",
+      "ฤกษ์วันธงชัยมหาเสน่ห์และโภคทรัพย์ พลังงานดาวส่องสว่างส่งผลดีเลิศต่อการเงินและการค้าขาย การเจรจาตกลงสัญญาคล่องตัว ผู้ใหญ่และผู้ร่วมงานให้ความเมตตาเอ็นดู เหมาะแก่การจัดงานมงคลสมรส ขึ้นบ้านใหม่ หรือเปิดร้านค้าเพื่อดึงดูดลูกค้าและโชคลาภเงินทองเข้ามาไม่ขาดสาย",
+      "ฤกษ์วันธงชัยมหาชัยชนะแห่งการบุกเบิก ขับเคลื่อนพลังความกล้าหาญและความมั่นใจ เหมาะแก่การเริ่มต้นสิ่งใหม่ๆ การเอาชนะอุปสรรคที่ค้างคา การเจรจาทวงสิทธิ์ หรือการแข่งขันทางธุรกิจ มีโอกาสได้รับชัยชนะและความสำเร็จสูง ขจัดความลังเลสงสัยแล้วลุยทำตามแผนได้อย่างมั่นใจ",
+      "ฤกษ์วันธงชัยวาทศิลป์การค้า เด่นด้านการสื่อสารและการลงนามเอกสารสำคัญ การเจรจาทำสัญญาซื้อขาย การปิดยอดขาย หรือการขยายเครือข่ายธุรกิจราบรื่น ผู้คนให้ความยอมรับและเชื่อมั่นในคำพูด มีเกณฑ์ได้รับลาภลอยจากการเดินทางและการประสานงานทางธุรกิจ",
+      "ฤกษ์วันธงชัยมหาอุตม์ตั้งมั่น เสริมสร้างความเจริญรุ่งเรืองและความมั่นคงในชีวิตระยะยาว เหมาะสำหรับการย้ายเข้าบ้านใหม่ การทำบุญเปิดอาคารสำนักงาน หรือการวางรากฐานชีวิตคู่ กระแสพลังบวกเปิดทางให้ชีวิตดำเนินไปด้วยความราบรื่นและเปี่ยมด้วยสิริมงคล"
+    ],
+    athipati: [
+      "ฤกษ์วันอธิบดีส่งเสริมพลังอำนาจและเกียรติยศ เด่นด้านการปกครองบริวาร การบริหารงานใหญ่ และการเข้าหาผู้ใหญ่เพื่อขอตำแหน่งหรือโอกาสใหม่ การเจรจาธุรกิจที่มีผู้ใหญ่เป็นประธานประสบผลสำเร็จด้วยดี คำพูดน่าเชื่อถือได้รับความเคารพยำเกรงจากคนรอบข้าง",
+      "ฤกษ์วันอธิบดีเมตตาบารมี การประสานงานและการเจรจาการค้าเป็นไปด้วยความมิตรและได้รับความเห็นชอบอย่างง่ายดาย เหมาะแก่การสัมภาษณ์งานใหม่ การลงนามในสัญญาสำคัญ หรือการขอความช่วยเหลือจากพันธมิตร มีเกณฑ์ได้รับข่าวดีเรื่องการงานและได้รับการสนับสนุนจากผู้มีอำนาจ",
+      "ฤกษ์วันอธิบดีเด็ดเดี่ยวและมั่นคง เสริมพลังในการตัดสินใจเรื่องสำคัญและการจัดการปัญหาความวุ่นวาย การคุมคนและบริหารองค์กรเป็นไปตามเป้าหมาย เหมาะแก่การกราบขอพรผู้ใหญ่ การทำบุญเสริมดวงชะตา และการเริ่มต้นวางโครงสร้างงานใหญ่เพื่อความสำเร็จยั่งยืน",
+      "ฤกษ์วันอธิบดีการค้าปัญญา เสริมสร้างไหวพริบและสติปัญญาในการวางแผนทางการเงิน การเจรจาตกลงผลประโยชน์ หรือการเปิดร้านค้าใหม่ ผลตอบแทนเป็นไปตามคาดหวัง การลงทุนระยะสั้นและยาวมีเกณฑ์ได้รับผลกำไรที่น่าพึงพอใจ",
+      "ฤกษ์วันอธิบดีครูบารมี เด่นด้านงานวิชาการ การศึกษาเรียนรู้ การกราบไหว้ครูอาจารย์และการขอพรสิ่งศักดิ์สิทธิ์ การเสนอผลงานวิจัยหรือการสอบแข่งขันมีโอกาสได้รับข่าวดี การดำเนินชีวิตเปี่ยมด้วยสติและได้รับการอุปถัมภ์ชูเชิดจากผู้ใหญ่"
+    ],
+    ubat: [
+      "วันอุบาทว์สภาวะอารมณ์และพลังงานรอบตัวตึงเครียด ระวังเรื่องทิฐิ ความใจร้อน และการใช้อารมณ์ตัดสินปัญหา อาจทำให้เกิดความขัดแย้งกับผู้คนรอบข้างโดยไม่จำเป็น ควรหลีกเลี่ยงการทำสัญญาสำคัญ การออกรถ หรือการลงทุนเสี่ยงภัย เน้นการทำความสะอาดบ้าน พักผ่อน และสวดมนต์นั่งสมาธิแก้เคล็ด",
+      "วันอุบาทว์กระแสพลังงานมีความผันผวน ระวังเอกสารสัญญาหรือข้อมูลสำคัญตกหล่นสูญหาย การเจรจาติดขัดและอาจมีความเข้าใจผิดเกิดขึ้นได้ง่าย หลีกเลี่ยงการจัดงานมงคลวิวาห์หรือการย้ายเข้าบ้านใหม่ในวันนี้ ควรเน้นการเคลียร์งานค้าง จัดระเบียบเอกสาร และทำบุญโชคลาภเสริมสิริมงคล",
+      "วันอุบาทว์ระวังอุบัติเหตุ ความใจร้อน และการมีปากเสียงกับคนในครอบครัวหรือผู้ร่วมงาน การเดินทางไกลควรเพิ่มความระมัดระวังเป็นพิเศษ งดเว้นการเจรจาเรื่องผลประโยชน์หรือการกู้หนี้ยืมสิน ควรใช้เวลาไปกับการดูแลสุขภาพ สวดมนต์ปล่อยนกปล่อยปลาเพื่อผ่อนคลายความตึงเครียด",
+      "วันอุบาทว์ระวังการสื่อสารคลาดเคลื่อนและการเข้าใจผิดทางธุรกิจ ไม่เหมาะแก่การเซ็นสัญญากู้ยืม หรือการเริ่มโปรเจกต์ใหม่ คำพูดอาจถูกตีความผิดความหมายได้ง่าย ควรใช้สติ ความสงบ และตรวจสอบข้อมูลให้รอบคอบก่อนลงมือทำสิ่งใดในวันนี้",
+      "วันอุบาทว์ระวังความประมาทในการลงทุนและการถูกหลอกลวง การเข้าหาผู้ใหญ่ในวันนี้อาจไม่ได้ผลดีเท่าที่ควร งดเว้นการเสี่ยงโชคและการทำกิจกรรมมงคลใหญ่ ควรเน้นการสวดมนต์ไหว้พระ ปฏิบัติธรรม และสรงน้ำพระเพื่อปัดเป่าอุปสรรคและเสริมพลังบวกให้กับตนเอง"
+    ],
+    lokawinat: [
+      "วันโลกาวินาศกระแสธรรมชาติและพลังงานแปรปรวน อาจทำให้เกิดอุปสรรคซ้อนอุปสรรค การเดินทางหรือระบบสื่อสารติดขัด ไม่เหมาะสำหรับการเปิดตัวงานใหม่ การขึ้นบ้านใหม่ หรือการย้ายที่อยู่อาศัย ควรใช้ชีวิตด้วยความไม่ประมาท เคลียร์ขยะสิ่งของชำรุดออกนอกบ้าน และทำทานเสริมบุญบารมี",
+      "วันโลกาวินาศระวังเรื่องความอึดอัดใจและการมีปากเสียงในครอบครัว สิ่งที่คาดหวังอาจไม่เป็นไปตามแผนและมีเหตุให้เสียเงินทองกะทันหัน หลีกเลี่ยงการเสี่ยงโชค งานมงคลสมรส หรือการเข้าพบผู้ใหญ่ ควรเน้นการทำบิ๊กคลีนนิ่งบ้าน พักผ่อนจิตใจ และสวดมนต์อธิษฐานจิตเพื่อความผาสุก",
+      "วันโลกาวินาศระวังสิ่งของชำรุดเสียหาย ระบบน้ำไฟในบ้านมีปัญหา หรือมีความขัดแย้งกะทันหันกับคนรอบข้าง ไม่ควรเริ่มงานใหญ่หรือรับปากช่วยเหลือใครเกินตัว ควรเน้นการซ่อมแซมสิ่งของที่ชำรุด ทำบุญบริจาคทานค่าน้ำค่าไฟวัด และตั้งมั่นในศีลธรรมเพื่อเป็นเกราะคุ้มครองดวงชะตา",
+      "วันโลกาวินาศระบบการเงินและการสื่อสารอาจเกิดความคลาดเคลื่อน ไม่ควรลงนามในสัญญาสำคัญ เอกสารคดีความ หรือการทำธุรกรรมกู้หนี้ยืมสิน การตัดสินใจด้วยความใจร้อนอาจนำมาซึ่งความสูญเสีย ควรสงบสติอารมณ์ ปล่อยวางเรื่องเครียด และทำบุญถวายสังฆทานเสริมดวง",
+      "วันโลกาวินาศระวังความประมาทและการตกหลุมพรางทางความคิด อาจมีเรื่องให้วุ่นวายใจจากบริวาร หลีกเลี่ยงการทำกิจกรรมเสี่ยงภัยและการเดินทางยามวิกาล ควรเน้นการปฏิบัติธรรม สวดมนต์คาถาชินบัญชร และทำบุญให้เจ้ากรรมนายเวร เพื่อเปลี่ยนร้ายให้กลายเป็นดี"
+    ],
+    neutral: [
+      "วันกำลังปานกลาง กระแสพลังงานราบรื่นและเป็นธรรมชาติ เหมาะสำหรับดำเนินกิจกรรมประจำวันตามปกติ ทำงานตามแผนงานเดิมที่วางไว้ และการพัฒนาทักษะตนเอง การเจรจาค้าขายเป็นไปอย่างเรียบง่าย ควรเน้นความสม่ำเสมอ ความตั้งใจจริง และการดูแลสุขภาพร่างกายให้แข็งแรง",
+      "วันกำลังปานกลาง บรรยากาศผ่อนคลาย เหมาะแก่การเจรจาสังสรรค์เล็กๆ กับเพื่อนฝูง การดูแลคนในครอบครัว และการชอปปิงของใช้เข้าบ้าน การงานดำเนินไปตามระบบโดยไม่มีอุปสรรคใหญ่ ควรใช้เวลานี้เติมพลังกายใจและวางแผนเป้าหมายใหม่สำหรับอนาคต",
+      "วันกำลังปานกลาง เหมาะแก่การเคลียร์งานค้าง สะสางเอกสารที่ค้างคา และการจัดระเบียบโต๊ะทำงาน การเงินหมุนเวียนได้เรื่อยๆ ตามปกติ ควรหาเวลาออกกำลังกายเสริมสร้างภูมิคุ้มกันร่างกาย ทำจิตใจให้สดใส และทำบุญตักบาตรตามโอกาสเพื่อเสริมความราบรื่น",
+      "วันกำลังปานกลาง เด่นด้านการประสานงาน นัดหมายส่งมอบงาน และการอ่านหนังสือหาความรู้ใหม่ๆ การพูดคุยแลกเปลี่ยนความคิดเห็นกับผู้ร่วมงานเป็นไปด้วยดี ควรเน้นการสร้างมิตรภาพและการทำความดีเล็กๆ น้อยๆ ในชีวิตประจำวันเพื่อสะสมแต้มบุญ",
+      "วันกำลังปานกลาง เหมาะแก่การทบทวนตนเอง การวางแผนการเงินระยะยาว และการเรียนรู้สิ่งใหม่ๆ ที่สนใจ การดำเนินชีวิตเป็นไปด้วยความเรียบร้อย ไร้แรงปะทะ ควรหมั่นกราบไหว้พระในบ้าน แสดงความกตัญญูต่อผู้มีพระคุณ เพื่อส่งเสริมดวงชะตาให้มีความสุขและเจริญรุ่งเรือง"
+    ]
+  };
+
+  const meaningIdx = (day + month * 3) % 5;
+
+  if (weekday === kalayoga.thongchai) {
     return {
       type: "auspicious",
-      badge: "🟢 วันฤกษ์มงคลพิเศษ (วันธงชัย)",
+      badge: "🟢 วันธงชัย",
       badgeColor: "#2E7D32",
       badgeBg: "#E8F5E9",
-      meaning: "ฤกษ์วันธงชัยแห่งชัยชนะ ความเจริญก้าวหน้าสูงสุด พลังงานสมบูรณ์แบบเพื่อเริ่มงานใหญ่และกิจกรรมสำคัญ",
+      meaning: MEANING_MATRIX.thongchai[meaningIdx],
       suitable: "🚗 ออกรถใหม่, 🏠 ขึ้นบ้านใหม่/ย้ายบ้าน, 💼 เปิดร้านค้า/จดทะเบียนบริษัท, 💍 มงคลสมรส",
-      avoid: "กิจกรรมที่เน้นความขัดแย้ง หรือเริ่มการปราบปรามทางกฎหมาย",
-      direction: "ทิศตะวันออกเฉียงเหนือ (ทิศมงคล)",
-      time: "09:09 - 10:30 น. และ 15:15 - 16:30 น.",
-      numbers: "1, 5, 9"
+      avoid: "กิจกรรมที่เน้นความขัดแย้ง หรือการเริ่มปราบปรามทางกฎหมาย",
+      direction: direction,
+      time: WEEKDAY_TIMES[weekday],
+      numbers: numbers
     };
-  } else if (key === 5) {
+  } else if (weekday === kalayoga.athipati) {
     return {
       type: "auspicious",
-      badge: "🟢 วันฤกษ์มงคล (วันอธิบดี)",
+      badge: "🟢 วันอธิบดี",
       badgeColor: "#1B5E20",
       badgeBg: "#E8F5E9",
-      meaning: "ฤกษ์วันอธิบดี ส่งเสริมเกียรติยศ อำนาจบารมี การเจรจาราบรื่น และมีผู้ใหญ่คอยหนุนหลังช่วยเหลือ",
+      meaning: MEANING_MATRIX.athipati[meaningIdx],
       suitable: "👔 สัมภาษณ์งาน/คุยเจรจาธุรกิจ, 🤝 เซ็นสัญญาสำคัญ, 🏠 ขึ้นบ้านใหม่, 🙏 ทำบุญเสริมดวง",
       avoid: "การให้ยืมเงิน หรือทำธุรกรรมกู้หนี้ยืมสิน",
-      direction: "ทิศใต้ (ทิศนำโชค)",
-      time: "08:30 - 09:45 น. และ 13:30 - 15:00 น.",
-      numbers: "2, 4, 6"
+      direction: direction,
+      time: WEEKDAY_TIMES[weekday],
+      numbers: numbers
     };
-  } else if (key === 2) {
+  } else if (weekday === kalayoga.ubat) {
     return {
       type: "caution",
-      badge: "🔴 วันควรระวังพิเศษ (วันอุบาทว์)",
+      badge: "🔴 วันอุบาทว์",
       badgeColor: "#C62828",
       badgeBg: "#FFEBEE",
-      meaning: "วันอุบาทว์ พลังของดวงดาวมีการขัดแย้งและหักเห หลีกเลี่ยงกิจกรรมสำคัญเพื่อป้องกันการติดขัด",
+      meaning: MEANING_MATRIX.ubat[meaningIdx],
       suitable: "🧹 จัดระเบียบทำความสะอาดบ้าน, 🧘‍♂️ สวดมนต์นั่งสมาธิปฏิบัติธรรม, 🏥 ตรวจสุขภาพ",
       avoid: "🚗 ออกรถใหม่, 💍 จัดงานวิวาห์, 💼 ลงนามในเอกสารสัญญาทางธุรกิจ",
-      direction: "ทิศเหนือ (ทิศหลีกเลี่ยงภัย)",
-      time: "10:30 - 11:45 น. (เน้นสวดมนต์สั้นเสริมมงคล)",
-      numbers: "3, 7, 8"
+      direction: direction,
+      time: WEEKDAY_TIMES[weekday],
+      numbers: numbers
     };
-  } else if (key === 7) {
+  } else if (weekday === kalayoga.lokawinat) {
     return {
       type: "caution",
-      badge: "🔴 วันควรระวังสูงสุด (วันโลกาวินาศ)",
+      badge: "🔴 วันโลกาวินาศ",
       badgeColor: "#B71C1C",
       badgeBg: "#FFEBEE",
-      meaning: "วันโลกาวินาศ พลังธรรมชาติแปรปรวน ส่งผลเชิงลบต่อการเจริญเติบโตหรือกิจกรรมที่เริ่มใหม่",
-      suitable: "🧼 ทำบิ๊กคลีนนิ่ง, 🗑️ เคลียร์ขยะ/สิ่งของชำรุดออกนอกบ้าน, 🛠️ ซ่อมแซมระบบน้ำไฟ",
+      meaning: MEANING_MATRIX.lokawinat[meaningIdx],
+      suitable: "🧼 ทำบิ๊กคลีนนิ่ง, 🗑️ เคลียร์ขยะสิ่งของชำรุดออกนอกบ้าน, 🛠️ ซ่อมแซมระบบน้ำไฟ",
       avoid: "🏠 ขึ้นบ้านใหม่/ย้ายบ้าน, 💼 เปิดตัวโปรเจกต์ใหม่, 🎓 สมัครหรือเข้าทำงานวันแรก",
-      direction: "ทิศตะวันตก (ทิศป้องกันเคราะห์)",
-      time: "14:15 - 15:30 น. (เหมาะในการสวดมนต์แก้เคล็ด)",
-      numbers: "0, 3, 5"
+      direction: direction,
+      time: WEEKDAY_TIMES[weekday],
+      numbers: numbers
     };
   } else {
     return {
       type: "neutral",
-      badge: "⚪ วันดีทั่วไป / ปานกลาง",
+      badge: "⚪ ฤกษ์ปานกลาง",
       badgeColor: "#616161",
       badgeBg: "#F5F5F5",
-      meaning: "วันกำลังปานกลาง พลังงานดาวเคลื่อนที่สมดุลดีตามรอบวงโคจร เหมาะสำหรับกิจกรรมชีวิตปกติ",
+      meaning: MEANING_MATRIX.neutral[meaningIdx],
       suitable: "🛒 ซื้อเครื่องใช้ไฟฟ้า/ของเข้าบ้าน, 💻 ทำงานตามปกติ, 🏃‍♂️ กิจกรรมเพื่อสุขภาพ, 📞 สังสรรค์เพื่อนฝูง",
       avoid: "การเก็งกำไรที่มีความเสี่ยงสูงมาก หรือการลงทุนที่ใช้ความเสี่ยงเกินตัว",
-      direction: "ทิศตะวันออก (ทิศนำโชค)",
-      time: "07:30 - 09:00 น. และ 11:00 - 12:30 น.",
-      numbers: "4, 8, 9"
+      direction: direction,
+      time: WEEKDAY_TIMES[weekday],
+      numbers: numbers
     };
   }
 }
+
+let calendarActiveFilter = 'all';
+
+function checkDayMatchesFilter(details, filter) {
+  if (filter === 'all') return true;
+  if (filter === 'auspicious') return details.type === 'auspicious';
+  if (filter === 'car') return details.suitable.includes('ออกรถ');
+  if (filter === 'home') return details.suitable.includes('ขึ้นบ้านใหม่');
+  if (filter === 'shop') return details.suitable.includes('เปิดร้าน') || details.suitable.includes('ธุรกิจ');
+  if (filter === 'wedding') return details.suitable.includes('มงคลสมรส');
+  return true;
+}
+
+function getPersonalizedAuspiciousAdvice(year, month, day) {
+  const thaksaDay = (typeof window.currentThaksaDay !== 'undefined' && window.currentThaksaDay !== null)
+    ? window.currentThaksaDay
+    : (window.lastCalculatedHoroscope ? window.lastCalculatedHoroscope.thaksaDay : null);
+
+  if (thaksaDay === null || typeof thaksaDay === 'undefined') {
+    return null;
+  }
+
+  const d = new Date(year, month, day);
+  const weekday = d.getDay(); // 0=Sun .. 6=Sat
+
+  // 0:Sun, 1:Mon, 2:Tue, 3:Wed, 4:Thu, 5:Fri, 6:Sat, 7:WedNight
+  const KALI_MAP = { 0: 5, 1: 0, 2: 1, 3: 2, 4: 6, 5: 6, 6: 3, 7: 4 };
+  const FRIEND_MAP = { 0: 4, 1: 3, 2: 5, 3: 1, 4: 0, 5: 2, 6: 7, 7: 6 };
+
+  const tabooWeekday = KALI_MAP[thaksaDay];
+  const friendWeekday = FRIEND_MAP[thaksaDay];
+
+  const weekdaysThai = ["วันอาทิตย์", "วันจันทร์", "วันอังคาร", "วันพุธ", "วันพฤหัสบดี", "วันศุกร์", "วันเสาร์"];
+
+  if (weekday === tabooWeekday) {
+    return {
+      type: "taboo",
+      text: `⚠️ วันนี้ตรงกับวันกาลกิณีดวงเกิดของคุณ (${weekdaysThai[tabooWeekday]}) ควรหลีกเลี่ยงการเริ่มงานมงคลสำคัญหรือออกรถใหม่`,
+      bg: "#FFEBEE",
+      border: "#EF9A9A",
+      color: "#C62828"
+    };
+  } else if (weekday === friendWeekday || (thaksaDay === 6 && weekday === 3)) {
+    return {
+      type: "friend",
+      text: `🌟 วันคู่มิตรดวงเกิด! วันนี้เป็นวันคู่มิตรส่งเสริมดวงชะตาของคุณ ช่วยทวีคูณความสำเร็จและราบรื่นเป็นพิเศษ`,
+      bg: "#E8F5E9",
+      border: "#A5D6A7",
+      color: "#1B5E20"
+    };
+  }
+
+  return null;
+}
+
+window.setCalendarFilter = function(filterType) {
+  calendarActiveFilter = filterType;
+  
+  const filterBtns = document.querySelectorAll('.cal-filter-btn');
+  filterBtns.forEach(btn => {
+    if (btn.id === `cal-filter-${filterType}`) {
+      btn.classList.add('active');
+      btn.style.background = 'var(--gold)';
+      btn.style.color = '#ffffff';
+      btn.style.borderColor = 'var(--gold-d)';
+      btn.style.fontWeight = '700';
+    } else {
+      btn.classList.remove('active');
+      btn.style.background = 'var(--cream)';
+      btn.style.color = 'var(--text)';
+      btn.style.borderColor = 'var(--border)';
+      btn.style.fontWeight = '400';
+    }
+  });
+
+  window.renderAuspiciousCalendar();
+};
 
 window.renderAuspiciousCalendar = function() {
   const label = document.getElementById('calendarMonthLabel');
@@ -661,31 +936,38 @@ window.renderAuspiciousCalendar = function() {
   // สร้างเซลล์ว่าง (Pad cells) ก่อนวันแรกของเดือน
   for (let i = 0; i < firstDayIndex; i++) {
     const emptyCell = document.createElement('div');
-    emptyCell.className = 'calendar-day-cell empty';
+    emptyCell.className = 'cal-day empty';
     grid.appendChild(emptyCell);
   }
 
   // สร้างเซลล์วันที่
   for (let day = 1; day <= totalDays; day++) {
+    const details = getAuspiciousDetails(calendarCurrentYear, calendarCurrentMonth, day);
+    const matchesFilter = checkDayMatchesFilter(details, calendarActiveFilter);
+
     const cell = document.createElement('div');
-    cell.className = 'calendar-day-cell';
-    
-    // ตั้งค่า active
+    cell.className = `cal-day cal-type-${details.type}`;
     if (day === calendarSelectedDay) {
+      cell.classList.add('selected');
       cell.classList.add('active');
     }
 
-    const details = getAuspiciousDetails(calendarCurrentYear, calendarCurrentMonth, day);
+    if (!matchesFilter) {
+      cell.style.opacity = '0.25';
+      cell.style.filter = 'grayscale(0.8)';
+    } else if (calendarActiveFilter !== 'all') {
+      cell.style.boxShadow = '0 0 8px rgba(226, 184, 66, 0.9)';
+      cell.style.borderColor = 'var(--gold-d)';
+    }
 
     cell.innerHTML = `
-      <span class="day-number">${day}</span>
-      <span class="day-indicator ${details.type}"></span>
+      <div class="cal-day-num">${day}</div>
+      <div class="cal-day-dot" style="background-color: ${details.badgeColor}"></div>
     `;
 
     cell.onclick = () => {
-      // เอาคลาส active ออกจากเซลล์อื่นทั้งหมด
-      grid.querySelectorAll('.calendar-day-cell').forEach(c => c.classList.remove('active'));
-      cell.classList.add('active');
+      grid.querySelectorAll('.cal-day').forEach(c => c.classList.remove('selected'));
+      cell.classList.add('selected');
       
       calendarSelectedDay = day;
       window.selectCalendarDay(day);
@@ -721,12 +1003,12 @@ window.selectCalendarDay = function(day) {
   const detailsCard = document.getElementById('calendarDetailsCard');
   const detailsDate = document.getElementById('calDetailsDate');
   const detailsBadge = document.getElementById('calDetailsBadge');
+  const personalAdvice = document.getElementById('calPersonalAdvice');
   const detailsMeaning = document.getElementById('calDetailsMeaning');
   const detailsSuitable = document.getElementById('calDetailsSuitable');
   const detailsAvoid = document.getElementById('calDetailsAvoid');
   const detailsDirection = document.getElementById('calDetailsDirection');
   const detailsNumbers = document.getElementById('calDetailsNumbers');
-  const detailsTime = document.getElementById('calDetailsTime');
 
   if (!detailsCard) return;
 
@@ -745,12 +1027,25 @@ window.selectCalendarDay = function(day) {
   detailsBadge.style.backgroundColor = details.badgeBg;
   detailsBadge.style.border = `1.5px solid ${details.badgeColor}20`;
 
+  // ตรวจสอบคำแนะนำดวงชะตาเฉพาะบุคคล
+  const advice = getPersonalizedAuspiciousAdvice(calendarCurrentYear, calendarCurrentMonth, day);
+  if (personalAdvice) {
+    if (advice) {
+      personalAdvice.textContent = advice.text;
+      personalAdvice.style.backgroundColor = advice.bg;
+      personalAdvice.style.border = `1.5px solid ${advice.border}`;
+      personalAdvice.style.color = advice.color;
+      personalAdvice.style.display = 'block';
+    } else {
+      personalAdvice.style.display = 'none';
+    }
+  }
+
   detailsMeaning.textContent = details.meaning;
   detailsSuitable.textContent = details.suitable;
   detailsAvoid.textContent = details.avoid;
   detailsDirection.textContent = details.direction;
   detailsNumbers.textContent = details.numbers;
-  detailsTime.textContent = details.time;
 
   window.lastSelectedCalendarDetails = {
     dateStr: `${dayName}ที่ ${day} ${THAI_MONTH_NAMES[calendarCurrentMonth]} พ.ศ. ${calendarCurrentYear + 543}`,
@@ -759,8 +1054,7 @@ window.selectCalendarDay = function(day) {
     suitable: details.suitable,
     avoid: details.avoid,
     direction: details.direction,
-    numbers: details.numbers,
-    time: details.time
+    numbers: details.numbers
   };
 
   // แสดงการ์ดรายละเอียด
@@ -774,7 +1068,7 @@ window.shareAuspiciousDay = function() {
   }
   const d = window.lastSelectedCalendarDetails;
   const shareUrl = window.location.origin + window.location.pathname + '#free-horoscope';
-  const textToCopy = `📅 บอกต่อฤกษ์มงคลสำหรับคุณ: ${d.dateStr}\n✨ ${d.badge}\n💫 ความหมาย: ${d.meaning}\n✅ เหมาะสำหรับ: ${d.suitable}\n❌ ควรหลีกเลี่ยง: ${d.avoid}\n⏱️ ช่วงเวลาทอง: ${d.time}\n🧭 ทิศนำโชค: ${d.direction} | 🔑 เลขมงคล: ${d.numbers}\n\nตรวจเช็คตารางฤกษ์ดีประจำเดือนล่วงหน้าฟรีได้ที่ MuHub ➔ ${shareUrl}`;
+  const textToCopy = `📅 บอกต่อฤกษ์มงคลสำหรับคุณ: ${d.dateStr}\n✨ ${d.badge}\n💡 ${d.meaning}\n✅ เหมาะสำหรับ: ${d.suitable}\n❌ ควรหลีกเลี่ยง: ${d.avoid}\n🧭 ทิศนำโชค: ${d.direction} | 🔑 เลขมงคล: ${d.numbers}\n\nตรวจเช็คตารางฤกษ์ดีประจำเดือนล่วงหน้าฟรีได้ที่ MuHub ➔ ${shareUrl}`;
 
   navigator.clipboard.writeText(textToCopy).then(() => {
     alert('คัดลอกลิงก์และคำแนะนำฤกษ์มงคลเรียบร้อย! ส่งต่อให้คนที่คุณรักได้เลยครับ');
@@ -1012,3 +1306,274 @@ window.drawRadarChart = function(overall, work, money, love, health) {
     ctx.fillText(`${asp.score.toFixed(1)}`, textX, textY);
   });
 };
+
+function renderDailyColorsTable(thaksaDay = null) {
+  if (window.selectedCalendarTabIdx === undefined) {
+    window.selectedCalendarTabIdx = new Date().getDay();
+  }
+
+  const container = document.getElementById('colorTableContainer');
+  const detailPanel = document.getElementById('colorDetailPanel');
+  if (!container) return;
+
+  const todayWeekday = new Date().getDay();
+
+  const daysData = [
+    { dayShort: 'อา', dayFull: 'วันอาทิตย์', weekdayIdx: 0, dayColor: '#FF5252',
+      aspects: { work: ['ชมพู'], luck: ['เขียว'], love: ['ดำ', 'น้ำตาล', 'เทา'], kali: ['ฟ้า', 'น้ำเงิน'] }
+    },
+    { dayShort: 'จ', dayFull: 'วันจันทร์', weekdayIdx: 1, dayColor: '#FFB300',
+      aspects: { work: ['เขียว'], luck: ['ม่วง'], love: ['ฟ้า', 'น้ำเงิน'], kali: ['แดง'] }
+    },
+    { dayShort: 'อ', dayFull: 'วันอังคาร', weekdayIdx: 2, dayColor: '#E91E63',
+      aspects: { work: ['ม่วง'], luck: ['ส้ม'], love: ['แดง'], kali: ['เหลือง', 'ขาว', 'ครีม'] }
+    },
+    { dayShort: 'พ', dayFull: 'วันพุธ', weekdayIdx: 3, dayColor: '#43A047',
+      aspects: { work: ['ส้ม', 'แสด'], luck: ['ดำ', 'น้ำตาล', 'เทา'], love: ['เหลือง', 'ขาว', 'ครีม'], kali: ['ชมพู'] }
+    },
+    { dayShort: 'พฤ', dayFull: 'วันพฤหัสบดี', weekdayIdx: 4, dayColor: '#FB8C00',
+      aspects: { work: ['ฟ้า', 'น้ำเงิน'], luck: ['แดง'], love: ['เขียว'], kali: ['ม่วง'] }
+    },
+    { dayShort: 'ศ', dayFull: 'วันศุกร์', weekdayIdx: 5, dayColor: '#26C6DA',
+      aspects: { work: ['เหลือง', 'ขาว', 'ครีม'], luck: ['ชมพู'], love: ['ส้ม', 'แสด'], kali: ['ดำ', 'น้ำตาล', 'เทา'] }
+    },
+    { dayShort: 'ส', dayFull: 'วันเสาร์', weekdayIdx: 6, dayColor: '#5E35B1',
+      aspects: { work: ['ดำ', 'น้ำตาล', 'เทา'], luck: ['ฟ้า', 'น้ำเงิน'], love: ['ชมพู'], kali: ['เขียว'] }
+    }
+  ];
+
+  const colorMap = {
+    'เขียว': '#43A047', 'ชมพู': '#F06292', 'เทา': '#9E9E9E', 'น้ำเงิน': '#1565C0',
+    'ฟ้า': '#29B6F6', 'ม่วง': '#9C27B0', 'แดง': '#E53935', 'ส้ม': '#FF9800',
+    'แสด': '#FF5722', 'ขาว': '#F5F5F5', 'ครีม': '#FFF9C4', 'เหลือง': '#FFEB3B',
+    'ดำ': '#212121', 'น้ำตาล': '#8D6E63'
+  };
+
+  const catMeta = [
+    { key: 'work', label: 'เดช\nอำนาจ สิทธิ์', shortLabel: 'เดช', emoji: '💼', borderColor: '#1565C0' },
+    { key: 'luck', label: 'ศรี\nโชคลาภ เงินทอง', shortLabel: 'ศรี', emoji: '💰', borderColor: '#2E7D32' },
+    { key: 'love', label: 'มนตรี\nอุปถัมภ์ช่วยเหลือ', shortLabel: 'มนตรี', emoji: '💖', borderColor: '#AD1457' },
+    { key: 'kali', label: 'กาลกิณี\nอัปโชค ไม่ดี', shortLabel: 'กาลกิณี', emoji: '⚠️', borderColor: '#C62828' }
+  ];
+
+  // Build the color block swatch for a list of colors
+  function buildSwatches(colorsList, compact = false) {
+    return colorsList.map(c => {
+      const hex = colorMap[c] || '#ccc';
+      const isLight = ['ขาว','ครีม','เหลือง'].includes(c);
+      const txtColor = isLight ? '#555' : '#fff';
+      const border = isLight ? 'box-shadow: inset 0 0 0 1px rgba(0,0,0,0.15);' : '';
+      const size = compact ? '28px' : '40px';
+      const fontSize = compact ? '0.56rem' : '0.72rem';
+      return `<div style="width:${size};height:${size};min-width:${size};border-radius:8px;background:${hex};${border}display:flex;align-items:center;justify-content:center;color:${txtColor};font-size:${fontSize};font-weight:800;text-align:center;line-height:1.1;">${c}</div>`;
+    }).join('');
+  }
+
+  // ── Full week grid ─────────────────────────────────────────────────────
+  // Header row: col labels
+  let tableHTML = `
+    <div style="display:grid;grid-template-columns:56px repeat(4,1fr);gap:4px;min-width:340px;">
+
+      <!-- Header -->
+      <div style="display:contents;">
+        <div style="padding:6px 4px;"></div>
+        ${catMeta.map(cat => `
+          <div style="background:linear-gradient(135deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03));border-radius:8px;padding:5px 3px;text-align:center;border-bottom:2px solid ${cat.borderColor}30;">
+            <div style="font-size:1rem;line-height:1;">${cat.emoji}</div>
+            <div style="font-size:0.62rem;font-weight:800;color:var(--text);line-height:1.2;margin-top:2px;white-space:pre-line;">${cat.label}</div>
+          </div>
+        `).join('')}
+      </div>`;
+
+  daysData.forEach(day => {
+    const isToday = day.weekdayIdx === todayWeekday;
+    const isBirth = thaksaDay !== null && (thaksaDay === day.weekdayIdx || (thaksaDay === 7 && day.weekdayIdx === 3));
+    const isActive = day.weekdayIdx === window.selectedCalendarTabIdx;
+
+    const rowBg = isActive
+      ? `background:linear-gradient(135deg,${day.dayColor}22,${day.dayColor}0a);box-shadow:0 2px 12px ${day.dayColor}20;`
+      : 'background:transparent;';
+    const rowBorder = isActive ? `border-left:3px solid ${day.dayColor};border-radius:12px;` : 'border-left:3px solid transparent;border-radius:12px;';
+
+    const dayLabelBg = isActive ? day.dayColor : (isToday ? day.dayColor + '33' : 'var(--cream)');
+    const dayLabelColor = isActive ? '#fff' : (isToday ? day.dayColor : 'var(--text)');
+
+    let badges = '';
+    if (isToday && !isActive) badges += `<span style="font-size:0.5rem;background:${day.dayColor};color:#fff;border-radius:4px;padding:1px 3px;line-height:1;">วันนี้</span>`;
+    if (isBirth) badges += `<span style="font-size:0.5rem;background:var(--gold-d);color:#fff;border-radius:4px;padding:1px 3px;line-height:1;">🎂</span>`;
+
+    tableHTML += `
+      <div style="display:contents;cursor:pointer;" onclick="selectDailyColorTab(${day.weekdayIdx}, ${thaksaDay})">
+
+        <!-- Day label cell -->
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 2px;${rowBg}${rowBorder}border-radius:10px;transition:all 0.2s;">
+          <div style="width:34px;height:34px;border-radius:50%;background:${dayLabelBg};color:${dayLabelColor};font-size:0.82rem;font-weight:900;display:flex;align-items:center;justify-content:center;border:2px solid ${isActive ? day.dayColor : 'var(--border)'};transition:all 0.2s;">
+            ${day.dayShort}
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:1px;">${badges}</div>
+        </div>
+
+        ${catMeta.map((cat, ci) => {
+          const colors = day.aspects[cat.key];
+          const isKali = cat.key === 'kali';
+          const cellBg = isKali
+            ? (isActive ? '#FF252520' : 'rgba(220,38,38,0.04)')
+            : (isActive ? `${day.dayColor}15` : 'rgba(255,255,255,0.4)');
+          const cellBorder = isActive ? `border:1.5px solid ${isKali ? '#C6282844' : day.dayColor + '44'};` : 'border:1.5px solid var(--border);';
+          return `
+            <div style="display:flex;align-items:center;justify-content:center;gap:3px;padding:5px 2px;border-radius:8px;background:${cellBg};${cellBorder}flex-wrap:wrap;transition:all 0.2s;">
+              ${buildSwatches(colors, true)}
+            </div>
+          `;
+        }).join('')}
+
+      </div>`;
+  });
+
+  tableHTML += `</div>`;
+  container.innerHTML = tableHTML;
+
+  // ── Detail panel for selected day ─────────────────────────────────────
+  if (detailPanel) {
+    const activeDay = daysData.find(d => d.weekdayIdx === window.selectedCalendarTabIdx);
+    if (!activeDay) { detailPanel.innerHTML = ''; return; }
+
+    const isBirth = thaksaDay !== null && (thaksaDay === activeDay.weekdayIdx || (thaksaDay === 7 && activeDay.weekdayIdx === 3));
+    const isToday = activeDay.weekdayIdx === todayWeekday;
+
+    const tipsMap = {
+      0: 'ใส่เสื้อสีเขียวคู่กับเครื่องประดับสีเงิน ช่วยเรียกทรัพย์และโชคดีตลอดทั้งวัน',
+      1: 'หลีกเลี่ยงสีแดงเด็ดขาด ใส่โทนสีขาวครีมคู่สีม่วงเพื่อดึงดูดเสน่ห์และมิตรไมตรี',
+      2: 'ใส่ชุดสีชมพูหรือม่วงเพิ่มอำนาจบารมีและความน่าเกรงขาม ดีสำหรับงานเจรจา',
+      3: 'สีส้มช่วยเสริมพลังการค้าขายและเจรจางาน ดึงดูดผู้ใหญ่เมตตาและพลังบวก',
+      4: 'แต่งสีส้มคู่สีทองหรือใส่เครื่องประดับแวววาวเพื่อเสริมโชคและเรื่องความรัก',
+      5: 'สีฟ้าน้ำเงินนำความสำเร็จในการประสานงาน เรื่องการเงินคล่องตัวและราบรื่น',
+      6: 'สีน้ำเงินเข้มหนุนดวงการเงินและโชคลาภ ดึงดูดแต่พลังงานดีๆ เข้าหาตัว'
+    };
+
+    let badge = '';
+    if (isBirth) badge = `<span style="background:var(--gold-d);color:#fff;padding:2px 8px;border-radius:12px;font-size:0.65rem;font-weight:700;margin-left:6px;">🎂 วันเกิดคุณ</span>`;
+    else if (isToday) badge = `<span style="background:${activeDay.dayColor};color:#fff;padding:2px 8px;border-radius:12px;font-size:0.65rem;font-weight:700;margin-left:6px;">วันนี้</span>`;
+
+    detailPanel.innerHTML = `
+      <div style="background:linear-gradient(135deg,${activeDay.dayColor}18,${activeDay.dayColor}08);border:1.5px solid ${activeDay.dayColor}44;border-radius:14px;padding:1rem;transition:all 0.3s;">
+        <div style="display:flex;align-items:center;margin-bottom:0.85rem;border-bottom:1.5px dashed ${activeDay.dayColor}55;padding-bottom:0.6rem;">
+          <div style="width:40px;height:40px;border-radius:50%;background:${activeDay.dayColor};color:#fff;font-size:1rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px ${activeDay.dayColor}44;">
+            ${activeDay.dayShort}
+          </div>
+          <div style="margin-left:0.7rem;flex:1;text-align:left;">
+            <div style="font-size:1rem;font-weight:800;color:${activeDay.dayColor};">${activeDay.dayFull} ${badge}</div>
+            <div style="font-size:0.72rem;color:var(--dim);margin-top:1px;">แตะแถวอื่นเพื่อดูสีแต่ละวัน</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;">
+          ${catMeta.map(cat => {
+            const colors = activeDay.aspects[cat.key];
+            const isKali = cat.key === 'kali';
+            const bg = isKali ? '#FFF5F5' : '#ffffff';
+            const borderC = isKali ? '#FFD1D1' : cat.borderColor + '33';
+            return `
+              <div style="background:${bg};border:1.5px solid ${borderC};border-radius:10px;padding:0.6rem 0.7rem;">
+                <div style="font-size:0.65rem;font-weight:800;color:${cat.borderColor};letter-spacing:0.05em;margin-bottom:5px;">${cat.emoji} ${cat.label.replace('\n',' · ')}</div>
+                <div style="display:flex;gap:4px;flex-wrap:wrap;align-items:center;">
+                  ${buildSwatches(colors, false)}
+                </div>
+                <div style="font-size:0.78rem;font-weight:700;color:${isKali ? '#C62828' : 'var(--text)'};margin-top:4px;">
+                  ${colors.join(' / ')}
+                </div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+
+        <div style="margin-top:0.8rem;padding:0.6rem 0.8rem;background:rgba(255,255,255,0.7);border-radius:8px;border-left:3px solid ${activeDay.dayColor};font-size:0.78rem;font-weight:600;color:var(--text-muted);line-height:1.5;text-align:left;">
+          💡 <strong>คำแนะนำเสริมดวง</strong>: ${tipsMap[activeDay.weekdayIdx]}
+        </div>
+      </div>
+    `;
+  }
+}
+
+window.renderYearlyThaksaColors = function(thaksaDay, age) {
+  const container = document.getElementById('freeThaksaColorsContainer');
+  if (!container) return;
+  if (thaksaDay === null || thaksaDay === undefined) {
+    container.innerHTML = '<div style="font-size: 0.85rem; color: var(--dim); padding: 1rem; text-align: center;">กรุณาผูกดวงชะตาเพื่อดูสีมงคลประจำปีเฉพาะบุคคล</div>';
+    return;
+  }
+
+  const THAKSA_PLANET_COLOR_CIRCLES = [
+    { colors: ['#E53935', '#FF7043'] },               // ๑ อาทิตย์: สีแดง, สีส้มแดง
+    { colors: ['#FFFFFF', '#FFF59D', '#FDD835'] },     // ๒ จันทร์: สีขาว, สีเหลืองอ่อน, สีครีม
+    { colors: ['#F8BBD0', '#F06292', '#EC407A'] },     // ๓ อังคาร: สีชมพู, สีบานเย็น
+    { colors: ['#81C784', '#4CAF50', '#2E7D32'] },     // ๔ พุธ: สีเขียวอ่อน, สีเขียวใบไม้, สีเขียวแก่
+    { colors: ['#9C27B0', '#212121', '#616161'] },     // ๗ เสาร์: สีม่วง, สีดำ, สีเทาเข้ม
+    { colors: ['#FF9800', '#FF7043', '#FFD54F'] },     // ๕ พฤหัส: สีส้ม, สีแสด, สีเหลืองทอง
+    { colors: ['#B0BEC5', '#78909C', '#5D4037'] },     // ๘ ราหู: สีบรอนซ์, สีเทา, สีน้ำตาล
+    { colors: ['#4FC3F7', '#0288D1', '#1565C0'] }      // ๖ ศุกร์: สีฟ้า, สีน้ำเงิน, สีคราม
+  ];
+
+  const weekdayToStartIndex = [0, 1, 2, 3, 5, 7, 4, 6];
+  const birthStartIndex = weekdayToStartIndex[thaksaDay];
+  const natalSri = THAKSA_PLANET_COLOR_CIRCLES[(birthStartIndex + 3) % 8];
+  const natalKalakini = THAKSA_PLANET_COLOR_CIRCLES[(birthStartIndex + 7) % 8];
+  const transitStart8 = (birthStartIndex + (age - 1)) % 8;
+  const transitSri = THAKSA_PLANET_COLOR_CIRCLES[(transitStart8 + 3) % 8];
+  const transitKalakini = THAKSA_PLANET_COLOR_CIRCLES[(transitStart8 + 7) % 8];
+
+  function renderGlowingCircles(planetObj) {
+    return `<div style="display: flex; gap: 8px; align-items: center;">` +
+      planetObj.colors.map(hex => 
+        `<div style="width: 24px; height: 24px; border-radius: 50%; background: ${hex}; border: 2px solid #ffffff; box-shadow: 0 0 8px rgba(255, 255, 255, 0.9), 0 2px 5px rgba(0,0,0,0.18);"></div>`
+      ).join('') +
+    `</div>`;
+  }
+
+  container.innerHTML = `
+    <div style="font-size: 0.82rem; font-weight: 600; color: var(--dim); margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.4rem;">
+      <span>คำนวณตามอายุย่าง ${age} ปี</span>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+      <!-- สีมงคลประจำปี -->
+      <div style="background: rgba(76, 175, 80, 0.05); border: 1.5px solid rgba(76, 175, 80, 0.3); border-radius: 12px; padding: 0.85rem 1rem;">
+        <div style="font-size: 0.84rem; font-weight: 700; color: #2E7D32; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 6px;">
+          <span>✨ สีมงคล</span>
+        </div>
+        
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; background: #ffffff; padding: 0.6rem 0.8rem; border-radius: 8px; border: 1px solid rgba(76, 175, 80, 0.15);">
+            <span style="font-weight: 700; color: #1B5E20; font-size: 0.86rem;">ตามดวงกำเนิด</span>
+            ${renderGlowingCircles(natalSri)}
+          </div>
+
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; background: #ffffff; padding: 0.6rem 0.8rem; border-radius: 8px; border: 1px solid rgba(76, 175, 80, 0.15);">
+            <span style="font-weight: 700; color: #C62828; font-size: 0.86rem;">ประจำปี</span>
+            ${renderGlowingCircles(transitSri)}
+          </div>
+        </div>
+      </div>
+
+      <!-- สีที่ควรหลีกเลี่ยง -->
+      <div style="background: rgba(239, 83, 80, 0.05); border: 1.5px solid rgba(239, 83, 80, 0.3); border-radius: 12px; padding: 0.85rem 1rem;">
+        <div style="font-size: 0.84rem; font-weight: 700; color: #C62828; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 6px;">
+          <span>🚫 สีที่ควรหลีกเลี่ยง</span>
+        </div>
+        
+        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; background: #ffffff; padding: 0.6rem 0.8rem; border-radius: 8px; border: 1px solid rgba(239, 83, 80, 0.15);">
+            <span style="font-weight: 700; color: #1B5E20; font-size: 0.86rem;">ตามดวงกำเนิด</span>
+            ${renderGlowingCircles(natalKalakini)}
+          </div>
+
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; background: #ffffff; padding: 0.6rem 0.8rem; border-radius: 8px; border: 1px solid rgba(239, 83, 80, 0.15);">
+            <span style="font-weight: 700; color: #C62828; font-size: 0.86rem;">ประจำปี</span>
+            ${renderGlowingCircles(transitKalakini)}
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+};
+

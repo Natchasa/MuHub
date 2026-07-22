@@ -1,0 +1,13 @@
+{
+  "LINE_CHANNEL_ACCESS_TOKEN": "JizxVq097GEGXOe8M6uE3Ixu547xs/v4agkUx3ldk5ffEpsdiug58WmGjjMGestVC6aKOpkdN6pympn8AuOeypNHyVAZq2jjt //US9Vgmm9LwAq5q9kstNXDcAucfo4JZYUVYRnMYWXJ9Ys1VMBvjAdB04t89/1O/w1cDnyilFU=",
+  "LINE_CHANNEL_SECRET": "99cbd7a395c6158fddcd2b9857c8d373",
+  "LINE_ADMIN_USER_ID": "pla_y_girl",
+  "WEB_APP_URL": "http://localhost:3737/",
+  "EXCEL_PATH": "G:\\My Drive\\Customer\\MuHub_Customer_DB.xlsx",
+  "PORT": 5001,
+  "GOOGLE_CALENDAR_API_KEY": "AIzaSyBJDmuRqBOUAPnh8bwTL5EQFRj_28fF3K4",
+  "GOOGLE_SCRIPT_URL": "https://script.google.com/macros/s/AKfycbwUkfB7te_1-o_u_2ZroBzpuACWmFYd8XS5JN3iv9rItvql-887wQw95SIIQBXWUQumPA/exec",
+  "APP_API_TOKEN": "8X8BL4z7J8BMqi403bXNUkgrZgSNtu19WWPp1ltuyOY",
+  "SLIPOK_API_KEY": "",
+  "SLIPOK_BRANCH_ID": ""
+}

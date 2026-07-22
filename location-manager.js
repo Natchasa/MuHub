@@ -141,7 +141,19 @@ function populateCities(prefix, selectCityId = null) {
 function onCountryChange(prefix) {
   syncSearchInput(prefix, 'Country');
   populateCities(prefix);
-  syncSearchInput(prefix, 'City');
+  
+  // Auto-populate the city search input with the first city of the selected country immediately
+  const citySelect = document.getElementById(prefix + 'City');
+  const citySearch = document.getElementById(prefix + 'CitySearch');
+  if (citySelect && citySearch) {
+    if (citySelect.options.length > 0) {
+      citySelect.selectedIndex = 0;
+      citySearch.value = citySelect.options[0].text;
+      onCityChange(prefix);
+    } else {
+      citySearch.value = '';
+    }
+  }
 }
 
 function onCityChange(prefix) {

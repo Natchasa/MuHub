@@ -1313,13 +1313,12 @@ main {
 }
 
 .siimsi-lucky-num {
-  font-size: 0.82rem;
+  font-size: 0.86rem;
   font-weight: 700;
   color: var(--blue-d);
-  background: rgba(42, 107, 173, 0.08);
-  padding: 4px 10px;
-  border-radius: 6px;
-  border: 1px dashed var(--blue);
+  background: transparent;
+  padding: 0;
+  border: none;
 }
 
 /* ── IMMERSIVE DEITY-SPECIFIC E-SIIMSI THEMES ────────────────── */
@@ -1455,9 +1454,17 @@ main {
   }
 
   /* 3. Thaksa Table/Grid */
+  #thaksa-container {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+  }
   #thaksa-container > div {
     grid-template-columns: repeat(3, 80px) !important;
     grid-template-rows: repeat(3, 80px) !important;
+    margin: 0 auto !important;
   }
   #thaksa-container div[style*="height: 92px"] {
     height: 80px !important;
@@ -1745,56 +1752,83 @@ main {
 }
 
 /* ── Auspicious Calendar Card Styles ─────────────────────────────────────── */
-#auspiciousCalendarCard .calendar-day-cell {
+#auspiciousCalendarCard .calendar-day-cell,
+#auspiciousCalendarCard .cal-day {
   background: #ffffff;
-  min-height: 52px;
+  min-height: 32px;
+  max-height: 42px;
+  padding: 2px 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
   cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 0.88rem;
-  font-weight: 500;
+  transition: all 0.15s ease;
+  font-size: 0.76rem;
+  font-weight: 600;
   color: var(--text);
   box-sizing: border-box;
-  border: 1.5px solid transparent;
+  width: 100%;
+  border: 1px solid transparent;
+  border-radius: 4px;
 }
-#auspiciousCalendarCard .calendar-day-cell:hover {
-  background: var(--cream);
+#auspiciousCalendarCard .calendar-day-cell:hover,
+#auspiciousCalendarCard .cal-day:hover {
+  filter: brightness(0.96);
 }
-#auspiciousCalendarCard .calendar-day-cell.empty {
-  background: #fcfcfc;
+#auspiciousCalendarCard .calendar-day-cell.empty,
+#auspiciousCalendarCard .cal-day.empty {
+  background: #fcfcfc !important;
   cursor: default;
+  border: none !important;
 }
-#auspiciousCalendarCard .calendar-day-cell.empty:hover {
-  background: #fcfcfc;
-}
-#auspiciousCalendarCard .calendar-day-cell.active {
-  background: rgba(226, 184, 66, 0.08) !important;
+#auspiciousCalendarCard .calendar-day-cell.active,
+#auspiciousCalendarCard .calendar-day-cell.selected,
+#auspiciousCalendarCard .cal-day.active,
+#auspiciousCalendarCard .cal-day.selected {
+  background: rgba(226, 184, 66, 0.2) !important;
   border-color: #D4AF37 !important;
-  font-weight: 700;
+  font-weight: 800 !important;
+  box-shadow: 0 0 5px rgba(212, 175, 55, 0.4);
 }
-#auspiciousCalendarCard .day-number {
-  margin-bottom: 2px;
+#auspiciousCalendarCard .cal-type-auspicious {
+  background: #E8F5E9 !important;
+  color: #1B5E20 !important;
 }
-#auspiciousCalendarCard .day-indicator {
-  width: 6px;
-  height: 6px;
+#auspiciousCalendarCard .cal-type-caution {
+  background: #FFEBEE !important;
+  color: #C62828 !important;
+}
+#auspiciousCalendarCard .cal-type-neutral {
+  background: #ffffff !important;
+}
+#auspiciousCalendarCard .day-number,
+#auspiciousCalendarCard .cal-day-num {
+  margin-bottom: 1px;
+  font-size: 0.78rem;
+  line-height: 1;
+}
+#auspiciousCalendarCard .day-indicator,
+#auspiciousCalendarCard .cal-day-dot {
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
   display: inline-block;
 }
-#auspiciousCalendarCard .day-indicator.auspicious {
+#auspiciousCalendarCard .day-indicator.auspicious,
+#auspiciousCalendarCard .cal-type-auspicious .cal-day-dot {
   background: #2E7D32;
-  box-shadow: 0 0 4px rgba(46, 125, 50, 0.4);
+  box-shadow: 0 0 3px rgba(46, 125, 50, 0.4);
 }
-#auspiciousCalendarCard .day-indicator.caution {
+#auspiciousCalendarCard .day-indicator.caution,
+#auspiciousCalendarCard .cal-type-caution .cal-day-dot {
   background: #C62828;
-  box-shadow: 0 0 4px rgba(198, 40, 40, 0.4);
+  box-shadow: 0 0 3px rgba(198, 40, 40, 0.4);
 }
-#auspiciousCalendarCard .day-indicator.neutral {
-  background: transparent;
+#auspiciousCalendarCard .day-indicator.neutral,
+#auspiciousCalendarCard .cal-type-neutral .cal-day-dot {
+  background: #bdbdbd;
 }
 
 /* ── COMMUNITY & SEO ARTICLES ────────────────────────── */
@@ -2178,4 +2212,118 @@ main {
 @keyframes slideUp {
   from { transform: translateY(30px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
-}
+}
+
+
+/* ── UTILITY & HELPER CLASSES (ADDED FOR CLEANUP) ── */
+.blog-img-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.blog-img-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(0,0,0,0) 50%, rgba(0,0,0,0.6) 100%);
+  z-index: 1;
+}
+
+.blog-tag-overlay {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+}
+
+.text-dim-bold {
+  color: var(--dim);
+  font-weight: 600;
+}
+
+.text-read-more {
+  color: var(--gold-d);
+  font-weight: 700;
+  font-size: 0.72rem;
+}
+
+.pill-btn {
+  height: 1.8rem;
+  font-size: 0.76rem;
+  padding: 0 0.8rem;
+  border-radius: 20px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.w-100 {
+  width: 100% !important;
+}
+
+.w-55 {
+  width: 55px !important;
+}
+
+.w-60 {
+  width: 60px !important;
+}
+
+.w-80 {
+  width: 80px !important;
+}
+
+.w-90 {
+  width: 90px !important;
+}
+
+.w-115 {
+  width: 115px !important;
+}
+
+
+/* ── ADDITIONAL HELPER CLASSES ── */
+.deity-tab-btn {
+  flex: 1;
+  height: 1.85rem;
+  padding: 0 0.4rem;
+  font-size: 0.76rem;
+  border-radius: 16px;
+  border: none !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+  color: inherit;
+}
+
+.max-800 {
+  max-width: 800px;
+  margin: 0 auto 1.5rem auto;
+}
+
+/* Location row for keeping inputs side-by-side on mobile */
+.location-row {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 8px;
+  align-items: flex-end;
+}
+.location-row .field-country,
+.location-row .field-city {
+  width: 220px !important;
+  flex: 0 0 220px !important;
+}
+
+@media (max-width: 768px) {
+  .location-row {
+    width: 100% !important;
+    flex: 1 1 100% !important;
+  }
+  .location-row .field-country,
+  .location-row .field-city {
+    width: auto !important;
+    flex: 1 1 0% !important;
+    min-width: 0 !important;
+  }
+}

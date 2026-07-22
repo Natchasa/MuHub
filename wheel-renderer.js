@@ -34,6 +34,54 @@ function toXY(r, lon) {
   return [CX + r * Math.cos(a), CY - r * Math.sin(a)];
 }
 
+function getNatalSlot(k, N, theta_c) {
+  // 1 planet -> placed at center
+  if (N === 1) {
+    return { r: 130, theta: theta_c };
+  }
+  // 2 planets -> 1 inside, 1 outside along center line
+  if (N === 2) {
+    if (k === 0) return { r: 105, theta: theta_c };
+    return { r: 155, theta: theta_c };
+  }
+  // 3 planets -> 1 inside, 2 outside (left and right)
+  if (N === 3) {
+    if (k === 0) return { r: 105, theta: theta_c };
+    if (k === 1) return { r: 155, theta: theta_c - 5.5 };
+    return { r: 155, theta: theta_c + 5.5 };
+  }
+  // 4 planets -> 1 inside, 2 middle (left/right), 1 outside
+  if (N === 4) {
+    if (k === 0) return { r: 96, theta: theta_c };
+    if (k === 1) return { r: 132, theta: theta_c - 5.5 };
+    if (k === 2) return { r: 132, theta: theta_c + 5.5 };
+    return { r: 168, theta: theta_c };
+  }
+  // 5 planets -> 1 inside, 2 middle (left/right), 2 outside (left/right)
+  if (N === 5) {
+    if (k === 0) return { r: 96, theta: theta_c };
+    if (k === 1) return { r: 132, theta: theta_c - 5.5 };
+    if (k === 2) return { r: 132, theta: theta_c + 5.5 };
+    if (k === 3) return { r: 168, theta: theta_c - 7.5 };
+    return { r: 168, theta: theta_c + 7.5 };
+  }
+  // 6 planets -> 1 inside, 2 middle (left/right), 3 outside (left/center/right)
+  if (N === 6) {
+    if (k === 0) return { r: 96, theta: theta_c };
+    if (k === 1) return { r: 132, theta: theta_c - 5.5 };
+    if (k === 2) return { r: 132, theta: theta_c + 5.5 };
+    if (k === 3) return { r: 168, theta: theta_c - 7.5 };
+    if (k === 4) return { r: 168, theta: theta_c };
+    return { r: 168, theta: theta_c + 7.5 };
+  }
+  // Fallback for N > 6
+  const row = Math.floor(k / 3);
+  const col = k % 3;
+  const r = 90 + row * 28;
+  const theta = theta_c + (col - 1) * 7;
+  return { r, theta };
+}
+
 function drawWheel() {
   let s = '';
 
@@ -87,14 +135,13 @@ function drawWheel() {
     const N = grp.length;
     if (N === 0) continue;
 
-    const a = toRad(90 + i * 30);
-    const rCenter = (i % 3 === 0) ? 130 : 135;
-    const spacing = 28;
+    const theta_c = 90 + i * 30;
 
     grp.forEach((p, k) => {
-      const r = rCenter + (k - (N - 1) / 2) * spacing;
-      const px = CX + r * Math.cos(a);
-      const py = CY - r * Math.sin(a);
+      const slot = getNatalSlot(k, N, theta_c);
+      const slotRad = toRad(slot.theta);
+      const px = CX + slot.r * Math.cos(slotRad);
+      const py = CY - slot.r * Math.sin(slotRad);
 
       if (p.id === 'lagna') {
         s += `<circle cx="${f(px)}" cy="${f(py)}" r="14" fill="#FFE070" stroke="#7A5510" stroke-width="1.5" />`;
@@ -154,8 +201,8 @@ function drawWheel() {
                                       endA += 360;
                                     }
                                     const rawAngle = getGridAngle(originalLon);
-                                    const minA = startA + 1.8;
-                                    const maxA = endA - 1.8;
+                                    const minA = startA + 3.8;
+                                    const maxA = endA - 3.8;
                                     
                                     return {
                                       ...p,
@@ -185,8 +232,8 @@ function drawWheel() {
         endA += 360;
       }
       const rawAngle = getGridAngle(originalLon);
-      const minA = startA + 1.8;
-      const maxA = endA - 1.8;
+      const minA = startA + 3.8;
+      const maxA = endA - 3.8;
 
       transitPlanets.push({
         id: 'age_lagna',

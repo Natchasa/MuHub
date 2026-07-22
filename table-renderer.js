@@ -53,19 +53,17 @@ function getDignityHTML(planetId, signIdx) {
 }
 
 function renderTable() {
-  const tbody = document.getElementById('tableTbody');
-  let h = '';
-
-  function rows(data, cls, label, useThaiNum) {
+  const natalTbody = document.getElementById('natalTableTbody');
+  const transitTbody = document.getElementById('transitTableTbody');
+  
+  function getRowsHTML(data, cls, useThaiNum) {
     const isNatal = (cls === 'col-n');
     const rowBg = isNatal ? '#ffffff' : '#FFF9E6';
     const rowTextColor = '#000000';
     const nameColor = '#000000';
     const symbolColor = isNatal ? '#2B1505' : '#B03828';
-    const headerBg = isNatal ? '#fff0dc' : '#FFEAB0';
-    const headerTextColor = '#000000';
-
-    h += `<tr class="group-head"><td colspan="5" style="background: ${headerBg}; color: ${headerTextColor}; padding: .4rem .8rem; font-size: .78rem; font-weight: 700; border-bottom: 1.5px solid #E8D0A0; text-align: left;">${label} — ${data.dateStr} ${data.timeStr}</td></tr>`;
+    
+    let html = '';
     for (const p of PLANETS) {
       if (data.pos[p.id] === undefined) continue;
       const sp = signPos(data.pos[p.id]);
@@ -81,7 +79,7 @@ function renderTable() {
       const lbl = useThaiNum ? p.numTH : p.numAR;
       const thName = (p.id === 'lagna' && isNatal && isUnknownTime) ? 'ลัคนา (อ.)' : p.th;
       const dignityHTML = getDignityHTML(p.id, sp.si);
-      h += `<tr style="background: ${rowBg}; color: ${rowTextColor};">
+      html += `<tr style="background: ${rowBg}; color: ${rowTextColor};">
           <td style="text-align:center; font-weight:700; font-size:1.05rem; color: ${symbolColor}; border-bottom: 1px solid #E8D0A044; border-right: 1px solid #E8D0A044;">${lbl}</td>
           <td style="border-bottom: 1px solid #E8D0A044; border-right: 1px solid #E8D0A044;"><span class="pname" style="font-weight:700; color: ${nameColor};">${thName}</span>${retTag}</td>
           <td style="border-bottom: 1px solid #E8D0A044; border-right: 1px solid #E8D0A044; font-weight:500; color: ${rowTextColor};">${SIGNS_TH[sp.si]}</td>
@@ -89,9 +87,48 @@ function renderTable() {
           <td style="border-bottom: 1px solid #E8D0A044; color: ${rowTextColor};">${dignityHTML}</td>
           </tr>`;
     }
+    return html;
   }
 
-  if (showN && nData) rows(nData, 'col-n', 'ดวงกำเนิด', true);
-  if (showT && tData) rows(tData, 'col-t', 'ดวงจร', false);
-  tbody.innerHTML = h || '<tr><td colspan="5" style="padding:.6rem;color:var(--dim);text-align:center">กดผูกดวงเพื่อดูผล</td></tr>';
+  const natalDateEl = document.getElementById('table-natal-date');
+  const transitDateEl = document.getElementById('table-transit-date');
+
+  if (natalTbody) {
+    if (showN && nData) {
+      natalTbody.innerHTML = getRowsHTML(nData, 'col-n', true);
+      if (natalDateEl) {
+        natalDateEl.textContent = `${nData.dateStr} เวลา ${nData.timeStr} น.`;
+        natalDateEl.style.display = 'block';
+      }
+    } else {
+      natalTbody.innerHTML = '<tr><td colspan="5" style="padding:.6rem;color:var(--dim);text-align:center">ไม่มีข้อมูลดวงกำเนิด</td></tr>';
+      if (natalDateEl) {
+        natalDateEl.style.display = 'none';
+      }
+    }
+  }
+
+  if (transitTbody) {
+    if (showT && tData) {
+      transitTbody.innerHTML = getRowsHTML(tData, 'col-t', false);
+      if (transitDateEl) {
+        transitDateEl.textContent = `${tData.dateStr} เวลา ${tData.timeStr} น.`;
+        transitDateEl.style.display = 'block';
+      }
+    } else {
+      transitTbody.innerHTML = '<tr><td colspan="5" style="padding:.6rem;color:var(--dim);text-align:center">ไม่มีข้อมูลดวงจร</td></tr>';
+      if (transitDateEl) {
+        transitDateEl.style.display = 'none';
+      }
+    }
+  }
 }
+
+window.toggleTable = function(type) {
+  const id = `table-${type}-wrapper`;
+  const wrapper = document.getElementById(id);
+  if (wrapper) {
+    const isShowing = (wrapper.style.display !== 'none');
+    wrapper.style.display = isShowing ? 'none' : 'block';
+  }
+};

@@ -127,21 +127,21 @@ LOCATION_DATABASE = {
     "cities": [
       {
         "id": "abu_dhabi",
-        "name": "อาบูดาบี (Abu Dhabi)",
+        "name": "Abu Dhabi",
         "lat": 24.4539,
         "lon": 54.3773,
         "tz": 4.0
       },
       {
         "id": "dubai",
-        "name": "ดูไบ (Dubai)",
+        "name": "Dubai",
         "lat": 25.2048,
         "lon": 55.2708,
         "tz": 4.0
       },
       {
         "id": "sharjah",
-        "name": "ชาร์จาห์ (Sharjah)",
+        "name": "Sharjah",
         "lat": 25.3463,
         "lon": 55.4208,
         "tz": 4.0
@@ -252,63 +252,63 @@ LOCATION_DATABASE = {
     "cities": [
       {
         "id": "canberra",
-        "name": "แคนเบอร์รา (Canberra)",
+        "name": "Canberra",
         "lat": -35.2809,
         "lon": 149.13,
         "tz": 10.0
       },
       {
         "id": "sydney",
-        "name": "ซิดนีย์ (Sydney)",
+        "name": "Sydney",
         "lat": -33.8688,
         "lon": 151.2093,
         "tz": 10.0
       },
       {
         "id": "melbourne",
-        "name": "เมลเบิร์น (Melbourne)",
+        "name": "Melbourne",
         "lat": -37.8136,
         "lon": 144.9631,
         "tz": 10.0
       },
       {
         "id": "brisbane",
-        "name": "บริสเบน (Brisbane)",
+        "name": "Brisbane",
         "lat": -27.4705,
         "lon": 153.026,
         "tz": 10.0
       },
       {
         "id": "perth",
-        "name": "เพิร์ท (Perth)",
+        "name": "Perth",
         "lat": -31.9505,
         "lon": 115.8605,
         "tz": 8.0
       },
       {
         "id": "adelaide",
-        "name": "แอดิเลด (Adelaide)",
+        "name": "Adelaide",
         "lat": -34.9285,
         "lon": 138.6007,
         "tz": 9.5
       },
       {
         "id": "darwin",
-        "name": "ดาร์วิน (Darwin)",
+        "name": "Darwin",
         "lat": -12.4634,
         "lon": 130.8456,
         "tz": 9.5
       },
       {
         "id": "hobart",
-        "name": "โฮบาร์ต (Hobart)",
+        "name": "Hobart",
         "lat": -42.8821,
         "lon": 147.3272,
         "tz": 10.0
       },
       {
         "id": "gold_coast",
-        "name": "โกลด์โคสต์ (Gold Coast)",
+        "name": "Gold Coast",
         "lat": -28.0167,
         "lon": 153.4,
         "tz": 10.0
@@ -742,49 +742,49 @@ LOCATION_DATABASE = {
     "cities": [
       {
         "id": "ottawa",
-        "name": "ออตตาวา (Ottawa)",
+        "name": "Ottawa",
         "lat": 45.4215,
         "lon": -75.6972,
         "tz": -5.0
       },
       {
         "id": "toronto",
-        "name": "โทรอนโต (Toronto)",
+        "name": "Toronto",
         "lat": 43.6532,
         "lon": -79.3832,
         "tz": -5.0
       },
       {
         "id": "montreal",
-        "name": "มอนทรีออล (Montreal)",
+        "name": "Montreal",
         "lat": 45.5017,
         "lon": -73.5673,
         "tz": -5.0
       },
       {
         "id": "vancouver",
-        "name": "แวนคูเวอร์ (Vancouver)",
+        "name": "Vancouver",
         "lat": 49.2827,
         "lon": -123.1207,
         "tz": -8.0
       },
       {
         "id": "calgary",
-        "name": "คาลการี (Calgary)",
+        "name": "Calgary",
         "lat": 51.0447,
         "lon": -114.0719,
         "tz": -7.0
       },
       {
         "id": "edmonton",
-        "name": "เอดมันตัน (Edmonton)",
+        "name": "Edmonton",
         "lat": 53.5461,
         "lon": -113.4938,
         "tz": -7.0
       },
       {
         "id": "quebec_city",
-        "name": "ควิเบกซิตี (Quebec City)",
+        "name": "Quebec City",
         "lat": 46.8139,
         "lon": -71.2082,
         "tz": -5.0
@@ -818,42 +818,42 @@ LOCATION_DATABASE = {
     "cities": [
       {
         "id": "bern",
-        "name": "เบิร์น (Bern)",
+        "name": "Bern",
         "lat": 46.948,
         "lon": 7.4474,
         "tz": 1.0
       },
       {
         "id": "zurich",
-        "name": "ซูริก (Zurich)",
+        "name": "Zurich",
         "lat": 47.3769,
         "lon": 8.5417,
         "tz": 1.0
       },
       {
         "id": "geneva",
-        "name": "เจนีวา (Geneva)",
+        "name": "Geneva",
         "lat": 46.2044,
         "lon": 6.1432,
         "tz": 1.0
       },
       {
         "id": "basel",
-        "name": "บาเซิล (Basel)",
+        "name": "Basel",
         "lat": 47.5596,
         "lon": 7.5886,
         "tz": 1.0
       },
       {
         "id": "lausanne",
-        "name": "โลซาน (Lausanne)",
+        "name": "Lausanne",
         "lat": 46.5197,
         "lon": 6.6323,
         "tz": 1.0
       },
       {
         "id": "lucerne",
-        "name": "ลูเซิร์น (Lucerne)",
+        "name": "Lucerne",
         "lat": 47.0502,
         "lon": 8.3093,
         "tz": 1.0
@@ -887,231 +887,231 @@ LOCATION_DATABASE = {
     "cities": [
       {
         "id": "anhui",
-        "name": "อานฮุย (Anhui)",
+        "name": "Anhui",
         "lat": 31.8206,
         "lon": 117.2272,
         "tz": 8.0
       },
       {
         "id": "beijing",
-        "name": "ปักกิ่ง (Beijing)",
+        "name": "Beijing",
         "lat": 39.9042,
         "lon": 116.4074,
         "tz": 8.0
       },
       {
         "id": "chongqing",
-        "name": "ฉงชิ่ง (Chongqing)",
+        "name": "Chongqing",
         "lat": 29.5628,
         "lon": 106.5516,
         "tz": 8.0
       },
       {
         "id": "fujian",
-        "name": "ฝูเจี้ยน (Fujian)",
+        "name": "Fujian",
         "lat": 26.0745,
         "lon": 119.2965,
         "tz": 8.0
       },
       {
         "id": "gansu",
-        "name": "กานซู่ (Gansu)",
+        "name": "Gansu",
         "lat": 36.0611,
         "lon": 103.8343,
         "tz": 8.0
       },
       {
         "id": "guangdong",
-        "name": "กวางตุ้ง (Guangdong)",
+        "name": "Guangdong",
         "lat": 23.1291,
         "lon": 113.2644,
         "tz": 8.0
       },
       {
         "id": "guangxi",
-        "name": "กว่างซี (Guangxi)",
+        "name": "Guangxi",
         "lat": 22.817,
         "lon": 108.3665,
         "tz": 8.0
       },
       {
         "id": "guizhou",
-        "name": "กุ้ยโจว (Guizhou)",
+        "name": "Guizhou",
         "lat": 26.6477,
         "lon": 106.6302,
         "tz": 8.0
       },
       {
         "id": "hainan",
-        "name": "ไห่หนาน (Hainan)",
+        "name": "Hainan",
         "lat": 20.0174,
         "lon": 110.3492,
         "tz": 8.0
       },
       {
         "id": "hebei",
-        "name": "เหอเป่ย์ (Hebei)",
+        "name": "Hebei",
         "lat": 38.0428,
         "lon": 114.5149,
         "tz": 8.0
       },
       {
         "id": "heilongjiang",
-        "name": "เฮยหลงเจียง (Heilongjiang)",
+        "name": "Heilongjiang",
         "lat": 45.8038,
         "lon": 126.535,
         "tz": 8.0
       },
       {
         "id": "henan",
-        "name": "เหอหนาน (Henan)",
+        "name": "Henan",
         "lat": 34.7578,
         "lon": 113.6654,
         "tz": 8.0
       },
       {
         "id": "hong_kong",
-        "name": "ฮ่องกง (Hong Kong)",
+        "name": "Hong Kong",
         "lat": 22.3193,
         "lon": 114.1694,
         "tz": 8.0
       },
       {
         "id": "hubei",
-        "name": "หูเป่ย์ (Hubei)",
+        "name": "Hubei",
         "lat": 30.5928,
         "lon": 114.3055,
         "tz": 8.0
       },
       {
         "id": "hunan",
-        "name": "หูหนาน (Hunan)",
+        "name": "Hunan",
         "lat": 28.2282,
         "lon": 112.9388,
         "tz": 8.0
       },
       {
         "id": "inner_mongolia",
-        "name": "มองโกเลียใน (Inner Mongolia)",
+        "name": "Inner Mongolia",
         "lat": 40.8174,
         "lon": 111.7664,
         "tz": 8.0
       },
       {
         "id": "jiangsu",
-        "name": "เจียงซู (Jiangsu)",
+        "name": "Jiangsu",
         "lat": 32.0603,
         "lon": 118.7969,
         "tz": 8.0
       },
       {
         "id": "jiangxi",
-        "name": "เจียงซี (Jiangxi)",
+        "name": "Jiangxi",
         "lat": 28.682,
         "lon": 115.8579,
         "tz": 8.0
       },
       {
         "id": "jilin",
-        "name": "จี๋หลิน (Jilin)",
+        "name": "Jilin",
         "lat": 43.8171,
         "lon": 125.3235,
         "tz": 8.0
       },
       {
         "id": "liaoning",
-        "name": "เหลียวหนิง (Liaoning)",
+        "name": "Liaoning",
         "lat": 41.8057,
         "lon": 123.4315,
         "tz": 8.0
       },
       {
         "id": "macao",
-        "name": "มาเก๊า (Macao)",
+        "name": "Macao",
         "lat": 22.1987,
         "lon": 113.5439,
         "tz": 8.0
       },
       {
         "id": "ningxia",
-        "name": "หนิงเซี่ย (Ningxia)",
+        "name": "Ningxia",
         "lat": 38.4872,
         "lon": 106.2309,
         "tz": 8.0
       },
       {
         "id": "qinghai",
-        "name": "ชิงไห่ (Qinghai)",
+        "name": "Qinghai",
         "lat": 36.6171,
         "lon": 101.7785,
         "tz": 8.0
       },
       {
         "id": "shaanxi",
-        "name": "ส่านซี (Shaanxi)",
+        "name": "Shaanxi",
         "lat": 34.3416,
         "lon": 108.9398,
         "tz": 8.0
       },
       {
         "id": "shandong",
-        "name": "ซานตง (Shandong)",
+        "name": "Shandong",
         "lat": 36.6509,
         "lon": 116.9797,
         "tz": 8.0
       },
       {
         "id": "shanghai",
-        "name": "เซี่ยงไฮ้ (Shanghai)",
+        "name": "Shanghai",
         "lat": 31.2304,
         "lon": 121.4737,
         "tz": 8.0
       },
       {
         "id": "shanxi",
-        "name": "ซานซี (Shanxi)",
+        "name": "Shanxi",
         "lat": 37.8706,
         "lon": 112.5488,
         "tz": 8.0
       },
       {
         "id": "sichuan",
-        "name": "เสฉวน (Sichuan)",
+        "name": "Sichuan",
         "lat": 30.5728,
         "lon": 104.0668,
         "tz": 8.0
       },
       {
         "id": "tibet",
-        "name": "ทิเบต (Tibet)",
+        "name": "Tibet",
         "lat": 29.6524,
         "lon": 91.1172,
         "tz": 8.0
       },
       {
         "id": "tianjin",
-        "name": "เทียนจิน (Tianjin)",
+        "name": "Tianjin",
         "lat": 39.0841,
         "lon": 117.2009,
         "tz": 8.0
       },
       {
         "id": "xinjiang",
-        "name": "ซินเจียง (Xinjiang)",
+        "name": "Xinjiang",
         "lat": 43.8256,
         "lon": 87.6168,
         "tz": 6.0
       },
       {
         "id": "yunnan",
-        "name": "ยูนนาน (Yunnan)",
+        "name": "Yunnan",
         "lat": 25.0422,
         "lon": 102.7122,
         "tz": 8.0
       },
       {
         "id": "zhejiang",
-        "name": "เจ้อเจียง (Zhejiang)",
+        "name": "Zhejiang",
         "lat": 30.2741,
         "lon": 120.1551,
         "tz": 8.0
@@ -1383,56 +1383,56 @@ LOCATION_DATABASE = {
     "cities": [
       {
         "id": "berlin",
-        "name": "เบอร์ลิน (Berlin)",
+        "name": "Berlin",
         "lat": 52.52,
         "lon": 13.405,
         "tz": 1.0
       },
       {
         "id": "munich",
-        "name": "มิวนิก (Munich)",
+        "name": "Munich",
         "lat": 48.1351,
         "lon": 11.582,
         "tz": 1.0
       },
       {
         "id": "frankfurt",
-        "name": "แฟรงก์เฟิร์ต (Frankfurt)",
+        "name": "Frankfurt",
         "lat": 50.1109,
         "lon": 8.6821,
         "tz": 1.0
       },
       {
         "id": "hamburg",
-        "name": "ฮัมบูร์ก (Hamburg)",
+        "name": "Hamburg",
         "lat": 53.5511,
         "lon": 9.9937,
         "tz": 1.0
       },
       {
         "id": "cologne",
-        "name": "โคโลญ (Cologne)",
+        "name": "Cologne",
         "lat": 50.9375,
         "lon": 6.9603,
         "tz": 1.0
       },
       {
         "id": "stuttgart",
-        "name": "สตุตการ์ต (Stuttgart)",
+        "name": "Stuttgart",
         "lat": 48.7758,
         "lon": 9.1829,
         "tz": 1.0
       },
       {
         "id": "dusseldorf",
-        "name": "ดุสเซลดอร์ฟ (Dusseldorf)",
+        "name": "Dusseldorf",
         "lat": 51.2271,
         "lon": 6.7735,
         "tz": 1.0
       },
       {
         "id": "leipzig",
-        "name": "ไลป์ซิก (Leipzig)",
+        "name": "Leipzig",
         "lat": 51.3397,
         "lon": 12.3731,
         "tz": 1.0
@@ -1602,42 +1602,42 @@ LOCATION_DATABASE = {
     "cities": [
       {
         "id": "madrid",
-        "name": "มาดริด (Madrid)",
+        "name": "Madrid",
         "lat": 40.4168,
         "lon": -3.7038,
         "tz": 1.0
       },
       {
         "id": "barcelona",
-        "name": "บาร์เซโลนา (Barcelona)",
+        "name": "Barcelona",
         "lat": 41.3851,
         "lon": 2.1734,
         "tz": 1.0
       },
       {
         "id": "valencia",
-        "name": "บาเลนเซีย (Valencia)",
+        "name": "Valencia",
         "lat": 39.4699,
         "lon": -0.3763,
         "tz": 1.0
       },
       {
         "id": "seville",
-        "name": "เซบียา (Seville)",
+        "name": "Seville",
         "lat": 37.3891,
         "lon": -5.9845,
         "tz": 1.0
       },
       {
         "id": "zaragoza",
-        "name": "ซารโกซา (Zaragoza)",
+        "name": "Zaragoza",
         "lat": 41.6488,
         "lon": -0.8891,
         "tz": 1.0
       },
       {
         "id": "malaga",
-        "name": "มาลากา (Malaga)",
+        "name": "Malaga",
         "lat": 36.7213,
         "lon": -4.4214,
         "tz": 1.0
@@ -1739,49 +1739,49 @@ LOCATION_DATABASE = {
     "cities": [
       {
         "id": "paris",
-        "name": "ปารีส (Paris)",
+        "name": "Paris",
         "lat": 48.8566,
         "lon": 2.3522,
         "tz": 1.0
       },
       {
         "id": "marseille",
-        "name": "มาร์เซย (Marseille)",
+        "name": "Marseille",
         "lat": 43.2965,
         "lon": 5.3698,
         "tz": 1.0
       },
       {
         "id": "lyon",
-        "name": "ลียง (Lyon)",
+        "name": "Lyon",
         "lat": 45.764,
         "lon": 4.8357,
         "tz": 1.0
       },
       {
         "id": "toulouse",
-        "name": "ตูลูส (Toulouse)",
+        "name": "Toulouse",
         "lat": 43.6047,
         "lon": 1.4442,
         "tz": 1.0
       },
       {
         "id": "nice",
-        "name": "นีซ (Nice)",
+        "name": "Nice",
         "lat": 43.7102,
         "lon": 7.262,
         "tz": 1.0
       },
       {
         "id": "nantes",
-        "name": "น็องต์ (Nantes)",
+        "name": "Nantes",
         "lat": 47.2184,
         "lon": -1.5536,
         "tz": 1.0
       },
       {
         "id": "strasbourg",
-        "name": "สทราซบูร์ (Strasbourg)",
+        "name": "Strasbourg",
         "lat": 48.5734,
         "lon": 7.7521,
         "tz": 1.0
@@ -1849,70 +1849,70 @@ LOCATION_DATABASE = {
     "cities": [
       {
         "id": "london",
-        "name": "ลอนดอน (London)",
+        "name": "London",
         "lat": 51.5074,
         "lon": -0.1278,
         "tz": 0.0
       },
       {
         "id": "birmingham",
-        "name": "เบอร์มิงแฮม (Birmingham)",
+        "name": "Birmingham",
         "lat": 52.4862,
         "lon": -1.8904,
         "tz": 0.0
       },
       {
         "id": "manchester",
-        "name": "แมนเชสเตอร์ (Manchester)",
+        "name": "Manchester",
         "lat": 53.4808,
         "lon": -2.2426,
         "tz": 0.0
       },
       {
         "id": "glasgow",
-        "name": "กลาสโกว์ (Glasgow)",
+        "name": "Glasgow",
         "lat": 55.8642,
         "lon": -4.2518,
         "tz": 0.0
       },
       {
         "id": "liverpool",
-        "name": "ลิเวอร์พูล (Liverpool)",
+        "name": "Liverpool",
         "lat": 53.4084,
         "lon": -2.9916,
         "tz": 0.0
       },
       {
         "id": "leeds",
-        "name": "ลีดส์ (Leeds)",
+        "name": "Leeds",
         "lat": 53.8008,
         "lon": -1.5491,
         "tz": 0.0
       },
       {
         "id": "edinburgh",
-        "name": "เอดินบะระ (Edinburgh)",
+        "name": "Edinburgh",
         "lat": 55.9533,
         "lon": -3.1883,
         "tz": 0.0
       },
       {
         "id": "bristol",
-        "name": "บริสตอล (Bristol)",
+        "name": "Bristol",
         "lat": 51.4545,
         "lon": -2.5879,
         "tz": 0.0
       },
       {
         "id": "cardiff",
-        "name": "คาร์ดิฟฟ์ (Cardiff)",
+        "name": "Cardiff",
         "lat": 51.4816,
         "lon": -3.1791,
         "tz": 0.0
       },
       {
         "id": "belfast",
-        "name": "เบลฟาสต์ (Belfast)",
+        "name": "Belfast",
         "lat": 54.5973,
         "lon": -5.9301,
         "tz": 0.0
@@ -2201,21 +2201,21 @@ LOCATION_DATABASE = {
     "cities": [
       {
         "id": "hong_kong",
-        "name": "ฮ่องกง (Hong Kong)",
+        "name": "Hong Kong",
         "lat": 22.3193,
         "lon": 114.1694,
         "tz": 8.0
       },
       {
         "id": "kowloon",
-        "name": "เกาลูน (Kowloon)",
+        "name": "Kowloon",
         "lat": 22.3193,
         "lon": 114.1694,
         "tz": 8.0
       },
       {
         "id": "new_territories",
-        "name": "นิวเทร์ริทอรีส์ (New Territories)",
+        "name": "New Territories",
         "lat": 22.4176,
         "lon": 114.1294,
         "tz": 8.0
@@ -2309,49 +2309,49 @@ LOCATION_DATABASE = {
     "cities": [
       {
         "id": "jakarta",
-        "name": "จาการ์ตา (Jakarta)",
+        "name": "Jakarta",
         "lat": -6.2088,
         "lon": 106.8456,
         "tz": 7.0
       },
       {
         "id": "surabaya",
-        "name": "สุราบายา (Surabaya)",
+        "name": "Surabaya",
         "lat": -7.2575,
         "lon": 112.7521,
         "tz": 7.0
       },
       {
         "id": "bandung",
-        "name": "บันดุง (Bandung)",
+        "name": "Bandung",
         "lat": -6.9175,
         "lon": 107.6191,
         "tz": 7.0
       },
       {
         "id": "medan",
-        "name": "เมดาน (Medan)",
+        "name": "Medan",
         "lat": 3.5952,
         "lon": 98.6722,
         "tz": 7.0
       },
       {
         "id": "denpasar",
-        "name": "เดนปาซาร์/บาหลี (Denpasar/Bali)",
+        "name": "Denpasar/Bali",
         "lat": -8.6705,
         "lon": 115.2126,
         "tz": 8.0
       },
       {
         "id": "yogyakarta",
-        "name": "ยอกยาการ์ตา (Yogyakarta)",
+        "name": "Yogyakarta",
         "lat": -7.7956,
         "lon": 110.3695,
         "tz": 7.0
       },
       {
         "id": "semarang",
-        "name": "เซมารัง (Semarang)",
+        "name": "Semarang",
         "lat": -6.9667,
         "lon": 110.4167,
         "tz": 7.0
@@ -2385,63 +2385,63 @@ LOCATION_DATABASE = {
     "cities": [
       {
         "id": "new_delhi",
-        "name": "นิวเดลี (New Delhi)",
+        "name": "New Delhi",
         "lat": 28.6139,
         "lon": 77.209,
         "tz": 5.5
       },
       {
         "id": "mumbai",
-        "name": "มุมไบ (Mumbai)",
+        "name": "Mumbai",
         "lat": 19.076,
         "lon": 72.8777,
         "tz": 5.5
       },
       {
         "id": "kolkata",
-        "name": "โกลกาตา (Kolkata)",
+        "name": "Kolkata",
         "lat": 22.5726,
         "lon": 88.3639,
         "tz": 5.5
       },
       {
         "id": "chennai",
-        "name": "เจนไน (Chennai)",
+        "name": "Chennai",
         "lat": 13.0827,
         "lon": 80.2707,
         "tz": 5.5
       },
       {
         "id": "bangalore",
-        "name": "เบงกาลูรู (Bangalore)",
+        "name": "Bangalore",
         "lat": 12.9716,
         "lon": 77.5946,
         "tz": 5.5
       },
       {
         "id": "hyderabad",
-        "name": "ไฮเดอราบัด (Hyderabad)",
+        "name": "Hyderabad",
         "lat": 17.385,
         "lon": 78.4867,
         "tz": 5.5
       },
       {
         "id": "ahmedabad",
-        "name": "อาห์เมดาบัด (Ahmedabad)",
+        "name": "Ahmedabad",
         "lat": 23.0225,
         "lon": 72.5714,
         "tz": 5.5
       },
       {
         "id": "pune",
-        "name": "ปูเน่ (Pune)",
+        "name": "Pune",
         "lat": 18.5204,
         "lon": 73.8567,
         "tz": 5.5
       },
       {
         "id": "jaipur",
-        "name": "ชัยปุระ (Jaipur)",
+        "name": "Jaipur",
         "lat": 26.9124,
         "lon": 75.7873,
         "tz": 5.5
@@ -2560,49 +2560,49 @@ LOCATION_DATABASE = {
     "cities": [
       {
         "id": "rome",
-        "name": "โรม (Rome)",
+        "name": "Rome",
         "lat": 41.9028,
         "lon": 12.4964,
         "tz": 1.0
       },
       {
         "id": "milan",
-        "name": "มิลาน (Milan)",
+        "name": "Milan",
         "lat": 45.4642,
         "lon": 9.19,
         "tz": 1.0
       },
       {
         "id": "naples",
-        "name": "เนเปิลส์ (Naples)",
+        "name": "Naples",
         "lat": 40.8518,
         "lon": 14.2681,
         "tz": 1.0
       },
       {
         "id": "turin",
-        "name": "ตูริน (Turin)",
+        "name": "Turin",
         "lat": 45.0703,
         "lon": 7.6869,
         "tz": 1.0
       },
       {
         "id": "florence",
-        "name": "ฟลอเรนซ์ (Florence)",
+        "name": "Florence",
         "lat": 43.7696,
         "lon": 11.2558,
         "tz": 1.0
       },
       {
         "id": "venice",
-        "name": "เวนิส (Venice)",
+        "name": "Venice",
         "lat": 45.4408,
         "lon": 12.3155,
         "tz": 1.0
       },
       {
         "id": "genoa",
-        "name": "เจนัว (Genoa)",
+        "name": "Genoa",
         "lat": 44.4056,
         "lon": 8.9463,
         "tz": 1.0
@@ -2670,84 +2670,84 @@ LOCATION_DATABASE = {
     "cities": [
       {
         "id": "tokyo",
-        "name": "โตเกียว (Tokyo)",
+        "name": "Tokyo",
         "lat": 35.6762,
         "lon": 139.6503,
         "tz": 9.0
       },
       {
         "id": "yokohama",
-        "name": "โยโกฮาม่า (Yokohama)",
+        "name": "Yokohama",
         "lat": 35.4437,
         "lon": 139.638,
         "tz": 9.0
       },
       {
         "id": "osaka",
-        "name": "โอซาก้า (Osaka)",
+        "name": "Osaka",
         "lat": 34.6937,
         "lon": 135.5023,
         "tz": 9.0
       },
       {
         "id": "nagoya",
-        "name": "นาโกย่า (Nagoya)",
+        "name": "Nagoya",
         "lat": 35.1814,
         "lon": 136.9064,
         "tz": 9.0
       },
       {
         "id": "sapporo",
-        "name": "ซัปโปโร (Sapporo)",
+        "name": "Sapporo",
         "lat": 43.0618,
         "lon": 141.3545,
         "tz": 9.0
       },
       {
         "id": "kobe",
-        "name": "โกเบ (Kobe)",
+        "name": "Kobe",
         "lat": 34.6901,
         "lon": 135.1955,
         "tz": 9.0
       },
       {
         "id": "fukuoka",
-        "name": "ฟุกุโอกะ (Fukuoka)",
+        "name": "Fukuoka",
         "lat": 33.5904,
         "lon": 130.4017,
         "tz": 9.0
       },
       {
         "id": "kyoto",
-        "name": "เกียวโต (Kyoto)",
+        "name": "Kyoto",
         "lat": 35.0116,
         "lon": 135.7681,
         "tz": 9.0
       },
       {
         "id": "kawasaki",
-        "name": "คาวาซากิ (Kawasaki)",
+        "name": "Kawasaki",
         "lat": 35.5308,
         "lon": 139.7029,
         "tz": 9.0
       },
       {
         "id": "saitama",
-        "name": "ไซตามะ (Saitama)",
+        "name": "Saitama",
         "lat": 35.8617,
         "lon": 139.6455,
         "tz": 9.0
       },
       {
         "id": "hiroshima",
-        "name": "ฮิโรชิม่า (Hiroshima)",
+        "name": "Hiroshima",
         "lat": 34.3853,
         "lon": 132.4553,
         "tz": 9.0
       },
       {
         "id": "sendai",
-        "name": "เซนได (Sendai)",
+        "name": "Sendai",
         "lat": 38.2682,
         "lon": 140.8694,
         "tz": 9.0
@@ -2815,42 +2815,42 @@ LOCATION_DATABASE = {
     "cities": [
       {
         "id": "phnom_penh",
-        "name": "พนมเปญ (Phnom Penh)",
+        "name": "Phnom Penh",
         "lat": 11.55,
         "lon": 104.9167,
         "tz": 7.0
       },
       {
         "id": "siem_reap",
-        "name": "เสียมราฐ (Siem Reap)",
+        "name": "Siem Reap",
         "lat": 13.3667,
         "lon": 103.85,
         "tz": 7.0
       },
       {
         "id": "battambang",
-        "name": "พระตะบอง (Battambang)",
+        "name": "Battambang",
         "lat": 13.1,
         "lon": 103.2,
         "tz": 7.0
       },
       {
         "id": "sihanoukville",
-        "name": "สีหนุวิลล์ (Sihanoukville)",
+        "name": "Sihanoukville",
         "lat": 10.64,
         "lon": 103.53,
         "tz": 7.0
       },
       {
         "id": "poipet",
-        "name": "ปอยเปต (Poipet)",
+        "name": "Poipet",
         "lat": 13.6556,
         "lon": 102.5625,
         "tz": 7.0
       },
       {
         "id": "kampot",
-        "name": "กัมปอต (Kampot)",
+        "name": "Kampot",
         "lat": 10.5929,
         "lon": 104.1814,
         "tz": 7.0
@@ -2901,49 +2901,49 @@ LOCATION_DATABASE = {
     "cities": [
       {
         "id": "seoul",
-        "name": "โซล (Seoul)",
+        "name": "Seoul",
         "lat": 37.5665,
         "lon": 126.978,
         "tz": 9.0
       },
       {
         "id": "busan",
-        "name": "ปูซาน (Busan)",
+        "name": "Busan",
         "lat": 35.1796,
         "lon": 129.0756,
         "tz": 9.0
       },
       {
         "id": "incheon",
-        "name": "อินชอน (Incheon)",
+        "name": "Incheon",
         "lat": 37.4563,
         "lon": 126.7052,
         "tz": 9.0
       },
       {
         "id": "daegu",
-        "name": "แดกู (Daegu)",
+        "name": "Daegu",
         "lat": 35.8714,
         "lon": 128.6014,
         "tz": 9.0
       },
       {
         "id": "daejeon",
-        "name": "แทจ็อน (Daejeon)",
+        "name": "Daejeon",
         "lat": 36.3504,
         "lon": 127.3845,
         "tz": 9.0
       },
       {
         "id": "gwangju",
-        "name": "กวางจู (Gwangju)",
+        "name": "Gwangju",
         "lat": 35.1595,
         "lon": 126.8526,
         "tz": 9.0
       },
       {
         "id": "jeju",
-        "name": "เชจู (Jeju)",
+        "name": "Jeju",
         "lat": 33.4996,
         "lon": 126.5312,
         "tz": 9.0
@@ -2994,49 +2994,49 @@ LOCATION_DATABASE = {
     "cities": [
       {
         "id": "vientiane",
-        "name": "เวียงจันทน์ (Vientiane)",
+        "name": "Vientiane",
         "lat": 17.9667,
         "lon": 102.6,
         "tz": 7.0
       },
       {
         "id": "luang_prabang",
-        "name": "หลวงพระบาง (Luang Prabang)",
+        "name": "Luang Prabang",
         "lat": 19.8833,
         "lon": 102.1333,
         "tz": 7.0
       },
       {
         "id": "pakse",
-        "name": "ปากเซ (Pakse)",
+        "name": "Pakse",
         "lat": 15.1167,
         "lon": 105.7833,
         "tz": 7.0
       },
       {
         "id": "savannakhet",
-        "name": "สะหวันนะเขต (Savannakhet)",
+        "name": "Savannakhet",
         "lat": 16.5667,
         "lon": 104.75,
         "tz": 7.0
       },
       {
         "id": "vang_vieng",
-        "name": "วังเวียง (Vang Vieng)",
+        "name": "Vang Vieng",
         "lat": 18.9333,
         "lon": 102.45,
         "tz": 7.0
       },
       {
         "id": "thakhek",
-        "name": "ท่าแขก (Thakhek)",
+        "name": "Thakhek",
         "lat": 17.4103,
         "lon": 104.8056,
         "tz": 7.0
       },
       {
         "id": "champasak",
-        "name": "จำปาสัก (Champasak)",
+        "name": "Champasak",
         "lat": 14.8914,
         "lon": 105.8783,
         "tz": 7.0
@@ -3223,7 +3223,7 @@ LOCATION_DATABASE = {
     "cities": [
       {
         "id": "macau",
-        "name": "มาเก๊า (Macau)",
+        "name": "Macau",
         "lat": 22.1987,
         "lon": 113.5439,
         "tz": 8.0
@@ -3325,14 +3325,14 @@ LOCATION_DATABASE = {
     "cities": [
       {
         "id": "male",
-        "name": "มาเล (Male)",
+        "name": "Male",
         "lat": 4.1753,
         "lon": 73.5089,
         "tz": 5.0
       },
       {
         "id": "addu_city",
-        "name": "อัดดูซิตี (Addu City)",
+        "name": "Addu City",
         "lat": -0.6301,
         "lon": 73.0932,
         "tz": 5.0
@@ -3618,49 +3618,49 @@ LOCATION_DATABASE = {
     "cities": [
       {
         "id": "kuala_lumpur",
-        "name": "กัวลาลัมเปอร์ (Kuala Lumpur)",
+        "name": "Kuala Lumpur",
         "lat": 3.139,
         "lon": 101.6869,
         "tz": 8.0
       },
       {
         "id": "penang",
-        "name": "ปีนัง (Penang)",
+        "name": "Penang",
         "lat": 5.4143,
         "lon": 100.3288,
         "tz": 8.0
       },
       {
         "id": "johor_bahru",
-        "name": "ยะโฮร์บาฮรู (Johor Bahru)",
+        "name": "Johor Bahru",
         "lat": 1.4897,
         "lon": 103.7435,
         "tz": 8.0
       },
       {
         "id": "malacca",
-        "name": "มะละกา (Malacca)",
+        "name": "Malacca",
         "lat": 2.1896,
         "lon": 102.2501,
         "tz": 8.0
       },
       {
         "id": "ipoh",
-        "name": "อิโปห์ (Ipoh)",
+        "name": "Ipoh",
         "lat": 4.5975,
         "lon": 101.0901,
         "tz": 8.0
       },
       {
         "id": "kota_kinabalu",
-        "name": "โกตาคินาบาลู (Kota Kinabalu)",
+        "name": "Kota Kinabalu",
         "lat": 5.9804,
         "lon": 116.0753,
         "tz": 8.0
       },
       {
         "id": "kuching",
-        "name": "กูชิง (Kuching)",
+        "name": "Kuching",
         "lat": 1.5533,
         "lon": 110.3592,
         "tz": 8.0
@@ -3881,28 +3881,28 @@ LOCATION_DATABASE = {
     "cities": [
       {
         "id": "wellington",
-        "name": "เวลลิงตัน (Wellington)",
+        "name": "Wellington",
         "lat": -41.2865,
         "lon": 174.7762,
         "tz": 12.0
       },
       {
         "id": "auckland",
-        "name": "โอ๊คแลนด์ (Auckland)",
+        "name": "Auckland",
         "lat": -36.8485,
         "lon": 174.7633,
         "tz": 12.0
       },
       {
         "id": "christchurch",
-        "name": "ไครสต์เชิร์ช (Christchurch)",
+        "name": "Christchurch",
         "lat": -43.5321,
         "lon": 172.6362,
         "tz": 12.0
       },
       {
         "id": "queenstown",
-        "name": "ควีนส์ทาวน์ (Queenstown)",
+        "name": "Queenstown",
         "lat": -45.0312,
         "lon": 168.6626,
         "tz": 12.0
@@ -4004,42 +4004,42 @@ LOCATION_DATABASE = {
     "cities": [
       {
         "id": "manila",
-        "name": "มะนิลา (Manila)",
+        "name": "Manila",
         "lat": 14.5995,
         "lon": 120.9842,
         "tz": 8.0
       },
       {
         "id": "quezon_city",
-        "name": "เคซอนซิตี (Quezon City)",
+        "name": "Quezon City",
         "lat": 14.676,
         "lon": 121.0437,
         "tz": 8.0
       },
       {
         "id": "cebu_city",
-        "name": "เซบู (Cebu City)",
+        "name": "Cebu City",
         "lat": 10.3157,
         "lon": 123.8854,
         "tz": 8.0
       },
       {
         "id": "davao_city",
-        "name": "ดาเวา (Davao City)",
+        "name": "Davao City",
         "lat": 7.1907,
         "lon": 125.4553,
         "tz": 8.0
       },
       {
         "id": "zamboanga_city",
-        "name": "ซัมบวงกา (Zamboanga)",
+        "name": "Zamboanga",
         "lat": 6.9214,
         "lon": 122.0797,
         "tz": 8.0
       },
       {
         "id": "baguio",
-        "name": "บาเกียว (Baguio)",
+        "name": "Baguio",
         "lat": 16.4023,
         "lon": 120.596,
         "tz": 8.0
@@ -4260,35 +4260,35 @@ LOCATION_DATABASE = {
     "cities": [
       {
         "id": "moscow",
-        "name": "มอสโก (Moscow)",
+        "name": "Moscow",
         "lat": 55.7558,
         "lon": 37.6173,
         "tz": 3.0
       },
       {
         "id": "saint_petersburg",
-        "name": "เซนต์ปีเตอร์สเบิร์ก (Saint Petersburg)",
+        "name": "Saint Petersburg",
         "lat": 59.9343,
         "lon": 30.3351,
         "tz": 3.0
       },
       {
         "id": "novosibirsk",
-        "name": "โนโวซีบีร์สค์ (Novosibirsk)",
+        "name": "Novosibirsk",
         "lat": 55.0084,
         "lon": 82.9357,
         "tz": 7.0
       },
       {
         "id": "yekaterinburg",
-        "name": "เยกาเตรินบุร์ก (Yekaterinburg)",
+        "name": "Yekaterinburg",
         "lat": 56.8389,
         "lon": 60.6057,
         "tz": 5.0
       },
       {
         "id": "vladivostok",
-        "name": "วลาดีวอสตอค (Vladivostok)",
+        "name": "Vladivostok",
         "lat": 43.1198,
         "lon": 131.8869,
         "tz": 10.0
@@ -4322,28 +4322,28 @@ LOCATION_DATABASE = {
     "cities": [
       {
         "id": "riyadh",
-        "name": "ริยาด (Riyadh)",
+        "name": "Riyadh",
         "lat": 24.7136,
         "lon": 46.6753,
         "tz": 3.0
       },
       {
         "id": "jeddah",
-        "name": "เจดดาห์ (Jeddah)",
+        "name": "Jeddah",
         "lat": 21.5433,
         "lon": 39.1728,
         "tz": 3.0
       },
       {
         "id": "mecca",
-        "name": "เมกกะ (Mecca)",
+        "name": "Mecca",
         "lat": 21.3891,
         "lon": 39.8579,
         "tz": 3.0
       },
       {
         "id": "medina",
-        "name": "มะดีนะฮ์ (Medina)",
+        "name": "Medina",
         "lat": 24.5247,
         "lon": 39.5692,
         "tz": 3.0
@@ -4394,7 +4394,7 @@ LOCATION_DATABASE = {
     "cities": [
       {
         "id": "singapore",
-        "name": "สิงคโปร์ (Singapore)",
+        "name": "Singapore",
         "lat": 1.2864,
         "lon": 103.851,
         "tz": 8.0
@@ -5453,28 +5453,28 @@ LOCATION_DATABASE = {
     "cities": [
       {
         "id": "ankara",
-        "name": "อังการา (Ankara)",
+        "name": "Ankara",
         "lat": 39.9334,
         "lon": 32.8597,
         "tz": 3.0
       },
       {
         "id": "istanbul",
-        "name": "อิสตันบูล (Istanbul)",
+        "name": "Istanbul",
         "lat": 41.0082,
         "lon": 28.9784,
         "tz": 3.0
       },
       {
         "id": "izmir",
-        "name": "อิซเมียร์ (Izmir)",
+        "name": "Izmir",
         "lat": 38.4237,
         "lon": 27.1428,
         "tz": 3.0
       },
       {
         "id": "antalya",
-        "name": "อันตัลยา (Antalya)",
+        "name": "Antalya",
         "lat": 36.8969,
         "lon": 30.7133,
         "tz": 3.0
@@ -5508,42 +5508,42 @@ LOCATION_DATABASE = {
     "cities": [
       {
         "id": "taipei",
-        "name": "ไทเป (Taipei)",
+        "name": "Taipei",
         "lat": 25.033,
         "lon": 121.5654,
         "tz": 8.0
       },
       {
         "id": "kaohsiung",
-        "name": "เกาสง (Kaohsiung)",
+        "name": "Kaohsiung",
         "lat": 22.6273,
         "lon": 120.3014,
         "tz": 8.0
       },
       {
         "id": "taichung",
-        "name": "ไทจง (Taichung)",
+        "name": "Taichung",
         "lat": 24.1477,
         "lon": 120.6736,
         "tz": 8.0
       },
       {
         "id": "tainan",
-        "name": "ไถหนาน (Tainan)",
+        "name": "Tainan",
         "lat": 22.9997,
         "lon": 120.227,
         "tz": 8.0
       },
       {
         "id": "hsinchu",
-        "name": "ซินจู๋ (Hsinchu)",
+        "name": "Hsinchu",
         "lat": 24.8138,
         "lon": 120.9675,
         "tz": 8.0
       },
       {
         "id": "keelung",
-        "name": "จีหลง (Keelung)",
+        "name": "Keelung",
         "lat": 25.1283,
         "lon": 121.7419,
         "tz": 8.0
@@ -6106,56 +6106,56 @@ LOCATION_DATABASE = {
     "cities": [
       {
         "id": "hanoi",
-        "name": "ฮานอย (Hanoi)",
+        "name": "Hanoi",
         "lat": 21.0285,
         "lon": 105.8542,
         "tz": 7.0
       },
       {
         "id": "ho_chi_minh",
-        "name": "โฮจิมินห์ซิตี้ (Ho Chi Minh City)",
+        "name": "Ho Chi Minh City",
         "lat": 10.7627,
         "lon": 106.6602,
         "tz": 7.0
       },
       {
         "id": "da_nang",
-        "name": "ดานัง (Da Nang)",
+        "name": "Da Nang",
         "lat": 16.0544,
         "lon": 108.2022,
         "tz": 7.0
       },
       {
         "id": "nha_trang",
-        "name": "ญาจาง (Nha Trang)",
+        "name": "Nha Trang",
         "lat": 12.2388,
         "lon": 109.1967,
         "tz": 7.0
       },
       {
         "id": "hue",
-        "name": "เว้ (Hue)",
+        "name": "Hue",
         "lat": 16.4637,
         "lon": 107.5909,
         "tz": 7.0
       },
       {
         "id": "can_tho",
-        "name": "เกิ่นเทอ (Can Tho)",
+        "name": "Can Tho",
         "lat": 10.0452,
         "lon": 105.7469,
         "tz": 7.0
       },
       {
         "id": "da_lat",
-        "name": "ดาลัด (Da Lat)",
+        "name": "Da Lat",
         "lat": 11.9404,
         "lon": 108.4583,
         "tz": 7.0
       },
       {
         "id": "haiphong",
-        "name": "ไฮฟอง (Haiphong)",
+        "name": "Haiphong",
         "lat": 20.8476,
         "lon": 106.6806,
         "tz": 7.0

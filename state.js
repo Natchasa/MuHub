@@ -50,6 +50,9 @@ let birthHour = 8;
 let birthMin = 0;
 let isUnknownTime = false;
 
+// Dynamic API Base URL detection
+const API_BASE_URL = typeof window !== 'undefined' && window.location ? window.location.origin : 'http://localhost:3737';
+
 // ── Conversion funnel tracking ─────────────────────────────────────────────
 // เก็บสถิติง่ายๆ ว่ามีคนกด "ผูกดวง" กี่คน เทียบกับกี่คนที่จองจริง (ข้อมูลจองมีอยู่
 // แล้วในชีต Bookings/Cust แต่ยังไม่มีตัวเลข "ต้นทาง" ว่ามีคนใช้เครื่องคำนวณกี่คน)
@@ -66,7 +69,7 @@ function getMuhubSessionId() {
 function trackEvent(eventName, detail) {
   try {
     const token = (typeof APP_API_TOKEN !== 'undefined') ? APP_API_TOKEN : '';
-    fetch('http://localhost:5001/api/track-event', {
+    fetch(`${API_BASE_URL}/api/track-event`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-App-Token': token },
       body: JSON.stringify({

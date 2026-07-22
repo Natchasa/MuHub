@@ -64,6 +64,7 @@ function restoreBirthData() {
     });
 
     console.log('Birth data restored from localStorage.');
+    if (typeof syncPickersFromHidden === 'function') syncPickersFromHidden();
     return true;
   } catch(e) {
     console.warn('restoreBirthData failed:', e);
@@ -87,6 +88,7 @@ function ensureLocationsLoaded() {
         populateCities('b', 'bangkok');
         populateCities('t', 'bangkok');
       }
+      if (typeof syncPickersFromHidden === 'function') syncPickersFromHidden();
 
       // Determine if there is a saved transit date in localStorage
       const raw = localStorage.getItem(BIRTH_DATA_KEY);
@@ -171,6 +173,7 @@ function ensureLocationsLoaded() {
 }
 
 window.addEventListener('load', () => {
+  if (typeof initHourMinSelects === 'function') initHourMinSelects();
   setTimeout(ensureLocationsLoaded, 100);
 });
 
@@ -181,6 +184,7 @@ window.setTransitNow = function() {
   document.getElementById('tYear').value = n.getFullYear() + 543;
   document.getElementById('tHour').value = String(n.getHours()).padStart(2, '0');
   document.getElementById('tMin').value = String(n.getMinutes()).padStart(2, '0');
+  if (typeof syncPickersFromHidden === 'function') syncPickersFromHidden();
 };
 
 window.setTransitSolarReturn = function() {
@@ -219,6 +223,7 @@ window.setTransitSolarReturn = function() {
   document.getElementById('tYear').value = localDate.getUTCFullYear() + 543;
   document.getElementById('tHour').value = String(localDate.getUTCHours()).padStart(2, '0');
   document.getElementById('tMin').value = String(localDate.getUTCMinutes()).padStart(2, '0');
+  if (typeof syncPickersFromHidden === 'function') syncPickersFromHidden();
 
   runCalc(true);
 };
@@ -228,6 +233,7 @@ function toggleUnknownTime() {
   const bMin = document.getElementById('bMin');
   const btn = document.getElementById('btnUnknownTime');
   const badge = document.getElementById('lagnaBadge');
+  const bTimeInput = document.getElementById('bTime');
   isUnknownTime = !isUnknownTime;
   if (badge) badge.style.display = 'none';
   if (isUnknownTime) {
@@ -237,14 +243,23 @@ function toggleUnknownTime() {
     bMin.value = "00";
     bHour.disabled = true;
     bMin.disabled = true;
-    btn.innerHTML = '✓ ไม่ทราบเวลา';
+    if (bTimeInput) {
+      bTimeInput.dataset.prevVal = bTimeInput.value;
+      bTimeInput.value = "06:00";
+      bTimeInput.disabled = true;
+    }
+    btn.innerHTML = '✓ ไม่ทราบเวลาเกิด';
     btn.className = 'btn btn-gold';
   } else {
     bHour.value = bHour.dataset.prevVal || "08";
     bMin.value = bMin.dataset.prevVal || "00";
     bHour.disabled = false;
     bMin.disabled = false;
-    btn.innerHTML = 'ไม่ทราบเวลา';
+    if (bTimeInput) {
+      bTimeInput.value = bTimeInput.dataset.prevVal || "08:00";
+      bTimeInput.disabled = false;
+    }
+    btn.innerHTML = 'ไม่ทราบเวลาเกิด';
     btn.className = 'btn btn-ghost';
   }
 }
@@ -632,3 +647,155 @@ if ('serviceWorker' in navigator) {
       .catch((err) => console.warn('Service Worker registration failed:', err));
   });
 }
+
+// Date and Time pickers synchronization helpers
+window.onBDateChange = function() {
+  const dateVal = document.getElementById('bDate').value;
+  if (!dateVal) return;
+  const [y, m, d] = dateVal.split('-').map(Number);
+  document.getElementById('bDay').value = d;
+  document.getElementById('bMonth').value = m;
+  document.getElementById('bYear').value = y + 543;
+};
+
+window.onBTimeChange = function() {
+  const timeVal = document.getElementById('bTime').value;
+  if (!timeVal) return;
+  const [h, m] = timeVal.split(':');
+  document.getElementById('bHour').value = h;
+  document.getElementById('bMin').value = m;
+};
+
+window.onTDateChange = function() {
+  const dateVal = document.getElementById('tDate').value;
+  if (!dateVal) return;
+  const [y, m, d] = dateVal.split('-').map(Number);
+  document.getElementById('tDay').value = d;
+  document.getElementById('tMonth').value = m;
+  document.getElementById('tYear').value = y + 543;
+};
+
+window.onTTimeChange = function() {
+  const timeVal = document.getElementById('tTime').value;
+  if (!timeVal) return;
+  const [h, m] = timeVal.split(':');
+  document.getElementById('tHour').value = h;
+  document.getElementById('tMin').value = m;
+};
+
+window.syncPickersFromHidden = function() {
+  const bDay = document.getElementById('bDay').value;
+  const bMonth = document.getElementById('bMonth').value;
+  const bYearBE = document.getElementById('bYear').value;
+  const bDateInput = document.getElementById('bDate');
+  if (bDateInput && bDay && bMonth && bYearBE) {
+    const yCE = parseInt(bYearBE) - 543;
+    const mStr = String(bMonth).padStart(2, '0');
+    const dStr = String(bDay).padStart(2, '0');
+    bDateInput.value = `${yCE}-${mStr}-${dStr}`;
+  }
+  
+  const bHour = document.getElementById('bHour').value;
+  const bMin = document.getElementById('bMin').value;
+  const bTimeInput = document.getElementById('bTime');
+  if (bTimeInput && bHour !== undefined && bMin !== undefined) {
+    const hStr = String(bHour).padStart(2, '0');
+    const mStr = String(bMin).padStart(2, '0');
+    bTimeInput.value = `${hStr}:${mStr}`;
+    const bHourSel = document.getElementById('bHourSelect');
+    const bMinSel = document.getElementById('bMinSelect');
+    if (bHourSel) bHourSel.value = hStr;
+    if (bMinSel) bMinSel.value = mStr;
+  }
+  
+  const tDay = document.getElementById('tDay').value;
+  const tMonth = document.getElementById('tMonth').value;
+  const tYearBE = document.getElementById('tYear').value;
+  const tDateInput = document.getElementById('tDate');
+  if (tDateInput && tDay && tMonth && tYearBE) {
+    const yCE = parseInt(tYearBE) - 543;
+    const mStr = String(tMonth).padStart(2, '0');
+    const dStr = String(tDay).padStart(2, '0');
+    tDateInput.value = `${yCE}-${mStr}-${dStr}`;
+  }
+  
+  const tHour = document.getElementById('tHour').value;
+  const tMin = document.getElementById('tMin').value;
+  const tTimeInput = document.getElementById('tTime');
+  if (tTimeInput && tHour !== undefined && tMin !== undefined) {
+    const hStr = String(tHour).padStart(2, '0');
+    const mStr = String(tMin).padStart(2, '0');
+    tTimeInput.value = `${hStr}:${mStr}`;
+    const tHourSel = document.getElementById('tHourSelect');
+    const tMinSel = document.getElementById('tMinSelect');
+    if (tHourSel) tHourSel.value = hStr;
+    if (tMinSel) tMinSel.value = mStr;
+  }
+};
+
+function initHourMinSelects() {
+  const bHourSel = document.getElementById('bHourSelect');
+  const bMinSel = document.getElementById('bMinSelect');
+  const tHourSel = document.getElementById('tHourSelect');
+  const tMinSel = document.getElementById('tMinSelect');
+
+  if (bHourSel && bMinSel) {
+    bHourSel.innerHTML = Array.from({length: 24}, (_, i) => `<option value="${String(i).padStart(2, '0')}">${String(i).padStart(2, '0')}</option>`).join('');
+    bMinSel.innerHTML = Array.from({length: 60}, (_, i) => `<option value="${String(i).padStart(2, '0')}">${String(i).padStart(2, '0')}</option>`).join('');
+  }
+  if (tHourSel && tMinSel) {
+    tHourSel.innerHTML = Array.from({length: 24}, (_, i) => `<option value="${String(i).padStart(2, '0')}">${String(i).padStart(2, '0')}</option>`).join('');
+    tMinSel.innerHTML = Array.from({length: 60}, (_, i) => `<option value="${String(i).padStart(2, '0')}">${String(i).padStart(2, '0')}</option>`).join('');
+  }
+
+  const bTime = document.getElementById('bTime');
+  const tTime = document.getElementById('tTime');
+
+  if (bTime && bTime.value) {
+    const parts = bTime.value.split(':');
+    if (parts.length >= 2) {
+      if (bHourSel) bHourSel.value = parts[0];
+      if (bMinSel) bMinSel.value = parts[1];
+    }
+  }
+  if (tTime && tTime.value) {
+    const parts = tTime.value.split(':');
+    if (parts.length >= 2) {
+      if (tHourSel) tHourSel.value = parts[0];
+      if (tMinSel) tMinSel.value = parts[1];
+    }
+  }
+}
+
+window.syncBTime = function() {
+  const hSel = document.getElementById('bHourSelect');
+  const mSel = document.getElementById('bMinSelect');
+  const bTime = document.getElementById('bTime');
+  if (bTime && hSel && mSel) {
+    bTime.value = `${hSel.value}:${mSel.value}`;
+    if (typeof onBTimeChange === 'function') onBTimeChange();
+  }
+};
+
+window.syncTTime = function() {
+  const hSel = document.getElementById('tHourSelect');
+  const mSel = document.getElementById('tMinSelect');
+  const tTime = document.getElementById('tTime');
+  if (tTime && hSel && mSel) {
+    tTime.value = `${hSel.value}:${mSel.value}`;
+    if (typeof onTTimeChange === 'function') onTTimeChange();
+  }
+};
+
+window.syncHiddenDate = function(prefix) {
+  const day = document.getElementById(prefix + 'Day').value;
+  const month = document.getElementById(prefix + 'Month').value;
+  const yearBE = document.getElementById(prefix + 'Year').value;
+  const dateInput = document.getElementById(prefix + 'Date');
+  if (dateInput && day && month && yearBE) {
+    const yCE = parseInt(yearBE) - 543;
+    const mStr = String(month).padStart(2, '0');
+    const dStr = String(day).padStart(2, '0');
+    dateInput.value = `${yCE}-${mStr}-${dStr}`;
+  }
+};

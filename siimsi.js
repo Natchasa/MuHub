@@ -367,13 +367,9 @@ function showSavedSiimsiProphecy(roll) {
   if (pBody) pBody.innerHTML = `<div style="text-align:center; font-style:italic; font-size:1.02rem; color:${poemColor}; margin-bottom:15rem; font-weight:700;">"${prophecy.poem}"</div>${prophecy.reading}`;
   if (pLucky) pLucky.textContent = `เลขมงคลนำโชค: ${prophecy.luckyNum}`;
   
-  if (resetBtn) {
-    resetBtn.innerHTML = 'เสี่ยงทายได้อีกครั้งพรุ่งนี้';
-    resetBtn.disabled = true;
-    resetBtn.style.opacity = '0.5';
-    resetBtn.style.cursor = 'not-allowed';
-    resetBtn.style.pointerEvents = 'none';
-  }
+  const limitText = document.getElementById('siimsiLimitText');
+  if (resetBtn) resetBtn.style.display = 'none';
+  if (limitText) limitText.style.display = 'block';
   
   if (widget) widget.style.display = 'none';
   if (scroll) {
@@ -460,13 +456,9 @@ window.triggerSiimsiShake = function() {
       if (pBody) pBody.innerHTML = `<div style="text-align:center; font-style:italic; font-size:1.02rem; color:${poemColor}; margin-bottom:15rem; font-weight:700;">"${prophecy.poem}"</div>${prophecy.reading}`;
       if (pLucky) pLucky.textContent = `เลขมงคลนำโชค: ${prophecy.luckyNum}`;
       
-      if (resetBtn) {
-        resetBtn.innerHTML = 'เสี่ยงทายได้อีกครั้งพรุ่งนี้';
-        resetBtn.disabled = true;
-        resetBtn.style.opacity = '0.5';
-        resetBtn.style.cursor = 'not-allowed';
-        resetBtn.style.pointerEvents = 'none';
-      }
+      const limitText = document.getElementById('siimsiLimitText');
+      if (resetBtn) resetBtn.style.display = 'none';
+      if (limitText) limitText.style.display = 'block';
       
       if (scroll) {
         scroll.style.display = 'block';
@@ -487,6 +479,7 @@ window.resetSiimsi = function() {
   const widget = document.getElementById('siimsiWidget');
   const instruction = document.getElementById('siimsiInstruction');
   const resetBtn = document.getElementById('siimsiResetBtn');
+  const limitText = document.getElementById('siimsiLimitText');
   
   if (scroll) {
     scroll.classList.remove('active');
@@ -496,11 +489,15 @@ window.resetSiimsi = function() {
   if (instruction) instruction.textContent = '👇 แตะกระบอกเซียมซีด้านล่างเพื่อเริ่มเขย่าเสี่ยงทายดวงชะตารายวัน';
   
   if (resetBtn) {
+    resetBtn.style.display = 'block';
     resetBtn.innerHTML = '🔄 เสี่ยงทายใหม่';
     resetBtn.disabled = false;
     resetBtn.style.opacity = '1';
     resetBtn.style.cursor = 'pointer';
     resetBtn.style.pointerEvents = 'auto';
+  }
+  if (limitText) {
+    limitText.style.display = 'none';
   }
 };
 

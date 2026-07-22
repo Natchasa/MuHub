@@ -195,7 +195,27 @@ window.onGCalApiKeyChange = function() {
   checkCalendarAvailability();
 };
 
+window.updateBookingDateDropdownsFromInput = function() {
+  const dateInput = document.getElementById('bookDate');
+  const daySel = document.getElementById('bookDateDay');
+  const monthSel = document.getElementById('bookDateMonth');
+  const yearInp = document.getElementById('bookDateYear');
+  
+  if (dateInput && dateInput.value && daySel && monthSel && yearInp) {
+    const parts = dateInput.value.split('-');
+    if (parts.length === 3) {
+      const yCE = parseInt(parts[0]);
+      const m = parseInt(parts[1]);
+      const d = parseInt(parts[2]);
+      daySel.value = d;
+      monthSel.value = m;
+      yearInp.value = yCE + 543;
+    }
+  }
+};
+
 window.onDateChange = function() {
+  window.updateBookingDateDropdownsFromInput();
   document.getElementById('selectedTime').value = '';
   document.querySelectorAll('.slot-btn').forEach(el => el.classList.remove('active'));
   hideStatusMessage();
@@ -592,7 +612,10 @@ window.submitBooking = function(event) {
   const yyyy = parseInt(dateParts[0]);
   const mm = parseInt(dateParts[1]);
   const dd = parseInt(dateParts[2]);
-  const formattedDate = `${dd} ${MONTHS_TH[mm - 1]} พ.ศ. ${yyyy + 543}`;
+  
+  const bookingDateObj = new Date(yyyy, mm - 1, dd);
+  const weekdayNames = ['วันอาทิตย์', 'วันจันทร์', 'วันอังคาร', 'วันพุธ', 'วันพฤหัสบดี', 'วันศุกร์', 'วันเสาร์'];
+  const formattedDate = `${weekdayNames[bookingDateObj.getDay()]}ที่ ${dd} ${MONTHS_TH[mm - 1]} พ.ศ. ${yyyy + 543}`;
 
   const birthDay   = document.getElementById('bookDay').value;
   const birthMonth = parseInt(document.getElementById('bookMonth').value);
@@ -603,7 +626,14 @@ window.submitBooking = function(event) {
   const birthCityEl    = document.getElementById('bookCity');
   const birthCountry = birthCountryEl ? birthCountryEl.options[birthCountryEl.selectedIndex]?.text : '';
   const birthCity    = birthCityEl    ? birthCityEl.options[birthCityEl.selectedIndex]?.text    : '';
-  const birthDateStr = `${birthDay} ${MONTHS_TH[birthMonth - 1]} พ.ศ. ${birthYear}`;
+  
+  const bYearCE = parseInt(birthYear) - 543;
+  const bDateObj = new Date(bYearCE, birthMonth - 1, parseInt(birthDay));
+  let bWeekday = weekdayNames[bDateObj.getDay()];
+  if (bDateObj.getDay() === 3 && parseInt(birthHour) >= 18) {
+    bWeekday = 'วันพุธกลางคืน';
+  }
+  const birthDateStr = `${bWeekday}ที่ ${birthDay} ${MONTHS_TH[birthMonth - 1]} พ.ศ. ${birthYear}`;
 
   currentBookingData = {
     astrologer,
@@ -776,7 +806,7 @@ async function saveCustomerToExcel(data) {
 
     const lineMessage = block1 + '\n\n' + block2;
 
-    const res = await fetch("http://localhost:5001/api/save-customer", {
+    const res = await fetch(`${API_BASE_URL}/api/save-customer`, {
       method: "POST",
       headers: { "Content-Type": "application/json", "X-App-Token": APP_API_TOKEN },
       body: JSON.stringify({
@@ -1118,6 +1148,7 @@ function renderBookings() {
   }
   
   container.innerHTML = '';
+  const escape = window.escapeHTML || (s => s);
   filtered.forEach(b => {
     let badgeClass = 'status-pending';
     let displayStatus = b.statusText || 'รอตรวจสอบ';
@@ -1125,21 +1156,30 @@ function renderBookings() {
     if (b.status === 'completed') { badgeClass = 'status-completed'; displayStatus = 'ตรวจดวงแล้ว'; }
     const actionButtons = b.status !== 'completed' ? `
       <div style="display:flex;gap:6px;margin-top:4px;">
-        <button class="btn" style="padding:4px 12px;font-size:0.75rem;height:2rem;background:rgba(226,184,66,0.1);border:1px solid rgba(226,184,66,0.35);color:var(--gold);border-radius:6px;cursor:pointer;white-space:nowrap;" onclick="rescheduleBooking('${b.id}')">🕒 เลื่อนนัด</button>
-        <button class="btn" style="padding:4px 12px;font-size:0.75rem;height:2rem;background:rgba(211,47,47,0.1);border:1px solid rgba(211,47,47,0.35);color:#ef9a9a;border-radius:6px;cursor:pointer;white-space:nowrap;" onclick="cancelBooking('${b.id}')">✕ ยกเลิกนัด</button>
+        <button class="btn" style="padding:4px 12px;font-size:0.75rem;height:2rem;background:rgba(226,184,66,0.1);border:1px solid rgba(226,184,66,0.35);color:var(--gold);border-radius:6px;cursor:pointer;white-space:nowrap;" onclick="rescheduleBooking('${escape(b.id)}')">🕒 เลื่อนนัด</button>
+        <button class="btn" style="padding:4px 12px;font-size:0.75rem;height:2rem;background:rgba(211,47,47,0.1);border:1px solid rgba(211,47,47,0.35);color:#ef9a9a;border-radius:6px;cursor:pointer;white-space:nowrap;" onclick="cancelBooking('${escape(b.id)}')">✕ ยกเลิกนัด</button>
       </div>` : '';
     
+    const safeAstrologer = escape(b.astrologer);
+    const safeId = escape(b.id);
+    const safeName = escape(b.name);
+    const safeLineId = b.lineId ? escape(b.lineId) : '';
+    const safeService = escape(b.service);
+    const safeQuestions = b.questions ? escape(b.questions) : '';
+    const safeTime = b.dateVal ? `${escape(b.dateVal)} (${escape(b.slot)})` : escape(b.time);
+    const safeDisplayStatus = escape(displayStatus);
+
     container.innerHTML += `
       <div class="booking-item">
         <div class="booking-meta">
-          <div style="font-weight:700;color:var(--text);font-size:1.05rem;">${b.astrologer}</div>
-          <div style="font-size:0.85rem;color:var(--dim);"><span style="font-weight:600;">คิว ID:</span> ${b.id} — คุณ ${b.name} ${b.lineId ? `(Line: ${b.lineId})` : ''}</div>
-          <div style="font-size:0.82rem;color:var(--dim);"><span style="font-weight:600;">บริการ:</span> ${b.service}</div>
-          ${b.questions ? `<div style="font-size:0.82rem;color:var(--dim);"><span style="font-weight:600;">คำถาม:</span> ${b.questions}</div>` : ''}
-          <div style="font-size:0.82rem;color:var(--text);font-weight:500;margin-top:4px;"><span style="font-size:1.1rem;vertical-align:-1px;">🕒</span> ${b.time}</div>
+          <div style="font-weight:700;color:var(--text);font-size:1.05rem;">${safeAstrologer}</div>
+          <div style="font-size:0.85rem;color:var(--dim);"><span style="font-weight:600;">คิว ID:</span> ${safeId} — คุณ ${safeName} ${safeLineId ? `(Line: ${safeLineId})` : ''}</div>
+          <div style="font-size:0.82rem;color:var(--dim);"><span style="font-weight:600;">บริการ:</span> ${safeService}</div>
+          ${safeQuestions ? `<div style="font-size:0.82rem;color:var(--dim);"><span style="font-weight:600;">คำถาม:</span> ${safeQuestions}</div>` : ''}
+          <div style="font-size:0.82rem;color:var(--text);font-weight:500;margin-top:4px;"><span style="font-size:1.1rem;vertical-align:-1px;">🕒</span> ${safeTime}</div>
         </div>
         <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">
-          <span class="booking-status ${badgeClass}">${displayStatus}</span>
+          <span class="booking-status ${badgeClass}">${safeDisplayStatus}</span>
           ${actionButtons}
         </div>
       </div>
@@ -1155,7 +1195,7 @@ async function checkPendingBookings() {
   let updatedAny = false;
   for (const b of pendingBookings) {
     try {
-      const res = await fetch(`http://localhost:5001/api/booking-status?queueId=${encodeURIComponent(b.id)}`);
+      const res = await fetch(`${API_BASE_URL}/api/booking-status?queueId=${encodeURIComponent(b.id)}`);
       if (res.ok) {
         const data = await res.json();
         if (data.found && data.status === 'confirmed') {
@@ -1181,3 +1221,64 @@ async function checkPendingBookings() {
 // Start polling every 15 seconds, and check once immediately on page load
 setInterval(checkPendingBookings, 15000);
 setTimeout(checkPendingBookings, 1000);
+
+// Thai Day/Month/Year Dropdowns Synchronization for Booking
+window.syncBookingDate = function() {
+  const daySel = document.getElementById('bookDateDay');
+  const monthSel = document.getElementById('bookDateMonth');
+  const yearInp = document.getElementById('bookDateYear');
+  const dateInput = document.getElementById('bookDate');
+  
+  if (daySel && monthSel && yearInp && dateInput) {
+    const d = String(daySel.value).padStart(2, '0');
+    const m = String(monthSel.value).padStart(2, '0');
+    const yBE = parseInt(yearInp.value) || (new Date().getFullYear() + 543);
+    const yCE = yBE - 543;
+    dateInput.value = `${yCE}-${m}-${d}`;
+    if (typeof window.onDateChange === 'function') {
+      window.onDateChange();
+    }
+  }
+};
+
+window.initBookingDateDropdowns = function() {
+  const daySel = document.getElementById('bookDateDay');
+  const monthSel = document.getElementById('bookDateMonth');
+  const yearInp = document.getElementById('bookDateYear');
+  const dateInput = document.getElementById('bookDate');
+  
+  if (!daySel || !monthSel || !yearInp) return;
+  
+  const MONTHS_TH_FULL = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน',
+                          'กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+  
+  daySel.innerHTML = '';
+  for (let i = 1; i <= 31; i++) {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.text = i;
+    daySel.appendChild(opt);
+  }
+  
+  monthSel.innerHTML = '';
+  MONTHS_TH_FULL.forEach((m, idx) => {
+    const opt = document.createElement('option');
+    opt.value = idx + 1;
+    opt.text = m;
+    monthSel.appendChild(opt);
+  });
+  
+  const now = new Date();
+  daySel.value = now.getDate();
+  monthSel.value = now.getMonth() + 1;
+  yearInp.value = now.getFullYear() + 543;
+  
+  window.syncBookingDate();
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', window.initBookingDateDropdowns);
+} else {
+  window.initBookingDateDropdowns();
+}
+

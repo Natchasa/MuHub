@@ -94,7 +94,31 @@ const ASTRO_PREDICTIONS = {
   ]
 };
 
+let currentThaksaMode = 8;
+let lastThaksaArgs = null;
+
+window.setThaksaMode = function(mode) {
+  currentThaksaMode = mode;
+  const btn8 = document.getElementById('btn-thaksa-mod8');
+  const btn9 = document.getElementById('btn-thaksa-mod9');
+  if (btn8) {
+    btn8.style.background = (mode === 8) ? 'var(--blue-l)' : 'transparent';
+    btn8.style.color = (mode === 8) ? 'white' : 'var(--dim)';
+  }
+  if (btn9) {
+    btn9.style.background = (mode === 9) ? 'var(--coral)' : 'transparent';
+    btn9.style.color = (mode === 9) ? 'white' : 'var(--dim)';
+  }
+
+  if (lastThaksaArgs) {
+    renderThaksa(...lastThaksaArgs);
+  } else if (typeof birthYear !== 'undefined' && birthYear) {
+    renderThaksa(birthYear, birthMonth, birthDay, birthHour, birthMin);
+  }
+};
+
 function renderThaksa(by, bmo, bd, bh, bmn) {
+  lastThaksaArgs = [by, bmo, bd, bh, bmn];
   const container = document.getElementById('thaksa-container');
   if (!container) return;
 
@@ -122,6 +146,10 @@ function renderThaksa(by, bmo, bd, bh, bmn) {
   let isTokaLang = false;
   let transitStartIndex = birthStartIndex;
 
+  const WEEKDAYS_TH = ['วันอาทิตย์', 'วันจันทร์', 'วันอังคาร', 'วันพุธกลางวัน', 'วันพฤหัส', 'วันศุกร์', 'วันเสาร์', 'วันพุธกลางคืน'];
+  const birthDayName = WEEKDAYS_TH[thaksaDay];
+  const modeLabel = (currentThaksaMode === 9) ? ' (ทักษาหาร 9)' : ' (ทักษาหาร 8)';
+
   if (isTransitActive) {
     let ty = by, tmo = bmo, td = bd, th = bh, tmn = bmn;
     const tYearBE = parseInt(document.getElementById('tYear').value);
@@ -143,21 +171,34 @@ function renderThaksa(by, bmo, bd, bh, bmn) {
     }
     age = Math.max(1, age);
 
-    const WEEKDAYS_TH = ['วันอาทิตย์', 'วันจันทร์', 'วันอังคาร', 'วันพุธกลางวัน', 'วันพฤหัส', 'วันศุกร์', 'วันเสาร์', 'วันพุธกลางคืน'];
-    const birthDayName = WEEKDAYS_TH[thaksaDay];
     const subtitleEl = document.getElementById('thaksa-subtitle');
     if (subtitleEl) {
-      subtitleEl.innerHTML = `เกิด${birthDayName} อายุย่าง ${age} ปี`;
+      subtitleEl.innerHTML = `เกิด${birthDayName} อายุย่าง ${age} ปี${modeLabel}`;
     }
 
-    transitStartIndex = (birthStartIndex + (age - 1)) % 8;
-    isTokaLang = false;
+    if (currentThaksaMode === 8) {
+      transitStartIndex = (birthStartIndex + (age - 1)) % 8;
+      isTokaLang = false;
+    } else {
+      // Mode 9: หาร 9 ตามลำดับ 1 > ตากลาง (๕) > 2 > 3 > 4 > 7 > 5 > 8 > 6
+      const thaksaDayToSeq9 = [0, 2, 3, 4, 6, 8, 5, 7];
+      const seq9ToPlanetIndex = [0, -1, 1, 2, 3, 4, 5, 6, 7];
+      const birthSeq9Index = thaksaDayToSeq9[thaksaDay];
+      const targetSeq9Index = (birthSeq9Index + (age - 1)) % 9;
+
+      if (targetSeq9Index === 1) {
+        // ตกตากลาง -> ให้ไปใส่ + ที่ดาว ๕ (พฤหัส - planetIndex 5) ช่องข้างล่างแทน
+        transitStartIndex = 5;
+        isTokaLang = true;
+      } else {
+        transitStartIndex = seq9ToPlanetIndex[targetSeq9Index];
+        isTokaLang = false;
+      }
+    }
   } else {
-    const WEEKDAYS_TH = ['วันอาทิตย์', 'วันจันทร์', 'วันอังคาร', 'วันพุธกลางวัน', 'วันพฤหัส', 'วันศุกร์', 'วันเสาร์', 'วันพุธกลางคืน'];
-    const birthDayName = WEEKDAYS_TH[thaksaDay];
     const subtitleEl = document.getElementById('thaksa-subtitle');
     if (subtitleEl) {
-      subtitleEl.innerHTML = `เกิด${birthDayName}`;
+      subtitleEl.innerHTML = `เกิด${birthDayName}${modeLabel}`;
     }
   }
 
@@ -187,7 +228,7 @@ function renderThaksa(by, bmo, bd, bh, bmn) {
     
     let transitLabel = '';
     let transitLabelIndex = -1;
-    if (isTransitActive && !isTokaLang) {
+    if (isTransitActive && transitStartIndex >= 0) {
       transitLabelIndex = (i - transitStartIndex + 8) % 8;
       transitLabel = THAKSA_HOUSES[transitLabelIndex];
     }
@@ -235,11 +276,19 @@ function renderThaksa(by, bmo, bd, bh, bmn) {
       } else {
         // Center cell
         gridHTML += `<div style="display: flex; justify-content: center; align-items: center; height: 92px; width: 92px; ${borderStyle} box-sizing: border-box;">`;
-        if (isTransitActive && isTokaLang) {
-          gridHTML += `<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; border: 1.5px dashed #FF6666; background: rgba(255, 102, 102, 0.08); border-radius: 8px; padding: 4px; text-align: center; width: 70px; height: 70px; box-sizing: border-box;">`;
-          gridHTML += `<span style="font-size: 0.58rem; font-weight: 700; color: #FF8888; text-transform: uppercase;">ปีจร</span>`;
-          gridHTML += `<span style="font-size: 0.72rem; font-weight: 700; color: #FF4444; margin-top: 1px;">ตกตากลาง</span>`;
+        if (currentThaksaMode === 9) {
+          // Mode 9: Show plain number ๙ in the center cell without circle or sublabel
+          gridHTML += `<div style="display: inline-flex; justify-content: center; align-items: center; width: 48px; height: 48px; position: relative;">`;
+          gridHTML += `<span style="font-size: 1.8rem; font-weight: 700; color: #222222; font-family: 'Sarabun', sans-serif; line-height: 1;">๙</span>`;
           gridHTML += `</div>`;
+        } else {
+          // Mode 8: Center cell
+          if (isTransitActive && isTokaLang) {
+            gridHTML += `<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; border: 1.5px dashed #FF6666; background: rgba(255, 102, 102, 0.08); border-radius: 8px; padding: 4px; text-align: center; width: 70px; height: 70px; box-sizing: border-box;">`;
+            gridHTML += `<span style="font-size: 0.58rem; font-weight: 700; color: #FF8888; text-transform: uppercase;">ปีจร</span>`;
+            gridHTML += `<span style="font-size: 0.72rem; font-weight: 700; color: #FF4444; margin-top: 1px;">ตกตากลาง</span>`;
+            gridHTML += `</div>`;
+          }
         }
         gridHTML += '</div>';
       }
@@ -535,6 +584,82 @@ function renderThaksa(by, bmo, bd, bh, bmn) {
       </button>
       <div id="mahathaksa-table-wrapper" style="display: none; margin-top: 0.8rem; max-height: 300px; overflow-y: auto; border: 1.5px solid var(--border); border-radius: 10px; box-shadow: inset 0 2px 8px rgba(0,0,0,0.05);">
         ${tableHTML}
+      </div>
+    `;
+  }
+
+  // 5. Render Thaksa Shirt Colors (Sri Natal, Sri Transit, Kalakini Transit based on Thaksa 8)
+  const colorsEl = document.getElementById('thaksa-colors-info');
+  if (colorsEl) {
+    const THAKSA_PLANET_COLOR_CIRCLES = [
+      { colors: ['#E53935', '#FF7043'] },               // ๑ อาทิตย์: สีแดง, สีส้มแดง
+      { colors: ['#FFFFFF', '#FFF59D', '#FDD835'] },     // ๒ จันทร์: สีขาว, สีเหลืองอ่อน, สีครีม
+      { colors: ['#F8BBD0', '#F06292', '#EC407A'] },     // ๓ อังคาร: สีชมพู, สีบานเย็น
+      { colors: ['#81C784', '#4CAF50', '#2E7D32'] },     // ๔ พุธ: สีเขียวอ่อน, สีเขียวใบไม้, สีเขียวแก่
+      { colors: ['#9C27B0', '#212121', '#616161'] },     // ๗ เสาร์: สีม่วง, สีดำ, สีเทาเข้ม
+      { colors: ['#FF9800', '#FF7043', '#FFD54F'] },     // ๕ พฤหัส: สีส้ม, สีแสด, สีเหลืองทอง
+      { colors: ['#B0BEC5', '#78909C', '#5D4037'] },     // ๘ ราหู: สีบรอนซ์, สีเทา, สีน้ำตาล
+      { colors: ['#4FC3F7', '#0288D1', '#1565C0'] }      // ๖ ศุกร์: สีฟ้า, สีน้ำเงิน, สีคราม
+    ];
+
+    const natalSri = THAKSA_PLANET_COLOR_CIRCLES[(birthStartIndex + 3) % 8];
+    const natalKalakini = THAKSA_PLANET_COLOR_CIRCLES[(birthStartIndex + 7) % 8];
+    const transitStart8 = (birthStartIndex + (age - 1)) % 8;
+    const transitSri = THAKSA_PLANET_COLOR_CIRCLES[(transitStart8 + 3) % 8];
+    const transitKalakini = THAKSA_PLANET_COLOR_CIRCLES[(transitStart8 + 7) % 8];
+
+    function renderGlowingCircles(planetObj) {
+      return `<div style="display: flex; gap: 8px; align-items: center;">` +
+        planetObj.colors.map(hex => 
+          `<div style="width: 24px; height: 24px; border-radius: 50%; background: ${hex}; border: 2px solid #ffffff; box-shadow: 0 0 8px rgba(255, 255, 255, 0.9), 0 2px 5px rgba(0,0,0,0.18);"></div>`
+        ).join('') +
+      `</div>`;
+    }
+
+    colorsEl.style.display = 'block';
+    colorsEl.innerHTML = `
+      <div style="font-size: 0.92rem; font-weight: 700; color: var(--gold-d); margin-bottom: 0.75rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.4rem;">
+        <span>🎨 สีมงคลประจำปี (ช่วงวันเกิดตามอายุย่าง ${age} ปี)</span>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <!-- สีมงคลประจำปี -->
+        <div style="background: rgba(76, 175, 80, 0.05); border: 1.5px solid rgba(76, 175, 80, 0.3); border-radius: 12px; padding: 0.85rem 1rem;">
+          <div style="font-size: 0.84rem; font-weight: 700; color: #2E7D32; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 6px;">
+            <span>✨ สีมงคล</span>
+          </div>
+          
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; background: #ffffff; padding: 0.6rem 0.8rem; border-radius: 8px; border: 1px solid rgba(76, 175, 80, 0.15);">
+              <span style="font-weight: 700; color: #1B5E20; font-size: 0.86rem;">ตามดวงกำเนิด</span>
+              ${renderGlowingCircles(natalSri)}
+            </div>
+
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; background: #ffffff; padding: 0.6rem 0.8rem; border-radius: 8px; border: 1px solid rgba(76, 175, 80, 0.15);">
+              <span style="font-weight: 700; color: #C62828; font-size: 0.86rem;">ประจำปี</span>
+              ${renderGlowingCircles(transitSri)}
+            </div>
+          </div>
+        </div>
+
+        <!-- สีที่ควรหลีกเลี่ยง -->
+        <div style="background: rgba(239, 83, 80, 0.05); border: 1.5px solid rgba(239, 83, 80, 0.3); border-radius: 12px; padding: 0.85rem 1rem;">
+          <div style="font-size: 0.84rem; font-weight: 700; color: #C62828; margin-bottom: 0.6rem; display: flex; align-items: center; gap: 6px;">
+            <span>🚫 สีที่ควรหลีกเลี่ยง</span>
+          </div>
+          
+          <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; background: #ffffff; padding: 0.6rem 0.8rem; border-radius: 8px; border: 1px solid rgba(239, 83, 80, 0.15);">
+              <span style="font-weight: 700; color: #1B5E20; font-size: 0.86rem;">ตามดวงกำเนิด</span>
+              ${renderGlowingCircles(natalKalakini)}
+            </div>
+
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; background: #ffffff; padding: 0.6rem 0.8rem; border-radius: 8px; border: 1px solid rgba(239, 83, 80, 0.15);">
+              <span style="font-weight: 700; color: #C62828; font-size: 0.86rem;">ประจำปี</span>
+              ${renderGlowingCircles(transitKalakini)}
+            </div>
+          </div>
+        </div>
       </div>
     `;
   }

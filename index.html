@@ -1,157 +1,117 @@
 <!DOCTYPE html>
 
-
 <html lang="th">
-
 
 <head>
 
-
 <meta charset="UTF-8">
-
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
 <title>MuHub — ผูกดวงโหราศาสตร์ไทย</title>
-
 
 <meta name="description" content="MuHub ผูกดวงโหราศาสตร์ไทยออนไลน์ตามคัมภีร์สุริยยาตรและปฏิทินลาหิรี นิรายนะ คำนวณลัคนาราศีเกิด ตรวจสอบดาวจร ทักษาคู่สมพงษ์ วิเคราะห์เลขศาสตร์ภาษาไทย พร้อมเซียมซีจำลองและระบบจองคิวหมอดู">
 
-
 <meta name="keywords" content="ผูกดวง, โหราศาสตร์ไทย, ลาหิรี, นิรายนะ, ลัคนา, ราศีเกิด, ทักษา, ดูดวง, เซียมซี, เลขศาสตร์, MuHub">
-
 
 <meta name="author" content="MuHub Team">
 
-
-
-
-
 <!-- Open Graph / Facebook -->
-
 
 <meta property="og:type" content="website">
 
-
 <meta property="og:title" content="MuHub — ผูกดวงโหราศาสตร์ไทย">
-
 
 <meta property="og:description" content="ผูกดวงโหราศาสตร์ไทยออนไลน์ คำนวณลัคนา ตรวจสอบดาวจร ทักษา เซียมซี วิเคราะห์เลขศาสตร์ครบวงจร">
 
-
 <meta property="og:image" content="logo.png">
 
-
-
-
-
-<!-- Twitter -->
-
-
-<meta property="twitter:card" content="summary_large_image">
-
-
-<meta property="twitter:title" content="MuHub — ผูกดวงโหราศาสตร์ไทย">
-
-
-<meta property="twitter:description" content="ผูกดวงโหราศาสตร์ไทยออนไลน์ คำนวณลัคนา ตรวจสอบดาวจร ทักษา เซียมซี วิเคราะห์เลขศาสตร์ครบวงจร">
-
-
-<meta property="twitter:image" content="logo.png">
-
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https: data: blob: 'unsafe-inline' 'unsafe-eval'; img-src 'self' https: data: blob:; connect-src 'self' https: http: ws: wss:;">
 
 <script>
 
+window.escapeHTML = function(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+};
 
 window.onerror = function(message, source, lineno, colno, error) {
-
 
   console.error("JS Error: " + message + "\nSource: " + source + "\nLine: " + lineno + "\nCol: " + colno, error);
   const errDiv = document.getElementById('js-error-banner');
   if (errDiv) {
     errDiv.style.display = 'block';
-    errDiv.innerHTML += `<div style="margin-top: 5px;"><strong>Error:</strong> ${message}<br><strong>File:</strong> ${source}:${lineno}</div>`;
-  }
+    const errContainer = document.createElement('div');
+    errContainer.style.marginTop = '5px';
 
+    const strongErr = document.createElement('strong');
+    strongErr.textContent = 'Error: ';
+    errContainer.appendChild(strongErr);
+    errContainer.appendChild(document.createTextNode(String(message)));
+
+    errContainer.appendChild(document.createElement('br'));
+
+    const strongFile = document.createElement('strong');
+    strongFile.textContent = 'File: ';
+    errContainer.appendChild(strongFile);
+    errContainer.appendChild(document.createTextNode(`${source}:${lineno}`));
+
+    errDiv.appendChild(errContainer);
+  }
 
   return false;
 
-
 };
-
 
 </script>
 
-
 <script src="astronomy.browser.min.js"></script>
-
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-
 <link rel="stylesheet" href="styles.css">
-
 
 <link rel="manifest" href="manifest.json">
 
-
 </head>
-
 
 <body>
 <div id="js-error-banner" style="display: none; background: #FFEBEE; border: 2px solid #EF5350; color: #C62828; padding: 1rem; margin: 1rem; border-radius: 8px; font-family: monospace; font-size: 0.85rem; z-index: 99999; position: relative;">
   <strong>⚠️ ตรวจพบข้อผิดพลาดระบบ (JS Error):</strong>
 </div>
 
-
-
-
-
 <!-- HEADER + NAME ROW WRAPPER -->
-
 
 <div style="position: relative; margin-bottom: 1rem;">
 
-
   <!-- HEADER -->
-
 
   <header style="padding-right: 120px; display: flex; flex-direction: column; gap: 8px;">
 
-
     <span class="header-tag">MuHub - มูฮับ</span>
-
 
     <div class="tab-bar">
 
-
       <button id="btn-calculator-tab" class="tab-btn active" onclick="switchTab('calculator-tab')">
-
 
         <span class="tab-icon">🔮</span>
 
-
         <span class="tab-label">ผูกดวง</span>
 
-
       </button>
-
-
-
-
 
       <button id="btn-booking-tab" class="tab-btn" onclick="switchTab('booking-tab')">
 
-
         <span class="tab-icon">🗓️</span>
-
 
         <span class="tab-label">จองคิวดูดวง</span>
 
-
       </button>
-
 
       <button id="btn-my-bookings-tab" class="tab-btn" onclick="switchTab('my-bookings-tab')">
         <span class="tab-icon">🎁</span>
@@ -168,682 +128,366 @@ window.onerror = function(message, source, lineno, colno, error) {
         <span class="tab-label">มูสเปซ</span>
       </button>
 
-
     </div>
-
 
   </header>
 
-
   <!-- LARGE FLOATING LOGO -->
-
 
   <div class="header-logo-container">
 
-
     <img src="logo.png" alt="MuHub Logo">
-
 
   </div>
 
-
 </div>
-
-
-
-
 
 <!-- CALCULATOR TAB START -->
 
-
 <div id="calculator-tab" class="tab-content">
-
 
   <!-- Introductory Guide Banner -->
 
-
   <div style="background: rgba(245, 200, 64, 0.07); border-bottom: 1.5px solid var(--border); padding: 0.8rem 1.2rem; font-size: 0.88rem; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 8px; line-height: 1.4;">
-
 
     <span>กรอกข้อมูลส่วนของดวงกำเนิด แล้วกดผูกดวง จะแสดงลัคนาราศีเกิดของคุณครับ</span>
 
-
   </div>
 
-
-
-
-
   <div class="name-bar bar-row" style="padding-right: 120px; display: flex; align-items: flex-end; gap: 12px; flex-wrap: wrap;">
-
-
-    <div style="display: flex; gap: 12px; flex: 1 1 350px; min-width: 250px;">
-      <div class="field field-name" style="flex: 1; min-width: 0;">
-        <label>ชื่อ</label>
-        <input type="text" id="bName" placeholder="ชื่อ" style="width: 100%;">
-      </div>
-      <div class="field field-lastname" style="flex: 1; min-width: 0;">
-        <label>นามสกุล</label>
-        <input type="text" id="bLastName" placeholder="นามสกุล" style="width: 100%;">
-      </div>
-    </div>
-
+    <!-- Hidden inputs for name/lastname compatibility -->
+    <input type="hidden" id="bName" value="">
+    <input type="hidden" id="bLastName" value="">
 
     <div class="field field-line-id">
 
-
       <label>Line ID</label>
-
 
       <input type="text" id="bLineId" placeholder="Line ID">
 
-
     </div>
-
 
     <div style="margin-bottom: 0px;">
 
-
       <button type="button" class="btn" style="background-color: #06C755; color: white; border: none; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; padding: 0 1.2rem; height: 2.1rem; border-radius: 6px; cursor: pointer; transition: background-color 0.2s; min-width: auto; width: auto;" onmouseover="this.style.backgroundColor='#05b04b'" onmouseout="this.style.backgroundColor='#06C755'" onclick="window.open('https://line.me/R/ti/p/@muhub', '_blank')">
-
 
         💬 เพิ่มเพื่อนในไลน์ OA
 
-
       </button>
 
-
     </div>
 
-
   </div>
-
-
-
-
 
 <div class="birth-bar bar-row">
+  <div style="width: 100%; margin-bottom: 0.6rem;">
+    <button class="tog tog-n" id="togN" onclick="toggleLayer('n')">ดวงกำเนิด</button>
+  </div>
 
+  <!-- Hidden time compat inputs -->
+  <div style="display: none;">
+    <input type="number" id="bHour" min="0" max="23" value="8">
+    <input type="number" id="bMin" min="0" max="59" value="0">
+  </div>
 
-  <button class="tog tog-n" id="togN" onclick="toggleLayer('n')">ดวงกำเนิด</button>
-
-
-  <div class="field field-date">
-
-
+  <div class="field field-date-picker">
     <label>วันเกิด (พ.ศ.)</label>
-
-
-    <div style="display: flex; gap: 4px;">
-
-
-      <select id="bDay" style="width: 60px;"></select>
-
-
-      <select id="bMonth" style="width: 115px;"></select>
-
-
-      <input type="number" id="bYear" value="2533" min="2443" max="2743" style="width: 80px;">
-
-
+    <div style="display: flex; gap: 4px; align-items: center; flex-wrap: wrap;">
+      <select id="bDay" onchange="syncHiddenDate('b')" style="padding: 6px 8px; border-radius: 8px; border: 1.5px solid var(--border); background: #ffffff; color: var(--text); height: 2.25rem; font-weight: 600; cursor: pointer; width: 62px;"></select>
+      <select id="bMonth" onchange="syncHiddenDate('b')" style="padding: 6px 8px; border-radius: 8px; border: 1.5px solid var(--border); background: #ffffff; color: var(--text); height: 2.25rem; font-weight: 600; cursor: pointer; width: 110px;"></select>
+      <input type="number" id="bYear" min="2443" max="2743" value="2533" onchange="syncHiddenDate('b')" oninput="syncHiddenDate('b')" style="padding: 6px 8px; border-radius: 8px; border: 1.5px solid var(--border); background: #ffffff; color: var(--text); height: 2.25rem; font-weight: 600; box-sizing: border-box; width: 78px;">
+      <input type="date" id="bDate" onchange="onBDateChange()" style="display: none;">
     </div>
-
-
   </div>
 
-
-  <div class="field field-time">
-
-
+  <div class="field field-time-picker">
     <label>เวลาเกิด</label>
-
-
-    <div style="display: flex; gap: 4px; align-items: center;">
-
-
-      <input type="number" id="bHour" value="08" min="0" max="23" style="width: 55px;" placeholder="ชม.">
-
-
-      <span style="font-weight: bold; color: var(--dim);">:</span>
-
-
-      <input type="number" id="bMin" value="00" min="0" max="59" style="width: 55px;" placeholder="นาที">
-
-
+    <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+      <input type="time" id="bTime" onchange="onBTimeChange()" style="display: none;">
+      <div style="display: flex; align-items: center; gap: 4px;">
+        <select id="bHourSelect" onchange="syncBTime()" style="padding: 6px 8px; border-radius: 8px; border: 1.5px solid var(--border); background: #ffffff; color: var(--text); height: 2.25rem; font-weight: 600; cursor: pointer; width: 68px;"></select>
+        <span style="font-weight: 700; color: var(--text);">:</span>
+        <select id="bMinSelect" onchange="syncBTime()" style="padding: 6px 8px; border-radius: 8px; border: 1.5px solid var(--border); background: #ffffff; color: var(--text); height: 2.25rem; font-weight: 600; cursor: pointer; width: 68px;"></select>
+      </div>
+      <button class="btn btn-ghost" id="btnUnknownTime" onclick="toggleUnknownTime()" style="width: 140px; justify-content: center;">ไม่ทราบเวลาเกิด</button>
     </div>
-
-
   </div>
 
-
-  <div class="field field-country">
-
-
-    <label>ประเทศ</label>
-
-
-    <div class="searchable-select">
-
-
-      <input type="text" id="bCountrySearch" class="search-input" placeholder="พิมพ์ค้นหาประเทศ..." onfocus="ensureLocationsLoaded()" value="ไทย">
-
-
-      <div id="bCountryOptions" class="options-list"></div>
-
-
-      <select id="bCountry" onfocus="ensureLocationsLoaded()" onchange="onCountryChange('b')" style="display: none;">
-
-
-        <option value="TH" selected>ประเทศไทย</option>
-
-
-        <option value="IN">อินเดีย</option>
-
-
-        <option value="SG">สิงคโปร์</option>
-
-
-        <option value="CN">จีน</option>
-
-
-        <option value="MM">พม่า</option>
-
-
-        <option value="custom">กำหนดเอง</option>
-
-
-      </select>
-
-
+  <div class="location-row">
+    <div class="field field-country">
+      <label>ประเทศ</label>
+      <div class="searchable-select">
+        <input type="text" id="bCountrySearch" class="search-input" placeholder="พิมพ์ค้นหาประเทศ..." onfocus="ensureLocationsLoaded()" value="ไทย">
+        <div id="bCountryOptions" class="options-list"></div>
+        <select id="bCountry" onfocus="ensureLocationsLoaded()" onchange="onCountryChange('b')" style="display: none;">
+          <option value="TH" selected>ประเทศไทย</option>
+          <option value="IN">อินเดีย</option>
+          <option value="SG">สิงคโปร์</option>
+          <option value="CN">จีน</option>
+          <option value="MM">พม่า</option>
+          <option value="custom">กำหนดเอง</option>
+        </select>
+      </div>
     </div>
-
-
-  </div>
-
-
-  <div class="field field-city">
-
-
-    <label>เมือง/จังหวัด</label>
-
-
-    <div class="searchable-select">
-
-
-      <input type="text" id="bCitySearch" class="search-input" placeholder="พิมพ์ค้นหาเมือง/จังหวัด..." onfocus="ensureLocationsLoaded()" value="กรุงเทพมหานคร">
-
-
-      <div id="bCityOptions" class="options-list"></div>
-
-
-      <select id="bCity" onfocus="ensureLocationsLoaded()" onchange="onCityChange('b')" style="display: none;">
-
-
-        <!-- Populated dynamically -->
-
-
-      </select>
-
-
+    <div class="field field-city">
+      <label>เมือง/จังหวัด</label>
+      <div class="searchable-select">
+        <input type="text" id="bCitySearch" class="search-input" placeholder="พิมพ์ค้นหาเมือง/จังหวัด..." onfocus="ensureLocationsLoaded()" value="กรุงเทพมหานคร">
+        <div id="bCityOptions" class="options-list"></div>
+        <select id="bCity" onfocus="ensureLocationsLoaded()" onchange="onCityChange('b')" style="display: none;">
+          <!-- Populated dynamically -->
+        </select>
+      </div>
     </div>
-
-
   </div>
-
 
   <div class="field field-coord" id="bLatField" style="display: none;">
-
-
     <label>ละติจูด</label>
-
-
-    <input type="number" id="bLat" value="13.7563" step="any" style="width: 90px;">
-
-
+    <input type="number" id="bLat" value="13.7563" step="any" class="w-80">
   </div>
-
-
   <div class="field field-coord" id="bLonField" style="display: none;">
-
-
     <label>ลองจิจูด</label>
-
-
-    <input type="number" id="bLon" value="100.5018" step="any" style="width: 90px;">
-
-
+    <input type="number" id="bLon" value="100.5018" step="any" class="w-80">
   </div>
-
-
-  <button class="btn btn-ghost" id="btnUnknownTime" onclick="toggleUnknownTime()">ไม่ทราบเวลา</button>
-
 
 </div>
-
-
-
-
-
-<!-- CONTROLS + TRANSIT INPUT -->
-
 
 <div class="transit-bar bar-row">
+  <div style="width: 100%; margin-bottom: 0.6rem;">
+    <button class="tog tog-t" id="togT" onclick="toggleLayer('t')">ดวงจร</button>
+  </div>
 
+  <!-- Hidden time compat inputs -->
+  <div style="display: none;">
+    <input type="number" id="tHour" min="0" max="23">
+    <input type="number" id="tMin" min="0" max="59">
+  </div>
 
-  <button class="tog tog-t" id="togT" onclick="toggleLayer('t')">ดวงจร</button>
-
-
-  <div class="field field-date">
-
-
+  <div class="field field-date-picker">
     <label>วันดวงจร (พ.ศ.)</label>
-
-
-    <div style="display: flex; gap: 4px;">
-
-
-      <select id="tDay" style="width: 60px;"></select>
-
-
-      <select id="tMonth" style="width: 115px;"></select>
-
-
-      <input type="number" id="tYear" min="2443" max="2743" style="width: 80px;">
-
-
+    <div style="display: flex; gap: 4px; align-items: center; flex-wrap: wrap;">
+      <select id="tDay" onchange="syncHiddenDate('t')" style="padding: 6px 8px; border-radius: 8px; border: 1.5px solid var(--border); background: #ffffff; color: var(--text); height: 2.25rem; font-weight: 600; cursor: pointer; width: 62px;"></select>
+      <select id="tMonth" onchange="syncHiddenDate('t')" style="padding: 6px 8px; border-radius: 8px; border: 1.5px solid var(--border); background: #ffffff; color: var(--text); height: 2.25rem; font-weight: 600; cursor: pointer; width: 110px;"></select>
+      <input type="number" id="tYear" min="2443" max="2743" onchange="syncHiddenDate('t')" oninput="syncHiddenDate('t')" style="padding: 6px 8px; border-radius: 8px; border: 1.5px solid var(--border); background: #ffffff; color: var(--text); height: 2.25rem; font-weight: 600; box-sizing: border-box; width: 78px;">
+      <input type="date" id="tDate" onchange="onTDateChange()" style="display: none;">
     </div>
-
-
   </div>
 
-
-  <div class="field field-time">
-
-
+  <div class="field field-time-picker">
     <label>เวลา</label>
-
-
-    <div style="display: flex; gap: 4px; align-items: center;">
-
-
-      <input type="number" id="tHour" min="0" max="23" style="width: 55px;" placeholder="ชม.">
-
-
-      <span style="font-weight: bold; color: var(--dim);">:</span>
-
-
-      <input type="number" id="tMin" min="0" max="59" style="width: 55px;" placeholder="นาที">
-
-
+    <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+      <input type="time" id="tTime" onchange="onTTimeChange()" style="display: none;">
+      <div style="display: flex; align-items: center; gap: 4px;">
+        <select id="tHourSelect" onchange="syncTTime()" style="padding: 6px 8px; border-radius: 8px; border: 1.5px solid var(--border); background: #ffffff; color: var(--text); height: 2.25rem; font-weight: 600; cursor: pointer; width: 68px;"></select>
+        <span style="font-weight: 700; color: var(--text);">:</span>
+        <select id="tMinSelect" onchange="syncTTime()" style="padding: 6px 8px; border-radius: 8px; border: 1.5px solid var(--border); background: #ffffff; color: var(--text); height: 2.25rem; font-weight: 600; cursor: pointer; width: 68px;"></select>
+      </div>
+      <button class="btn btn-ghost" onclick="setTransitNow()" style="width: 140px; justify-content: center;">ตอนนี้</button>
     </div>
-
-
   </div>
 
-
-  <div class="field field-country">
-
-
-    <label>ประเทศ</label>
-
-
-    <div class="searchable-select">
-
-
-      <input type="text" id="tCountrySearch" class="search-input" placeholder="พิมพ์ค้นหาประเทศ..." onfocus="ensureLocationsLoaded()" value="ไทย">
-
-
-      <div id="tCountryOptions" class="options-list"></div>
-
-
-      <select id="tCountry" onfocus="ensureLocationsLoaded()" onchange="onCountryChange('t')" style="display: none;">
-
-
-        <option value="TH" selected>ประเทศไทย</option>
-
-
-        <option value="IN">อินเดีย</option>
-
-
-        <option value="SG">สิงคโปร์</option>
-
-
-        <option value="CN">จีน</option>
-
-
-        <option value="MM">พม่า</option>
-
-
-        <option value="custom">กำหนดเอง</option>
-
-
-      </select>
-
-
+  <div class="location-row">
+    <div class="field field-country">
+      <label>ประเทศ</label>
+      <div class="searchable-select">
+        <input type="text" id="tCountrySearch" class="search-input" placeholder="พิมพ์ค้นหาประเทศ..." onfocus="ensureLocationsLoaded()" value="ไทย">
+        <div id="tCountryOptions" class="options-list"></div>
+        <select id="tCountry" onfocus="ensureLocationsLoaded()" onchange="onCountryChange('t')" style="display: none;">
+          <option value="TH" selected>ประเทศไทย</option>
+          <option value="IN">อินเดีย</option>
+          <option value="SG">สิงคโปร์</option>
+          <option value="CN">จีน</option>
+          <option value="MM">พม่า</option>
+          <option value="custom">กำหนดเอง</option>
+        </select>
+      </div>
     </div>
-
-
-  </div>
-
-
-  <div class="field field-city">
-
-
-    <label>เมือง/จังหวัด</label>
-
-
-    <div class="searchable-select">
-
-
-      <input type="text" id="tCitySearch" class="search-input" placeholder="พิมพ์ค้นหาเมือง/จังหวัด..." onfocus="ensureLocationsLoaded()" value="กรุงเทพมหานคร">
-
-
-      <div id="tCityOptions" class="options-list"></div>
-
-
-      <select id="tCity" onfocus="ensureLocationsLoaded()" onchange="onCityChange('t')" style="display: none;">
-
-
-        <!-- Populated dynamically -->
-
-
-      </select>
-
-
+    <div class="field field-city">
+      <label>เมือง/จังหวัด</label>
+      <div class="searchable-select">
+        <input type="text" id="tCitySearch" class="search-input" placeholder="พิมพ์ค้นหาเมือง/จังหวัด..." onfocus="ensureLocationsLoaded()" value="กรุงเทพมหานคร">
+        <div id="tCityOptions" class="options-list"></div>
+        <select id="tCity" onfocus="ensureLocationsLoaded()" onchange="onCityChange('t')" style="display: none;">
+          <!-- Populated dynamically -->
+        </select>
+      </div>
     </div>
-
-
   </div>
-
 
   <div class="field field-coord" id="tLatField" style="display: none;">
-
-
     <label>ละติจูด</label>
-
-
-    <input type="number" id="tLat" value="13.7563" step="any" style="width: 80px;">
-
-
+    <input type="number" id="tLat" value="13.7563" step="any" class="w-80">
   </div>
-
-
   <div class="field field-coord" id="tLonField" style="display: none;">
-
-
     <label>ลองจิจูด</label>
-
-
-    <input type="number" id="tLon" value="100.5018" step="any" style="width: 80px;">
-
-
+    <input type="number" id="tLon" value="100.5018" step="any" class="w-80">
   </div>
 
-
-  <button class="btn btn-ghost" onclick="setTransitNow()">ตอนนี้</button>
-
-
-  <button id="btnRunCalc" class="btn btn-coral" onclick="runCalc(true)">✦ ผูกดวง</button>
-
-
-  <div id="lagnaBadge" class="lagna-badge">ลัคนาราศี...</div>
-
+  <div class="calc-btn-container" style="width: 100%; display: flex; justify-content: center; align-items: center; margin-top: 1rem; flex-wrap: wrap; gap: 8px;">
+    <button id="btnRunCalc" class="btn btn-coral" onclick="runCalc(true)" style="padding: 0.6rem 2.5rem; font-size: 1rem; border-radius: 12px; height: auto;">✦ ผูกดวง</button>
+    <div id="lagnaBadge" class="lagna-badge">ลัคนาราศี...</div>
+  </div>
 
 </div>
-
-
-
-
 
 <!-- MAIN CONTENT -->
 
-
 <main>
-
 
   <div class="layout">
 
-
     <!-- WHEEL -->
-
 
     <div class="wheel-wrap">
 
-
       <svg id="wheel-svg" viewBox="0 0 520 520" xmlns="http://www.w3.org/2000/svg"></svg>
-
 
       <div class="legend">
 
-
         <div class="legend-item"><div class="lc" style="background:var(--blue-l)"></div> ดวงกำเนิด (วงใน) — เลขไทย</div>
-
 
         <div class="legend-item"><div class="lc" style="background:var(--white);border:1px solid #bbb"></div> ดวงจร (วงนอก) — เลขอารบิก</div>
 
-
         <div class="legend-item"><strong style="color:#7A5510;font-size:.85rem">พ</strong> พักร์</div>
-
 
         <div class="legend-item"><strong style="color:#2E7D32;font-size:.85rem">ม</strong> มนต์</div>
 
-
         <div class="legend-item"><strong style="color:#1976D2;font-size:.85rem">ส</strong> เสริด</div>
-
 
       </div>
 
-
     </div>
-
-
- 
-
 
     <!-- TABLE -->
 
-
     <div style="display: flex; flex-direction: column; gap: 1.4rem;">
 
-
       <!-- TABLE CARD -->
-
-
       <div class="card">
-
-
         <div class="card-title">📊 ตารางสมผุสดาว</div>
+        
+        <!-- ดวงกำเนิด Section -->
+        <button class="btn btn-ghost" style="width: 100%; font-size: 0.8rem; height: 2.2rem; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 0.6rem;" onclick="toggleTable('natal')">
+          📋 ตารางสมผุสดาว (ดวงกำเนิด)
+        </button>
+        <div id="table-natal-date" style="font-size: 0.8rem; text-align: center; color: var(--dim); margin-top: -0.4rem; margin-bottom: 0.6rem; display: none;"></div>
+        <div id="table-natal-wrapper" style="display: none; margin-bottom: 1rem; border: 1.5px solid var(--border); border-radius: 10px; overflow-x: auto;">
+          <table class="ptable" style="width: 100%;">
+            <thead>
+              <tr>
+                <th style="text-align:center; width: 8%;">สัญลักษณ์</th>
+                <th style="width: 22%;">ดาว/ปัจจัย</th>
+                <th style="width: 18%;">ราศี</th>
+                <th style="width: 26%; white-space: nowrap;">ค่าองศา / ลิปดา</th>
+                <th style="width: 26%;">มาตรฐานดาว</th>
+              </tr>
+            </thead>
+            <tbody id="natalTableTbody"></tbody>
+          </table>
+        </div>
 
-
-        <table class="ptable">
-
-
-          <thead>
-
-
-            <tr>
-
-
-              <th style="text-align:center; width: 8%;">สัญลักษณ์</th>
-
-
-              <th style="width: 22%;">ดาว/ปัจจัย</th>
-
-
-              <th style="width: 18%;">ราศี</th>
-
-
-              <th style="width: 26%; white-space: nowrap;">ค่าองศา / ลิปดา</th>
-
-
-              <th style="width: 26%;">มาตรฐานดาว</th>
-
-
-            </tr>
-
-
-          </thead>
-
-
-          <tbody id="tableTbody"></tbody>
-
-
-        </table>
-
-
+        <!-- ดวงจร Section -->
+        <button class="btn btn-ghost" style="width: 100%; font-size: 0.8rem; height: 2.2rem; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;" onclick="toggleTable('transit')">
+          📋 ตารางสมผุสดาว (ดวงจร)
+        </button>
+        <div id="table-transit-date" style="font-size: 0.8rem; text-align: center; color: var(--dim); margin-top: 0.2rem; margin-bottom: 0.6rem; display: none;"></div>
+        <div id="table-transit-wrapper" style="display: none; margin-top: 0.6rem; border: 1.5px solid var(--border); border-radius: 10px; overflow-x: auto;">
+          <table class="ptable" style="width: 100%;">
+            <thead>
+              <tr>
+                <th style="text-align:center; width: 8%;">สัญลักษณ์</th>
+                <th style="width: 22%;">ดาว/ปัจจัย</th>
+                <th style="width: 18%;">ราศี</th>
+                <th style="width: 26%; white-space: nowrap;">ค่าองศา / ลิปดา</th>
+                <th style="width: 26%;">มาตรฐานดาว</th>
+              </tr>
+            </thead>
+            <tbody id="transitTableTbody"></tbody>
+          </table>
+        </div>
       </div>
 
-
     </div>
-
-
-
-
 
     <!-- THAKSA CHART -->
 
-
     <div style="display: flex; flex-direction: column; gap: 1.4rem;">
-
 
       <!-- THAKSA CARD -->
 
-
       <div class="card">
-
-
-        <div class="card-title" style="flex-direction: column; align-items: flex-start; gap: 0.25rem;">
-
-
-          <div style="display: flex; align-items: center; gap: 0.4rem;">☸️ ตารางทักษา</div>
-
-
-          <div id="thaksa-subtitle" style="font-size: 0.82rem; font-weight: 500; color: var(--dim); margin-top: 2px;">เกิดวัน...</div>
-
-
-
-
-
-
-        <div id="thaksa-container" style="display: flex; justify-content: center; align-items: center; padding: 0.5rem 0;">
-
-
-          <!-- Populated dynamically -->
-
-
+        <div class="card-title" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.5rem; width: 100%;">
+          <div style="display: flex; flex-direction: column; gap: 0.25rem;">
+            <div style="display: flex; align-items: center; gap: 0.4rem; font-weight: 700;">☸️ ตารางทักษา</div>
+            <div id="thaksa-subtitle" style="font-size: 0.82rem; font-weight: 500; color: var(--dim); margin-top: 2px;">เกิดวัน...</div>
+          </div>
+          <div class="thaksa-mode-selector" style="display: inline-flex; background: rgba(0, 0, 0, 0.04); padding: 3px; border-radius: 10px; gap: 4px; border: 1.5px solid var(--border);">
+            <button type="button" id="btn-thaksa-mod8" style="padding: 3px 10px; font-size: 0.78rem; height: 1.8rem; border-radius: 7px; font-weight: 700; cursor: pointer; background: var(--blue-l); color: white; border: none; transition: all 0.2s;" onclick="setThaksaMode(8)">หาร 8</button>
+            <button type="button" id="btn-thaksa-mod9" style="padding: 3px 10px; font-size: 0.78rem; height: 1.8rem; border-radius: 7px; font-weight: 700; cursor: pointer; background: transparent; color: var(--dim); border: none; transition: all 0.2s;" onclick="setThaksaMode(9)">หาร 9</button>
+          </div>
         </div>
-
+        <div id="thaksa-container" style="display: flex; justify-content: center; align-items: center; padding: 0.5rem 0;">
+          <!-- Populated dynamically -->
+        </div>
 
         <div id="mahathaksa-info" style="border-top: 1.5px solid var(--border); padding-top: 1rem; display: none;">
 
-
           <!-- Populated dynamically -->
-
 
         </div>
 
+        <div id="thaksa-colors-info" style="border-top: 1.5px solid var(--border); padding-top: 1rem; margin-top: 1rem; display: none;">
+
+          <!-- Populated dynamically -->
+
+        </div>
 
       </div>
 
-
     </div>
-
 
   </div>
 
-
 </main>
-
-
-</div><!-- END calculator-tab -->
-
-
-
-
-
-
-
-
-<!-- ============================================================
-
-
-     NEW TABS CONTENT
-
-
-     ============================================================ -->
-
-
-
-
-
-
-
-
-
-
 
 </div><!-- END calculator-tab -->
 
 
 <!-- BOOKING TAB -->
 
-
 <div id="booking-tab" class="tab-content hidden">
-
 
   <!-- Queue Status Card (placed at the top) -->
 
-
   <div class="card" style="max-width: 800px; margin: 0 auto 1.5rem auto;">
-
 
     <div class="card-title">📌 สถานะคิวดูดวงของฉัน</div>
 
-
     <div style="font-size: 0.88rem; color: var(--dim); margin-bottom: 1rem;">คิวที่คุณลงทะเบียนไว้ทั้งหมด รายละเอียด และประวัติตรวจดวง</div>
-
-
-    
-
 
     <!-- Filter Toggle Buttons -->
 
-
     <div style="display: flex; gap: 8px; margin-bottom: 1.2rem; flex-wrap: wrap;">
-
 
       <button type="button" class="tog tog-n" id="filterTogActive" onclick="toggleBookingFilter('active')">
 
-
         คิวของฉัน
 
-
       </button>
-
 
       <button type="button" class="tog tog-t" id="filterTogCompleted" onclick="toggleBookingFilter('completed')">
 
-
         ตรวจดวงแล้ว
-
 
       </button>
 
-
     </div>
-
-
-
-
 
     <div class="booking-list" id="bookingsList">
 
-
       <!-- Dynamic list will be populated by renderBookings() -->
 
-
     </div>
-
 
   </div>
 
@@ -860,7 +504,10 @@ window.onerror = function(message, source, lineno, colno, error) {
             <div class="astrologer-name">อ. โกโก้</div>
           </div>
           <div class="astrologer-specialty">โหราศาสตร์ไทย ระบบลาหิรี</div>
-          <div class="astrologer-price">399 ฿ / 45 นาที</div>
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px; margin-top: 4px;">
+            <span style="font-size: 0.8rem; font-weight: 700; color: var(--coral-d);">📞 โทรผ่านไลน์</span>
+            <span class="astrologer-price" style="margin-top: 0;">399 ฿ / 45 นาที</span>
+          </div>
         </div>
         <div class="astrologer-bio">ไขข้อข้องใจผ่านแผนที่ดวงดาวอย่างสร้างสรรค์ พร้อมมอบพลังใจดีๆ และแนะนำแนวทางการแก้ไขปัญหาชีวิต เพื่อก้าวเดินต่อไปได้อย่างมั่นใจในทุกเรื่องราว</div>
         <button type="button" class="btn btn-coral" style="width: 100%;" onclick="selectAstrologer('อ. โกโก้ (โหราศาสตร์ไทย ระบบลาหิรี)')">จองคิว</button>
@@ -873,7 +520,10 @@ window.onerror = function(message, source, lineno, colno, error) {
             <div class="astrologer-name">อ. โกโก้</div>
           </div>
           <div class="astrologer-specialty">วิเคราะห์เบอร์มงคล / ชื่อ</div>
-          <div class="astrologer-price">399 ฿ / 30 นาที</div>
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px; margin-top: 4px;">
+            <span style="font-size: 0.8rem; font-weight: 700; color: var(--coral-d);">📞 โทรผ่านไลน์</span>
+            <span class="astrologer-price" style="margin-top: 0;">399 ฿ / 30 นาที</span>
+          </div>
         </div>
         <div class="astrologer-bio">ไขข้อข้องใจและชี้แนะแนวทางแก้ปัญหาความติดขัดในชีวิต ผ่านศาสตร์ตัวเลขและชื่อมงคล คัดเลือกตัวเลขเปิดทางบวก เติมกำลังใจให้พร้อมรับสิ่งดีๆ เข้ามา</div>
         <button type="button" class="btn btn-coral" style="width: 100%;" onclick="selectAstrologer('อ. โกโก้ (วิเคราะห์เบอร์มงคล/ชื่อ)')">จองคิว</button>
@@ -886,7 +536,10 @@ window.onerror = function(message, source, lineno, colno, error) {
             <div class="astrologer-name">อ. นัดสา</div>
           </div>
           <div class="astrologer-specialty">โหราศาสตร์ไทย ระบบลาหิรี</div>
-          <div class="astrologer-price">399 ฿ / 45 นาที</div>
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px; margin-top: 4px;">
+            <span style="font-size: 0.8rem; font-weight: 700; color: var(--coral-d);">📞 โทรผ่านไลน์</span>
+            <span class="astrologer-price" style="margin-top: 0;">399 ฿ / 45 นาที</span>
+          </div>
         </div>
         <div class="astrologer-bio">วิเคราะห์จุดติดขัด หาทางออก พร้อมมอบไอเดียเชิงบวกที่จะช่วยบาลานซ์ทั้งเรื่องงาน ความสัมพันธ์ และพลังใจ ให้คุณก้าวไปข้างหน้าอย่างถูกจังหวะเวลา</div>
         <button type="button" class="btn btn-coral" style="width: 100%;" onclick="selectAstrologer('อ. นัดสา (โหราศาสตร์ไทย ระบบลาหิรี)')">จองคิว</button>
@@ -896,555 +549,327 @@ window.onerror = function(message, source, lineno, colno, error) {
 
   <div class="card booking-container" id="bookingFormCard" style="max-width: 800px; margin: 0 auto 1.5rem auto;">
 
-
     <div class="card-title">🗓️ ระบบจองคิวตรวจดวงชะตา</div>
-
 
     <div style="font-size: 0.88rem; color: var(--dim); margin-bottom: 1.5rem;">ระบุรายละเอียดเพื่อยืนยันนัดหมายของคุณกับหมอดู</div>
 
-
-    
-
-
     <!-- Free Horoscope Promo Code Banner -->
-
 
     <div style="background: rgba(240, 112, 96, 0.08); border: 1.5px dashed var(--coral); border-radius: 12px; padding: 0.8rem 1rem; font-size: 0.88rem; font-weight: 700; color: var(--coral-d); margin-bottom: 1.5rem; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px; box-sizing: border-box;">
 
-
       <span>🎁 ใส่โค้ดดูดวงฟรี (เฉพาะครั้งแรก) <strong style="font-size: 1.05rem; color: var(--text); background: rgba(255,255,255,0.7); padding: 2px 8px; border-radius: 6px; border: 1px solid var(--coral-l); font-family: monospace;">Muhubfirst</strong></span>
 
-
     </div>
-
-
-    
-
 
     <!-- Google Calendar Sync Card (Hidden in Background) -->
 
-
     <div class="card" style="display: none;">
-
 
       <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.8rem;">
 
-
         <span style="font-size: 0.9rem; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 6px;">
-
 
           📅 การเชื่อมต่อ Google Calendar (ตรวจสอบสิทธิ์ว่าง)
 
-
         </span>
-
 
         <span id="gcalStatusBadge" style="font-size: 0.78rem; font-weight: 700; color: #2E7D32; background: #E8F5E9; padding: 3px 8px; border-radius: 20px; display: inline-flex; align-items: center; gap: 4px;">
 
-
           <span style="width: 6px; height: 6px; border-radius: 50%; background: #2E7D32; display: inline-block;"></span> 
-
 
           เชื่อมต่อระบบออนไลน์แล้ว
 
-
         </span>
 
-
       </div>
-
 
       <div style="width: 100%;">
 
-
         <div class="field" style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 0; width: 100%;">
-
 
           <label style="font-size: 0.72rem; font-weight: 700; color: var(--dim);">Google Calendar API Key (ทางเลือก - สำหรับดึงข้อมูลจริง)</label>
 
-
           <input type="password" id="gcalApiKey" placeholder="ใส่ Google Calendar API Key เพื่อดึงข้อมูลจริง" style="width: 100%; height: 2.1rem;" onchange="onGCalApiKeyChange()">
-
 
         </div>
 
-
       </div>
-
 
     </div>
 
-
-
-
-
     <form id="bookingForm" onsubmit="submitBooking(event)">
-
 
       <!-- Reschedule warning banner -->
 
-
       <div id="rescheduleWarning" style="display: none; background: rgba(226, 184, 66, 0.12); border: 1.5px solid var(--gold); border-radius: 8px; padding: 12px; margin-bottom: 1.5rem; color: var(--gold); font-weight: bold; font-size: 0.9rem;">
-
 
         🕒 กำลังเลื่อนนัดคิว ID: <span id="rescheduleIdText" style="text-decoration: underline;"></span> (อ้างอิงสลิปใบเดิม)<br>
 
-
         <span style="font-size: 0.8rem; font-weight: normal; color: var(--dim); display: block; margin-top: 4px;">
-
 
           กรุณาเลือกวันและเวลาใหม่ที่คุณต้องการ จากนั้นกดยืนยันด้านล่าง (หากต้องการยกเลิกการเลื่อนนัด <a href="javascript:void(0)" onclick="cancelReschedule()" style="color: var(--coral-l); text-decoration: underline;">กดยกเลิกที่นี่</a>)
 
-
         </span>
-
 
       </div>
 
+      <div class="booking-grid" style="display: flex; gap: 8px; align-items: flex-start; margin-bottom: 1.2rem; flex-wrap: nowrap;">
 
-      
+        <div class="field" style="flex: 1 1 45%; min-width: 0; margin-bottom: 0;">
 
+          <label style="font-size: 0.78rem; font-weight: 700; white-space: nowrap;">เลือกแพคเกจ</label>
 
-      <div class="booking-grid">
+          <select id="bookAstrologer" style="width: 100%; height: 2.25rem; font-size: 0.78rem; padding: 4px; text-overflow: ellipsis;" required onchange="onAstrologerChange()">
 
-
-        <div class="field">
-
-
-          <label>เลือกนักพยากรณ์</label>
-
-
-          <select id="bookAstrologer" style="width: 100%;" required onchange="onAstrologerChange()">
-
-
-            <option value="">-- เลือกนักพยากรณ์ --</option>
-
+            <option value="">-- เลือกแพคเกจ --</option>
 
             <option value="อ. โกโก้ (โหราศาสตร์ไทย ระบบลาหิรี)">อ. โกโก้ (โหราศาสตร์ไทย ระบบลาหิรี) (399฿/45นาที)</option>
 
-
             <option value="อ. โกโก้ (วิเคราะห์เบอร์มงคล/ชื่อ)">อ. โกโก้ (วิเคราะห์เบอร์มงคล/ชื่อ) (399฿/30นาที)</option>
-
 
             <option value="อ. นัดสา (โหราศาสตร์ไทย ระบบลาหิรี)">อ. นัดสา (โหราศาสตร์ไทย ระบบลาหิรี) (399฿/45นาที)</option>
 
-
           </select>
 
-
         </div>
 
+        <input type="hidden" id="bookService" value="โทรผ่านไลน์">
 
-        <div class="field">
+        <div class="field field-date-picker" style="flex: 1 1 55%; min-width: 0; margin-bottom: 0;">
 
+          <label style="font-size: 0.78rem; font-weight: 700; white-space: nowrap;">เลือกวันนัดหมาย (พ.ศ.)</label>
 
-          <label>รูปแบบบริการ</label>
+          <div style="display: flex; gap: 2px; align-items: center; width: 100%;">
 
+            <select id="bookDateDay" onchange="syncBookingDate()" style="padding: 4px 1px; border-radius: 8px; border: 1.5px solid var(--border); background: #ffffff; color: var(--text); height: 2.25rem; font-size: 0.75rem; font-weight: 600; cursor: pointer; flex: 1; min-width: 36px; text-align: center;"></select>
 
-          <select id="bookService" style="width: 100%;" required>
+            <select id="bookDateMonth" onchange="syncBookingDate()" style="padding: 4px 1px; border-radius: 8px; border: 1.5px solid var(--border); background: #ffffff; color: var(--text); height: 2.25rem; font-size: 0.72rem; font-weight: 600; cursor: pointer; flex: 2; min-width: 66px;"></select>
 
+            <input type="number" id="bookDateYear" min="2567" max="2575" onchange="syncBookingDate()" oninput="syncBookingDate()" style="padding: 4px 1px; border-radius: 8px; border: 1.5px solid var(--border); background: #ffffff; color: var(--text); height: 2.25rem; font-size: 0.75rem; font-weight: 600; box-sizing: border-box; flex: 1.3; min-width: 48px; text-align: center;">
 
-            <option value="โทรด้วยเสียง ผ่านไลน์">โทรด้วยเสียง ผ่านไลน์</option>
+            <input type="date" id="bookDate" required onchange="onDateChange()" style="display: none;">
 
-
-            <option value="พิมพ์แชทถามตอบ">พิมพ์แชทถามตอบออนไลน์</option>
-
-
-            <option value="ส่งสรุปเอกสาร PDF">สรุปวิเคราะห์เอกสาร PDF</option>
-
-
-          </select>
-
+          </div>
 
         </div>
-
-
-        <div class="field">
-
-
-          <label>เลือกวันนัดหมาย</label>
-
-
-          <input type="date" id="bookDate" required onchange="onDateChange()" style="width: 100%;">
-
-
-        </div>
-
-
-
-
 
       </div>
-
-
-
-
 
       <div style="margin-bottom: 1.5rem;">
 
-
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-
 
           <div style="font-size: 0.85rem; font-weight: 700; color: var(--text);">เลือกเวลาที่สะดวก</div>
 
-
           <span id="slotsLoader" style="font-size: 0.8rem; font-weight: 700; color: var(--blue); display: none;">
-
 
             🔄 กำลังตรวจสอบสถานะคิวว่างจากปฏิทิน...
 
-
           </span>
 
-
         </div>
-
 
         <div class="time-slots" id="slotsContainer">
 
-
           <!-- Slots will be populated dynamically -->
 
-
         </div>
-
 
         <div style="margin-top: 1.2rem; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
 
-
           <button type="button" class="btn btn-coral" style="display: inline-flex; align-items: center; gap: 6px; justify-content: center; width: auto; min-width: 140px; height: 2.4rem;" onclick="checkCalendarAvailability()">
-
 
             🔄 เช็คตารางนัด
 
-
           </button>
-
 
           <div id="bookingStatusMessage" style="font-size: 0.88rem; font-weight: 700; display: none; align-items: center; gap: 6px; line-height: 1.4; flex: 1;"></div>
 
-
         </div>
-
 
         <input type="hidden" id="selectedTime">
 
-
       </div>
-
-
-
-
 
       <div class="card" style="border: 1px dashed #E8D0A0; background: var(--cream1); margin-bottom: 1.5rem; padding: 1rem;">
 
-
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; flex-wrap: wrap; gap: 0.5rem;">
-
 
           <span style="font-size: 0.9rem; font-weight: 700; color: var(--text);">📝 ข้อมูลวันเกิดสำหรับทำนายดวง</span>
 
-
           <button type="button" class="btn btn-ghost" style="padding: 2px 10px; font-size: 0.78rem;" onclick="autoFillBooking()">📥 ดึงข้อมูลจากหน้าผูกดวง</button>
 
-
         </div>
-
 
         <div style="display: flex; flex-direction: column; gap: 1rem;">
 
-
           <!-- Name and Line ID row -->
-
 
           <div style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
 
-
             <div class="field" style="display: flex; flex-direction: column; gap: 0.2rem; flex: 1; min-width: 200px; max-width: 320px;">
-
 
               <label style="font-size: .72rem; font-weight: 700; color: var(--dim); letter-spacing: .04em;">ชื่อผู้รับทำนาย</label>
 
-
               <input type="text" id="bookName" style="width: 100%; padding: 0.65rem 0.75rem; height: 2.8rem; box-sizing: border-box;" placeholder="ชื่อเล่น หรือชื่อจริง" required>
 
-
             </div>
-
 
             <div class="field" style="display: flex; flex-direction: column; gap: 0.2rem; flex: 1; min-width: 200px; max-width: 320px;">
 
-
               <label style="font-size: .72rem; font-weight: 700; color: var(--dim); letter-spacing: .04em;">Line ID ของคุณ</label>
-
 
               <input type="text" id="bookLineId" style="width: 100%; padding: 0.65rem 0.75rem; height: 2.8rem; box-sizing: border-box;" placeholder="Line ID (สำหรับติดต่อดูดวง)" required>
 
-
             </div>
 
-
           </div>
-
 
           <!-- Birth details row in bar-row format -->
 
-
           <div class="bar-row" style="border: none; background: transparent; padding: 0; box-shadow: none; margin: 0; display: flex; flex-wrap: wrap; gap: 0.8rem; align-items: flex-end; width: 100%;">
-
 
             <div class="field field-date">
 
-
               <label>วันเกิด (พ.ศ.)</label>
-
 
               <div style="display: flex; gap: 4px;">
 
-
                 <select id="bookDay" style="width: 60px;"></select>
-
 
                 <select id="bookMonth" style="width: 115px;"></select>
 
-
                 <input type="number" id="bookYear" value="2533" min="2443" max="2743" style="width: 80px;" required>
-
 
               </div>
 
-
             </div>
-
 
             <div class="field field-time">
 
-
               <label>เวลาเกิด</label>
-
 
               <div style="display: flex; gap: 4px; align-items: center;">
 
-
                 <input type="number" id="bookHour" value="08" min="0" max="23" style="width: 55px;" placeholder="ชม." required>
-
 
                 <span style="font-weight: bold; color: var(--dim);">:</span>
 
-
                 <input type="number" id="bookMin" value="00" min="0" max="59" style="width: 55px;" placeholder="นาที" required>
 
-
               </div>
-
 
             </div>
 
-
-            <div class="field field-country">
-
-
-              <label>ประเทศ</label>
-
-
-              <div class="searchable-select">
-
-
-                <input type="text" id="bookCountrySearch" class="search-input" placeholder="พิมพ์ค้นหาประเทศ..." onfocus="ensureLocationsLoaded()" value="ไทย" required>
-
-
-                <div id="bookCountryOptions" class="options-list"></div>
-
-
-                <select id="bookCountry" onfocus="ensureLocationsLoaded()" onchange="onCountryChange('book')" style="display: none;" required>
-
-
-                  <!-- Populated dynamically -->
-
-
-                </select>
-
-
+            <div class="location-row">
+              <div class="field field-country">
+                <label>ประเทศ</label>
+                <div class="searchable-select">
+                  <input type="text" id="bookCountrySearch" class="search-input" placeholder="พิมพ์ค้นหาประเทศ..." onfocus="ensureLocationsLoaded()" value="ไทย" required>
+                  <div id="bookCountryOptions" class="options-list"></div>
+                  <select id="bookCountry" onfocus="ensureLocationsLoaded()" onchange="onCountryChange('book')" style="display: none;" required>
+                    <!-- Populated dynamically -->
+                  </select>
+                </div>
               </div>
 
-
-            </div>
-
-
-            <div class="field field-city">
-
-
-              <label>เมือง/จังหวัด</label>
-
-
-              <div class="searchable-select">
-
-
-                <input type="text" id="bookCitySearch" class="search-input" placeholder="พิมพ์ค้นหาเมือง/จังหวัด..." onfocus="ensureLocationsLoaded()" value="กรุงเทพมหานคร" required>
-
-
-                <div id="bookCityOptions" class="options-list"></div>
-
-
-                <select id="bookCity" onfocus="ensureLocationsLoaded()" onchange="onCityChange('book')" style="display: none;" required>
-
-
-                  <!-- Populated dynamically -->
-
-
-                </select>
-
-
+              <div class="field field-city">
+                <label>เมือง/จังหวัด</label>
+                <div class="searchable-select">
+                  <input type="text" id="bookCitySearch" class="search-input" placeholder="พิมพ์ค้นหาเมือง/จังหวัด..." onfocus="ensureLocationsLoaded()" value="กรุงเทพมหานคร" required>
+                  <div id="bookCityOptions" class="options-list"></div>
+                  <select id="bookCity" onfocus="ensureLocationsLoaded()" onchange="onCityChange('book')" style="display: none;" required>
+                    <!-- Populated dynamically -->
+                  </select>
+                </div>
               </div>
-
-
             </div>
-
 
             <div class="field field-coord" id="bookLatField" style="display: none;">
 
-
               <label>ละติจูด</label>
-
 
               <input type="number" id="bookLat" value="13.7563" step="any" style="width: 90px;">
 
-
             </div>
-
 
             <div class="field field-coord" id="bookLonField" style="display: none;">
 
-
               <label>ลองจิจูด</label>
-
 
               <input type="number" id="bookLon" value="100.5018" step="any" style="width: 90px;">
 
-
             </div>
 
-
           </div>
-
 
           <!-- Questions Field -->
 
-
           <div class="field" style="display: flex; flex-direction: column; gap: 0.4rem; width: 100%; margin-top: 0.4rem;">
-
 
             <label style="font-size: .75rem; font-weight: 700; color: var(--dim); letter-spacing: .04em;">2-3 คำถามที่อยากทราบเป็นพิเศษ</label>
 
-
             <textarea id="bookQuestions" style="width: 100%; padding: 0.65rem 0.75rem; height: 4.8rem; box-sizing: border-box; resize: vertical;" placeholder="ระบุคำถาม 2-3 ข้อที่อยากรู้เป็นพิเศษ"></textarea>
-
 
           </div>
 
-
         </div>
 
-
       </div>
-
-
-
-
 
       <div style="text-align: left;">
 
-
         <button type="submit" class="btn btn-coral" style="padding: 0.6rem 2rem; width: auto; min-width: 250px;">✦ ยืนยันตารางนัด ไปที่หน้าชำระเงิน</button>
-
 
       </div>
 
-
     </form>
-
-
-    
-
 
     <!-- BOOKING CHECKOUT INLINE SECTION -->
 
-
     <div id="bookingCheckoutSection" class="checkout-section">
-
 
       <div class="checkout-container">
 
-
         <div id="checkoutTitle" class="checkout-title">
-
 
           💳 ยืนยันการชำระเงินค่าจองคิว
 
-
         </div>
-
-
-        
-
 
         <!-- Booking Details Summary -->
 
-
         <div style="background: var(--cream); border: 1.5px solid #E8D0A0; border-radius: 12px; padding: 1rem; margin-bottom: 1.2rem; font-size: 0.88rem; display: flex; flex-direction: column; gap: 6px; text-align: left;">
-
 
           <div><span style="color: var(--dim); font-weight: 600;">นักพยากรณ์:</span> <strong id="summaryAstrologer">-</strong></div>
 
-
           <div><span style="color: var(--dim); font-weight: 600;">บริการ:</span> <span id="summaryService">-</span></div>
-
 
           <div><span style="color: var(--dim); font-weight: 600;">วันและเวลานัดหมาย:</span> <strong id="summaryTime">-</strong></div>
 
-
           <div><span style="color: var(--dim); font-weight: 600;">ชื่อผู้รับการทำนาย:</span> <span id="summaryName">-</span></div>
-
 
           <div><span style="color: var(--dim); font-weight: 600;">Line ID ติดต่อ:</span> <span id="summaryLine">-</span></div>
 
-
           <div id="summaryQuestionsRow" style="display: none;"><span style="color: var(--dim); font-weight: 600;">คำถามที่อยากทราบ:</span> <span id="summaryQuestions" style="word-break: break-all;">-</span></div>
-
 
           <div id="checkoutPriceContainer" style="border-top: 1px dashed #E8D0A0; margin-top: 6px; padding-top: 6px; display: flex; justify-content: space-between; align-items: center; font-size: 1.05rem;">
 
-
             <span style="font-weight: 700; color: var(--text);">ยอดชำระทั้งสิ้น:</span>
-
 
             <strong id="checkoutPriceText" style="color: var(--coral-d); font-size: 1.2rem;">399 ฿</strong>
 
-
           </div>
 
-
         </div>
-
-
-
-
 
         <!-- Reschedule Slip Reference Info -->
 
-
         <div id="checkoutRescheduleInfo" style="display: none; background: rgba(40, 167, 69, 0.12); border: 1.5px solid rgba(40, 167, 69, 0.3); border-radius: 12px; padding: 1rem; margin-bottom: 1.2rem; font-size: 0.88rem; color: #28a745; text-align: left; font-weight: 600; line-height: 1.4;">
-
 
           🟢 ระบบตรวจพบสลิปการโอนเงินใบเดิมเรียบร้อยแล้ว ไม่จำเป็นต้องแนบไฟล์ใหม่หรือชำระเงินเพิ่มเติม ระบบจะอ้างอิงข้อมูลสลิปการชำระเงินเดิมสำหรับคิวจองนี้
 
-
         </div>
-
-
- 
-
 
         <!-- Promo Code Section -->
         <div class="card" id="promoCodeSection" style="border: 1px dashed #E8D0A0; background: var(--cream1); margin-bottom: 1.2rem; padding: 1rem; text-align: left;">
@@ -1458,192 +883,121 @@ window.onerror = function(message, source, lineno, colno, error) {
 
         <!-- PromptPay QR Code Real Card -->
 
-
         <div id="checkoutQrSection" style="display: flex; flex-direction: column; align-items: center; gap: 8px; margin-bottom: 1.2rem; background: #ffffff; border: 1px solid #eee; padding: 1rem; border-radius: 12px;">
-
 
           <!-- payment_qr.png is kept local (non-github/) — replace with your PromptPay QR before deployment -->
 
-
           <img src="payment_qr.png" alt="PromptPay QR Code" style="width:100%;max-width:280px;height:auto;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.08);">
-
 
           <div style="font-size: 0.72rem; color: var(--dim); text-align: center; margin-top: 4px;">
 
-
             เลขที่อ้างอิง: <span id="paymentRefId" style="font-weight: 700; color: var(--text);">MU-88912-339</span>
 
-
           </div>
-
 
           <div style="font-size: 0.8rem; font-weight: 700; color: #d32f2f;">
 
-
             ⏳ กรุณาชำระเงินและแนบสลิปภายใน <span id="paymentTimer">30:00</span> นาที
-
 
           </div>
 
-
         </div>
-
-
-
-
 
         <!-- Slip Upload Form -->
 
-
         <div id="checkoutSlipSection" style="margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 8px; text-align: left;">
-
 
           <label style="font-size: 0.78rem; font-weight: 700; color: var(--text);">แนบสลิปการโอนเงิน</label>
 
-
           <div style="display: flex; gap: 8px;">
-
 
             <input type="file" id="bookingSlipFile" accept="image/*" style="display: none;" onchange="onBookingSlipSelected()">
 
-
             <button type="button" class="btn btn-ghost" style="width: 100%; height: 2.2rem; min-width: auto; font-size: 0.82rem;" onclick="document.getElementById('bookingSlipFile').click()">
-
 
               📁 <span id="bookingSlipFilename">เลือกไฟล์รูปภาพสลิป</span>
 
-
             </button>
 
-
           </div>
-
 
           <div style="display: flex; flex-direction: column; gap: 4px; margin-top: 6px;">
 
-
             <label style="font-size: 0.72rem; font-weight: 700; color: var(--dim); letter-spacing: .04em;">ชื่อบัญชีผู้โอน</label>
-
 
             <input type="text" id="slipSenderName" style="width: 100%; padding: 0.4rem 0.6rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.82rem; background: var(--bg-card); color: var(--text); box-sizing: border-box;" placeholder="ระบุชื่อบัญชีผู้โอน">
 
-
           </div>
-
 
           <div style="display: flex; flex-direction: column; gap: 4px;">
 
-
             <label style="font-size: 0.72rem; font-weight: 700; color: var(--dim); letter-spacing: .04em;">วันเวลาโอน (ตามสลิป)</label>
-
 
             <input type="datetime-local" id="slipTransferDateTime" style="width: 100%; padding: 0.4rem 0.6rem; border: 1px solid var(--border); border-radius: 6px; font-size: 0.82rem; background: var(--bg-card); color: var(--text); box-sizing: border-box;">
 
-
           </div>
 
-
         </div>
-
-
-
-
 
         <!-- Confirm Button -->
 
-
         <div style="display: flex; gap: 10px;">
-
 
           <button type="button" class="btn btn-coral" style="flex: 1.5;" onclick="confirmBookingPayment()">✔️ ยืนยันการชำระเงิน</button>
 
-
           <button type="button" class="btn btn-ghost" style="flex: 1;" onclick="closeBookingCheckoutModal()">ยกเลิก</button>
 
-
         </div>
-
 
         <div style="text-align: center; font-size: 0.76rem; color: var(--gold-d); font-weight: 600; margin-top: 10px; line-height: 1.4; letter-spacing: 0.02em;">
 
-
           รอตรวจสอบสลิปสักครู่ แล้วเลื่อนขึ้นไปดูสถานะคิวนัดของคุณด้านบนได้เลยครับ
-
 
         </div>
 
-
       </div>
-
 
     </div>
 
-
   </div>
-
 
 </div><!-- END booking-tab -->
 
-
-
 <!-- MY BOOKINGS TAB (changed to FREE HOROSCOPE "ดูดวงฟรี") -->
-
 
 <div id="my-bookings-tab" class="tab-content hidden" style="padding: 0.5rem 1.2rem 3rem 1.2rem;">
 
-
   <!-- NO DATA STATE -->
-
 
   <div id="free-no-data-view">
 
-
     <div class="free-no-data-card">
-
 
       <span class="free-no-data-icon">🔮</span>
 
-
       <h3 class="free-no-data-title">วิเคราะห์พื้นดวงและเซียมซีส่วนตัว</h3>
-
 
       <p class="free-no-data-text">
 
-
         กรุณากรอกข้อมูลดวงชะตา (วัน เดือน ปี และเวลาเกิด) ในหน้าหลักก่อนนะครับ<br>
-
 
         จากนั้นกดปุ่ม <strong>"✦ ผูกดวง"</strong> เพื่อให้ระบบคำนวณข้อมูลชะตาชีวิตของคุณ แล้วกลับมาเปิดหน้านี้เพื่อดูคำทำนายทักษาจร เสริมโชคลาภ และสั่นเขย่าเซียมซีพระพิฆเนศฟรี!
 
-
       </p>
-
 
       <button class="btn btn-coral" onclick="switchTab('calculator-tab')" style="padding: 0.6rem 2rem; font-size: 0.95rem; height: 2.6rem; border-radius: 12px;">
 
-
         ไปหน้าผูกดวงเลย
-
 
       </button>
 
-
     </div>
-
 
   </div>
 
-
-
-
-
   <!-- DASHBOARD STATE -->
 
-
   <div id="free-dashboard-view" style="display: none; max-width: 1200px; margin: 0 auto;">
-
-
-
 
     <!-- Suggestion Banner to bind birth data -->
     <div id="free-bind-suggest-banner" style="background: rgba(226, 184, 66, 0.08); border: 1.5px dashed var(--gold); border-radius: 12px; padding: 1rem; margin-bottom: 1.2rem; font-size: 0.88rem; text-align: left; display: none; max-width: 800px; margin-left: auto; margin-right: auto; box-sizing: border-box;">
@@ -1653,80 +1007,78 @@ window.onerror = function(message, source, lineno, colno, error) {
     <!-- Quick Nav Bar -->
     <div class="free-quicknav" id="freeQuickNav">
       <button class="free-quicknav-btn" id="btn-nav-transit" onclick="freeScrollTo('free-card-transit')">📊 ดัชนีความปัง</button>
-      <button class="free-quicknav-btn" id="btn-nav-calendar" onclick="freeScrollTo('auspiciousCalendarCard')">📅 ฤกษ์มงคล</button>
       <button class="free-quicknav-btn" id="btn-nav-siimsi" onclick="freeScrollTo('siimsiCard')">🪄 เซียมซี</button>
+      <button class="free-quicknav-btn" id="btn-nav-thaksa" onclick="freeScrollTo('free-card-thaksa')">🎨 สีมงคล</button>
+      <button class="free-quicknav-btn" id="btn-nav-calendar" onclick="freeScrollTo('auspiciousCalendarCard')">📅 ฤกษ์มงคล</button>
       <button class="free-quicknav-btn" id="btn-nav-lagna" onclick="freeScrollTo('free-card-lagna')">♈ พื้นดวง</button>
-      <button class="free-quicknav-btn" id="btn-nav-thaksa" onclick="freeScrollTo('free-card-thaksa')">👗 สีเสื้อผ้า</button>
       <button class="free-quicknav-btn" id="btn-nav-numerology" onclick="freeScrollTo('numerologyCard')">🔮 วิเคราะห์ชื่อ</button>
     </div>
 
-
-
-
-
     <div class="free-dashboard">
-
 
       <!-- Card 3: Dynamic Transit Aspects Ratings -->
 
-
-        <div class="card" id="free-card-transit">
-
+        <div class="card" id="free-card-transit" style="padding: 0.6rem 0.8rem;">
 
           <div class="card-title free-accent-title">📊 ดัชนีความปังวันนี้</div>
 
-
           <!-- Radar Chart Container -->
-          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; margin: 1rem 0;">
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0.1rem 0;">
             <canvas id="radarChartCanvas" style="width: 340px; height: 340px; max-width: 100%; height: auto; display: block; margin: 0 auto; filter: drop-shadow(0 4px 12px rgba(226, 184, 66, 0.08));"></canvas>
           </div>
 
-
-          <div style="font-size: 0.72rem; color: var(--dim); margin-top: 1.2rem; line-height: 1.4;">
-
+          <div style="font-size: 0.7rem; color: var(--dim); margin-top: 0.2rem; line-height: 1.35;">
 
             * หมายเหตุ: ดัชนีความปังเป็นการจำลองวิเคราะห์มุมโยคเกณฑ์และตำแหน่งดวงดาวจรปัจจุบัน (ดวงจร) ที่ส่งผลกระทบต่อลัคนาชะตาเดิมของคุณจริงแบบเรียลไทม์
 
-
           </div>
-
 
         </div>
 
       <!-- Card: Auspicious Days Calendar -->
-      <div class="card" id="auspiciousCalendarCard" style="display: flex; flex-direction: column; gap: 1rem; max-width: 800px; margin: 0 auto 1.5rem auto;">
+      <div class="card" id="auspiciousCalendarCard" style="display: flex; flex-direction: column; gap: 0.5rem; max-width: 800px; width: 100%; box-sizing: border-box; margin: 0 auto 1.5rem auto; padding: 0.8rem 0.6rem; overflow: hidden;">
         <div class="card-title free-accent-title">📅 ปฏิทินฤกษ์มงคลประจำเดือน</div>
-        <div style="font-size: 0.85rem; color: var(--dim); margin-bottom: 0.5rem; line-height: 1.4; text-align: left;">
+        <div style="font-size: 0.8rem; color: var(--dim); margin-bottom: 0.1rem; line-height: 1.35; text-align: left;">
           ตรวจฤกษ์งามยามดี วันมงคลสำหรับกิจกรรมต่าง ๆ และวันควรระวังประจำเดือนตามหลักโหราศาสตร์
         </div>
         
         <!-- Month Selector Header -->
-        <div class="calendar-header" style="display: flex; justify-content: space-between; align-items: center; background: var(--cream1); padding: 0.5rem 1rem; border-radius: 12px; border: 1px solid var(--border);">
-          <button type="button" class="btn btn-gold" onclick="changeCalendarMonth(-1)" style="margin: 0; min-width: auto; padding: 0.3rem 0.8rem; font-size: 0.85rem;">◀</button>
-          <strong id="calendarMonthLabel" style="font-size: 1rem; color: var(--text);">กรกฎาคม 2569</strong>
-          <button type="button" class="btn btn-gold" onclick="changeCalendarMonth(1)" style="margin: 0; min-width: auto; padding: 0.3rem 0.8rem; font-size: 0.85rem;">▶</button>
+        <div class="calendar-header" style="display: flex; justify-content: space-between; align-items: center; background: var(--cream1); padding: 0.4rem 0.6rem; border-radius: 10px; border: 1px solid var(--border);">
+          <button type="button" class="btn btn-gold" onclick="changeCalendarMonth(-1)" style="margin: 0; min-width: auto; padding: 0.2rem 0.6rem; font-size: 0.8rem;">◀</button>
+          <strong id="calendarMonthLabel" style="font-size: 0.95rem; color: var(--text);">กรกฎาคม 2569</strong>
+          <button type="button" class="btn btn-gold" onclick="changeCalendarMonth(1)" style="margin: 0; min-width: auto; padding: 0.2rem 0.6rem; font-size: 0.8rem;">▶</button>
+        </div>
+
+        <!-- Activity-Based Filter Tabs -->
+        <div class="calendar-filters" style="display: flex; gap: 4px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; width: 100%; box-sizing: border-box;">
+          <button type="button" class="cal-filter-btn active" onclick="setCalendarFilter('all')" id="cal-filter-all" style="padding: 4px 10px; font-size: 0.72rem; border-radius: 12px; border: 1.5px solid var(--gold-d); background: var(--gold); color: #fff; cursor: pointer; white-space: nowrap; font-weight: 700; transition: all 0.2s;">✨ ทั้งหมด</button>
+          <button type="button" class="cal-filter-btn" onclick="setCalendarFilter('auspicious')" id="cal-filter-auspicious" style="padding: 4px 10px; font-size: 0.72rem; border-radius: 12px; border: 1px solid var(--border); background: var(--cream); color: var(--text); cursor: pointer; white-space: nowrap; transition: all 0.2s;">🟢 วันธงชัย/อธิบดี</button>
+          <button type="button" class="cal-filter-btn" onclick="setCalendarFilter('car')" id="cal-filter-car" style="padding: 4px 10px; font-size: 0.72rem; border-radius: 12px; border: 1px solid var(--border); background: var(--cream); color: var(--text); cursor: pointer; white-space: nowrap; transition: all 0.2s;">🚗 ออกรถใหม่</button>
+          <button type="button" class="cal-filter-btn" onclick="setCalendarFilter('home')" id="cal-filter-home" style="padding: 4px 10px; font-size: 0.72rem; border-radius: 12px; border: 1px solid var(--border); background: var(--cream); color: var(--text); cursor: pointer; white-space: nowrap; transition: all 0.2s;">🏠 ขึ้นบ้านใหม่</button>
+          <button type="button" class="cal-filter-btn" onclick="setCalendarFilter('shop')" id="cal-filter-shop" style="padding: 4px 10px; font-size: 0.72rem; border-radius: 12px; border: 1px solid var(--border); background: var(--cream); color: var(--text); cursor: pointer; white-space: nowrap; transition: all 0.2s;">💼 เปิดร้าน/ธุรกิจ</button>
+          <button type="button" class="cal-filter-btn" onclick="setCalendarFilter('wedding')" id="cal-filter-wedding" style="padding: 4px 10px; font-size: 0.72rem; border-radius: 12px; border: 1px solid var(--border); background: var(--cream); color: var(--text); cursor: pointer; white-space: nowrap; transition: all 0.2s;">💍 มงคลสมรส</button>
         </div>
 
         <!-- Legend / Indicators info -->
-        <div class="calendar-legend" style="display: flex; justify-content: center; gap: 1rem; font-size: 0.76rem; flex-wrap: wrap;">
-          <div style="display: flex; align-items: center; gap: 4px;">
-            <span style="display: inline-block; width: 8px; height: 8px; background: #2E7D32; border-radius: 50%;"></span>
-            <span>วันฤกษ์มงคล (วันธงชัย/วันอธิบดี)</span>
+        <div class="calendar-legend" style="display: flex; justify-content: center; gap: 0.6rem; font-size: 0.7rem; flex-wrap: wrap; margin: 1px 0;">
+          <div style="display: flex; align-items: center; gap: 3px;">
+            <span style="display: inline-block; width: 7px; height: 7px; background: #2E7D32; border-radius: 50%;"></span>
+            <span>วันฤกษ์มงคล</span>
           </div>
-          <div style="display: flex; align-items: center; gap: 4px;">
-            <span style="display: inline-block; width: 8px; height: 8px; background: #C62828; border-radius: 50%;"></span>
-            <span>วันควรระวัง (วันอุบาทว์/วันโลกาวินาศ)</span>
+          <div style="display: flex; align-items: center; gap: 3px;">
+            <span style="display: inline-block; width: 7px; height: 7px; background: #C62828; border-radius: 50%;"></span>
+            <span>วันควรระวัง</span>
           </div>
-          <div style="display: flex; align-items: center; gap: 4px;">
-            <span style="display: inline-block; width: 8px; height: 8px; background: #9e9e9e; border-radius: 50%;"></span>
+          <div style="display: flex; align-items: center; gap: 3px;">
+            <span style="display: inline-block; width: 7px; height: 7px; background: #9e9e9e; border-radius: 50%;"></span>
             <span>วันทั่วไป</span>
           </div>
         </div>
 
         <!-- Calendar Grid -->
-        <div class="calendar-grid-container" style="border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: #ffffff;">
+        <div class="calendar-grid-container" style="border: 1px solid var(--border); border-radius: 10px; overflow: hidden; background: #ffffff; width: 100%; box-sizing: border-box;">
           <!-- Days of Week Headers -->
-          <div class="calendar-weekdays" style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; background: var(--cream); border-bottom: 1px solid var(--border); font-size: 0.78rem; font-weight: 700; color: var(--text); padding: 0.5rem 0;">
+          <div class="calendar-weekdays" style="display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; background: var(--cream); border-bottom: 1px solid var(--border); font-size: 0.74rem; font-weight: 700; color: var(--text); padding: 0.35rem 0;">
             <div style="color: #c62828;">อา</div>
             <div>จ</div>
             <div>อ</div>
@@ -1736,21 +1088,25 @@ window.onerror = function(message, source, lineno, colno, error) {
             <div style="color: #1565c0;">ส</div>
           </div>
           <!-- Days Grid -->
-          <div id="calendarDaysGrid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: var(--border);">
+          <div id="calendarDaysGrid" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: var(--border); width: 100%; box-sizing: border-box;">
             <!-- Dynamic days will be rendered here -->
           </div>
         </div>
 
         <!-- Auspicious Details Card -->
-        <div id="calendarDetailsCard" style="display: none; background: var(--cream); border: 1.5px solid #E8D0A0; border-radius: 12px; padding: 1.2rem; margin-top: 0.5rem; text-align: left;">
+        <div id="calendarDetailsCard" style="display: none; background: var(--cream); border: 1.5px solid #E8D0A0; border-radius: 10px; padding: 0.9rem 0.8rem; margin-top: 0.4rem; text-align: left; width: 100%; box-sizing: border-box;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem; border-bottom: 1px dashed #E8D0A0; padding-bottom: 0.5rem;">
             <strong id="calDetailsDate" style="font-size: 0.95rem; color: var(--text);">-</strong>
             <span id="calDetailsBadge" style="font-size: 0.72rem; font-weight: 700; padding: 3px 8px; border-radius: 6px;">-</span>
           </div>
+
+          <!-- Personal Horoscope Advice Banner (if bound) -->
+          <div id="calPersonalAdvice" style="display: none; border-radius: 8px; padding: 0.6rem 0.8rem; font-size: 0.78rem; font-weight: 600; margin-bottom: 0.8rem; line-height: 1.4;">
+            <!-- Dynamic Personal Advice -->
+          </div>
           
           <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.84rem; line-height: 1.5;">
-            <div>
-              <span style="color: var(--dim); font-weight: 600;">💫 ความหมายฤกษ์:</span>
+            <div style="font-size: 0.85rem; line-height: 1.5; color: var(--text); background: rgba(226, 184, 66, 0.08); padding: 8px 10px; border-radius: 8px; border-left: 3px solid var(--gold-d); margin-bottom: 2px;">
               <span id="calDetailsMeaning">-</span>
             </div>
             <div>
@@ -1761,571 +1117,323 @@ window.onerror = function(message, source, lineno, colno, error) {
               <span style="color: var(--dim); font-weight: 600;">❌ ควรหลีกเลี่ยง:</span>
               <span id="calDetailsAvoid" style="color: #C62828;">-</span>
             </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; border-top: 1px dashed #E8D0A0; padding-top: 8px; margin-top: 4px;">
-              <div>
+            <div style="display: flex; flex-direction: column; gap: 0.45rem; border-top: 1px dashed #E8D0A0; padding-top: 8px; margin-top: 8px; font-size: 0.8rem;">
+              <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
                 <span style="color: var(--dim); font-weight: 600;">🧭 ทิศนำโชค:</span>
                 <span id="calDetailsDirection" style="font-weight: 700; color: var(--text);">-</span>
               </div>
-              <div>
+              <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 4px;">
                 <span style="color: var(--dim); font-weight: 600;">🔑 เลขมงคล:</span>
-                <strong id="calDetailsNumbers" style="color: var(--gold-d); font-size: 0.9rem;">-</strong>
+                <strong id="calDetailsNumbers" style="color: var(--gold-d); font-size: 0.92rem; font-weight: 800;">-</strong>
               </div>
             </div>
-            <div style="background: rgba(226, 184, 66, 0.08); border-radius: 8px; padding: 0.5rem 0.8rem; font-size: 0.78rem; color: var(--text); border: 1px solid rgba(226,184,66,0.15); margin-top: 4px;">
-              <span style="font-weight: 700;">⏱️ ช่วงเวลาทอง (ฤกษ์ยาม):</span> <span id="calDetailsTime">-</span>
-            </div>
             
-            <button id="btnShareAuspicious" onclick="shareAuspiciousDay()" class="btn btn-coral" style="margin-top: 0.8rem; width: 100%; height: 2.2rem; font-size: 0.82rem; border-radius: 12px; border: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px;">
-              🟢 บอกต่อวันฤกษ์ดีนี้ให้คนใกล้ชิด
-            </button>
+            <div style="display: flex; justify-content: flex-end; width: 100%; margin-top: 0.8rem;">
+              <button id="btnShareAuspicious" onclick="shareAuspiciousDay()" class="btn btn-coral" style="height: 2rem; font-size: 0.8rem; padding: 0 1.2rem; border-radius: 12px; border: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 4px; margin-left: auto;">
+                แชร์
+              </button>
+            </div>
           </div>
         </div>
       </div>
-
 
       <!-- Card 4: Animated Ganesh E-Siimsi -->
 
-
         <div class="card deity-ganesh" id="siimsiCard" style="display: flex; flex-direction: column; align-items: center; min-height: 500px; transition: all 0.5s ease;">
-
 
           <div class="card-title" id="siimsiCardTitle" style="width: 100%; text-align: left;">
 
-
             เซียมซีประจำวัน
 
-
           </div>
-
-
-          
-
 
           <!-- Deity Selector Tabs -->
 
-
           <div style="display: flex; gap: 6px; justify-content: center; margin-bottom: 1.2rem; width: 100%; max-width: 380px; background: rgba(226, 184, 66, 0.03); padding: 4px; border-radius: 20px; border: 1.5px solid var(--border);">
-
 
             <button type="button" id="deity-btn-ganesh" class="tab-btn active" onclick="selectSiimsiDeity('ganesh')" style="flex: 1; height: 1.85rem; padding: 0 0.4rem; font-size: 0.76rem; border-radius: 16px; border: none !important; box-shadow: none !important; margin: 0 !important; color: inherit;">
 
-
               พระพิฆเนศ
 
-
             </button>
-
 
             <button type="button" id="deity-btn-guanyin" class="tab-btn" onclick="selectSiimsiDeity('guanyin')" style="flex: 1; height: 1.85rem; padding: 0 0.4rem; font-size: 0.76rem; border-radius: 16px; border: none !important; box-shadow: none !important; margin: 0 !important; color: inherit;">
 
-
               เจ้าแม่กวนอิม
 
-
             </button>
-
 
             <button type="button" id="deity-btn-citypillar" class="tab-btn" onclick="selectSiimsiDeity('citypillar')" style="flex: 1; height: 1.85rem; padding: 0 0.4rem; font-size: 0.76rem; border-radius: 16px; border: none !important; box-shadow: none !important; margin: 0 !important; color: inherit;">
 
-
               ศาลหลักเมือง
-
 
             </button>
 
-
           </div>
-
-
-          
-
 
           <div class="siimsi-widget" id="siimsiWidget">
 
-
             <!-- 1. Prayer Caption (Moved to top) -->
-
 
             <div id="siimsiCaption" style="font-size: 0.8rem; color: var(--dim); text-align: center; max-width: 300px; line-height: 1.4; margin-bottom: 0.8rem;">
 
-
               ตั้งจิตอธิษฐานนึกถึงสิ่งศักดิ์สิทธิ์หรือองค์พระพิฆเนศ มหาเทพแห่งความสำเร็จ แล้วแตะที่กระบอกเพื่อสุ่มรับพรนำทางชีวิตครับ
 
-
             </div>
-
-
-
-
 
             <!-- 2. Instruction Text (Moved to middle) -->
 
-
             <p class="siimsi-instruction" id="siimsiInstruction" style="margin-bottom: 0px;">👇 แตะกระบอกเซียมซีด้านล่างเพื่อเริ่มเขย่าเสี่ยงทายดวงชะตารายวัน</p>
-
-
-            
-
 
             <!-- 3. Shaker Cup (Moved to bottom, with top margin to clear the sticks) -->
 
-
             <div class="siimsi-cup-container" id="siimsiCupContainer" onclick="triggerSiimsiShake()" style="margin-top: 5.8rem !important; margin-bottom: 0.8rem;">
-
 
               <!-- Deity Background Aura -->
 
-
               <div class="siimsi-aura"></div>
-
 
               <!-- Shaker Wrapper -->
 
-
               <div class="siimsi-cup-wrapper" id="siimsiCup">
-
 
                 <!-- Bamboo sticks sticking out -->
 
-
                 <div class="siimsi-sticks">
 
+                  <div class="siimsi-stick-item"></div>
 
                   <div class="siimsi-stick-item"></div>
 
+                  <div class="siimsi-stick-item"></div>
 
                   <div class="siimsi-stick-item"></div>
 
+                  <div class="siimsi-stick-item"></div>
 
                   <div class="siimsi-stick-item"></div>
 
+                  <div class="siimsi-stick-item"></div>
 
                   <div class="siimsi-stick-item"></div>
 
-
                   <div class="siimsi-stick-item"></div>
-
-
-                  <div class="siimsi-stick-item"></div>
-
-
-                  <div class="siimsi-stick-item"></div>
-
-
-                  <div class="siimsi-stick-item"></div>
-
-
-                  <div class="siimsi-stick-item"></div>
-
 
                 </div>
-
 
                 <!-- Cylinder Cup -->
 
-
                 <div class="siimsi-cup-cylinder" id="siimsiCupCylinder"></div>
 
-
               </div>
-
 
               <!-- Dropped stick animation element -->
 
-
               <div class="siimsi-stick-falling" id="fallingStick"></div>
-
 
             </div>
 
-
           </div>
-
-
-          
-
 
           <!-- Siimsi Prophecy Scroll Result -->
 
-
           <div class="siimsi-scroll" id="siimsiScroll">
-
 
             <div class="siimsi-scroll-header">
 
-
               <div class="siimsi-scroll-number" id="siimsiScrollNumber">ใบที่ -</div>
-
 
               <h4 class="siimsi-scroll-title" id="siimsiScrollTitle">คำทำนายมงคล</h4>
 
-
             </div>
-
 
             <div class="siimsi-scroll-body" id="siimsiScrollBody">
 
-
               -
 
-
             </div>
-
-
-
-
 
             <div class="siimsi-scroll-footer" style="flex-wrap: wrap; gap: 8px;">
-
-
-              <div class="siimsi-lucky-num" id="siimsiLuckyNum">เลขมงคลนำโชค: -</div>
-
-
-              <div style="display: flex; gap: 8px; width: 100%; justify-content: flex-end; align-items: center;">
-
-
-                <button id="siimsiShareBtn" class="btn btn-coral" onclick="shareSiimsiResult()" style="height: 2rem; font-size: 0.8rem; padding: 0 1rem; border-radius: 12px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
-                  ✨ แชร์ผลคำทำนาย
+              <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 12px; flex-wrap: wrap;">
+                <div class="siimsi-lucky-num" id="siimsiLuckyNum" style="margin-bottom: 0;">เลขมงคลนำโชค: -</div>
+                <button id="siimsiShareBtn" class="btn btn-coral" onclick="shareSiimsiResult()" style="height: 2rem; font-size: 0.8rem; padding: 0 1.2rem; border-radius: 12px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; margin-left: auto;">
+                  แชร์
                 </button>
-
-
-                <button id="siimsiResetBtn" class="btn btn-ghost" onclick="resetSiimsi()" style="height: 2rem; font-size: 0.8rem; padding: 0 1rem; border-radius: 12px;">
-                  เสี่ยงทายใหม่
-                </button>
-
-
               </div>
-
-
+              <button id="siimsiResetBtn" class="btn btn-ghost" onclick="resetSiimsi()" style="height: 2rem; font-size: 0.8rem; padding: 0 1rem; border-radius: 12px;">
+                เสี่ยงทายใหม่
+              </button>
+              <div id="siimsiLimitText" style="display: none; width: 100%; text-align: center; font-size: 0.85rem; color: var(--coral-d); font-weight: 700; margin-top: 10px; border-top: 1px dashed rgba(212, 175, 55, 0.2); padding-top: 8px;">
+                เสี่ยงทายได้อีกครั้งพรุ่งนี้
+              </div>
             </div>
-
 
           </div>
 
-
         </div>
 
-
-      
-
+      <!-- Card 2: Yearly Thaksa Shirt Colors Guide -->
+        <div class="card" id="free-card-thaksa" style="padding: 1.2rem 1rem;">
+          <div class="card-title free-accent-title">🎨 สีมงคลประจำปี (ช่วงวันเกิดตามอายุย่าง)</div>
+          <div id="freeThaksaColorsContainer">
+            <!-- Rendered by JS: renderFreeHoroscope() -->
+          </div>
+        </div>
 
       <!-- Card 1: Lagna Personality -->
-
-
         <div class="card" id="free-card-lagna">
-
-
           <div class="card-title free-accent-title">พื้นดวงชะตาตามลัคนาราศี</div>
-
-
           <div id="free-lagna-badge" class="free-lagna-badge">ลัคนาราศี...</div>
-
-
           <p id="free-lagna-desc" class="free-lagna-desc">กำลังคำนวณอุปนิสัยและทิศทางชะตาชีวิตของคุณ...</p>
-
-
         </div>
-
-
-      
-
-
-      <!-- Card 2: Yearly Thaksa Guide -->
-
-
-        <div class="card" id="free-card-thaksa">
-
-
-          <div class="card-title free-accent-title">👗 สีเสื้อผ้าที่เหมาะกับดวงชะตา</div>
-
-
-          <div style="font-size: 0.82rem; font-weight: 600; color: var(--dim); margin-bottom: 0.8rem;" id="free-thaksa-meta">วันเกิดคุณ: - | อายุย่าง: -</div>
-
-
-          <div class="thaksa-guide-list">
-
-
-            <div class="thaksa-guide-item">
-
-
-              <span class="thaksa-guide-label">🟢 สีเสื้อผ้า/สิ่งของนำโชคลาภประจำปี</span>
-
-
-              <span style="font-size: 0.85rem; font-weight: 700; color: #2E7D32;" id="free-thaksa-colors-good">-</span>
-
-
-            </div>
-
-
-            <div class="thaksa-guide-item">
-
-
-              <span class="thaksa-guide-label">🔴 สีกาลกิณีที่ควรหลีกเลี่ยงเป็นพิเศษ</span>
-
-
-              <span style="font-size: 0.85rem; font-weight: 700; color: #C62828;" id="free-thaksa-colors-bad">-</span>
-
-
-            </div>
-
-
-          </div>
-
-
-        </div>
-
-
-      
-
 
       <!-- Card 3b: Thai Numerology Analyzer -->
 
-
         <div class="card" id="numerologyCard" style="margin-top: 0.2rem;">
-
 
           <div class="card-title free-accent-title" style="display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; gap: 6px;">
 
-
             <span>🔮 วิเคราะห์ชื่อ-นามสกุล</span>
-
 
             <button type="button" class="btn btn-ghost" style="padding: 3px 10px; font-size: 0.72rem; height: auto; min-height: unset; font-weight: 700; cursor: pointer; border-radius: 6px;" onclick="pullNameFromHoroscope()">ดึงข้อมูลจากหน้าผูกดวง</button>
 
-
           </div>
-
 
           <div style="font-size: 0.8rem; color: var(--dim); margin-bottom: 1rem; line-height: 1.4;">
 
-
             วิเคราะห์พลังดวงดาวและถอดรหัสชะตาชีวิตจากผลรวมชื่อและนามสกุลของคุณตามตำราเลขศาสตร์ดวงดาวไทย เพื่อตรวจสมดุลความเป็นสิริมงคล
 
-
           </div>
-
-
-          
-
 
           <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1rem;">
 
-
             <div style="flex: 1; min-width: 140px;">
-
 
               <label for="numFirstName" style="display: block; font-size: 0.75rem; font-weight: 700; margin-bottom: 4px; color: var(--text);">ชื่อจริง (ภาษาไทย)</label>
 
-
               <input type="text" id="numFirstName" placeholder="" style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.85rem; background: var(--bg-card); color: var(--text); box-sizing: border-box;">
 
-
             </div>
-
 
             <div style="flex: 1; min-width: 140px;">
 
-
               <label for="numLastName" style="display: block; font-size: 0.75rem; font-weight: 700; margin-bottom: 4px; color: var(--text);">นามสกุล (ภาษาไทย)</label>
-
 
               <input type="text" id="numLastName" placeholder="" style="width: 100%; padding: 0.5rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; font-size: 0.85rem; background: var(--bg-card); color: var(--text); box-sizing: border-box;">
 
-
             </div>
 
-
           </div>
-
-
-          
-
 
           <button class="btn btn-coral" onclick="analyzeNumerology()" style="width: 100%; font-size: 0.88rem; font-weight: 700; padding: 0.6rem; border-radius: 8px; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; border: none;">
 
-
             วิเคราะห์คำทำนายเลขศาสตร์
-
 
           </button>
 
-
-          
-
-
           <!-- Results Section (Initially Hidden) -->
-
 
           <div id="numerologyResult" style="display: none; margin-top: 1.2rem; border-top: 1px dashed rgba(226, 184, 66, 0.2); padding-top: 1rem; animation: fadeIn 0.5s ease;">
 
-
             <!-- Circular Badges for Numbers -->
-
 
             <div style="display: flex; justify-content: space-around; gap: 8px; margin-bottom: 1.2rem; flex-wrap: wrap;">
 
-
               <div style="text-align: center; flex: 1; min-width: 80px; background: rgba(226, 184, 66, 0.03); padding: 8px; border-radius: 12px; border: 1px solid var(--border);">
-
 
                 <div style="font-size: 0.7rem; color: var(--dim); font-weight: 700; margin-bottom: 4px;">เลขกำลังชื่อ</div>
 
-
                 <div id="numValName" style="font-size: 1.6rem; font-weight: 800; color: var(--coral-d);">0</div>
 
-
               </div>
-
 
               <div style="text-align: center; flex: 1; min-width: 80px; background: rgba(226, 184, 66, 0.03); padding: 8px; border-radius: 12px; border: 1px solid var(--border);">
 
-
                 <div style="font-size: 0.7rem; color: var(--dim); font-weight: 700; margin-bottom: 4px;">เลขกำลังนามสกุล</div>
-
 
                 <div id="numValLastName" style="font-size: 1.6rem; font-weight: 800; color: var(--coral-d);">0</div>
 
-
               </div>
-
 
               <div style="text-align: center; flex: 1; min-width: 80px; background: rgba(245, 200, 64, 0.08); padding: 8px; border-radius: 12px; border: 1.5px solid var(--gold);">
 
-
                 <div style="font-size: 0.7rem; color: #7A5510; font-weight: 800; margin-bottom: 4px;">เลขรวมชะตาชีวิต</div>
-
 
                 <div id="numValTotal" style="font-size: 1.8rem; font-weight: 900; color: #7A5510;">0</div>
 
-
               </div>
 
-
             </div>
-
-
-
-
 
             <!-- Character Breakdown -->
 
-
             <div style="font-size: 0.78rem; background: rgba(0,0,0,0.12); padding: 10px 12px; border-radius: 8px; margin-bottom: 1.2rem; border: 1px solid var(--border); line-height: 1.4;">
-
 
               <div style="font-weight: 700; color: var(--text); margin-bottom: 6px;">📊 รายละเอียดการถอดรหัสตัวอักษร:</div>
 
-
               <div id="numBreakdownName" style="color: var(--dim); margin-bottom: 4px;">ชื่อ: -</div>
-
 
               <div id="numBreakdownLastName" style="color: var(--dim);">นามสกุล: -</div>
 
-
             </div>
-
-
-
-
 
             <!-- Detailed Interpretations -->
 
-
             <div style="display: flex; flex-direction: column; gap: 1rem;">
-
 
               <!-- Name Interpretation -->
 
-
               <div style="border-left: 3.5px solid var(--coral-d); padding-left: 10px;">
 
-
                 <div style="font-size: 0.85rem; font-weight: 800; color: var(--text); margin-bottom: 3px;">
-
 
                   🪐 คำทำนายพลังชื่อจริง (เลข <span id="numTextName">0</span>)
 
-
                 </div>
-
 
                 <div id="numDescName" style="font-size: 0.8rem; color: var(--dim); line-height: 1.45;">-</div>
 
-
               </div>
-
-
-
-
 
               <!-- Surname Interpretation -->
 
-
               <div style="border-left: 3.5px solid var(--coral-d); padding-left: 10px;">
-
 
                 <div style="font-size: 0.85rem; font-weight: 800; color: var(--text); margin-bottom: 3px;">
 
-
                   🪐 คำทำนายพลังนามสกุล (เลข <span id="numTextLastName">0</span>)
 
-
                 </div>
-
 
                 <div id="numDescLastName" style="font-size: 0.8rem; color: var(--dim); line-height: 1.45;">-</div>
 
-
               </div>
-
-
-
-
 
               <!-- Combined Interpretation -->
 
-
               <div style="background: rgba(245, 200, 64, 0.03); border: 1px solid var(--gold); border-left: 4px solid var(--gold); padding: 10px; border-radius: 8px;">
-
 
                 <div style="font-size: 0.88rem; font-weight: 900; color: #7A5510; margin-bottom: 4px; display: flex; align-items: center; gap: 4px;">
 
-
                   ✨ ผลรวมชะตาชีวิตสูงสุด (เลข <span id="numTextTotal">0</span>)
-
 
                 </div>
 
-
                 <div id="numDescTotal" style="font-size: 0.82rem; color: var(--text); line-height: 1.5; font-weight: 500;">-</div>
-
 
               </div>
 
-
             </div>
-
 
           </div>
 
-
-
-
-
         </div>
-
 
       </div>
 
-
   </div>
 
-
 </div>
-
-
-
-
 
 <!-- COMMUNITY TAB -->
 <div id="community-tab" class="tab-content hidden" style="padding: 1.5rem 1.2rem 3rem 1.2rem;">
@@ -2602,8 +1710,6 @@ window.onerror = function(message, source, lineno, colno, error) {
       </div>
     </section>
 
-
-
   </div>
 </div>
 
@@ -2633,250 +1739,156 @@ window.onerror = function(message, source, lineno, colno, error) {
 <!-- MU SHOP TAB -->
 <div id="shop-tab" class="tab-content hidden">
 
-
   <div class="card">
-
 
     <div class="card-title">🛍️ มูมาร์เก็ต เสริมดวงชะตา</div>
 
-
     <div style="font-size: 0.88rem; color: var(--dim); margin-bottom: 1.2rem;">เลือกบูชาของมงคลเพื่อกระตุ้นโชคลาภ การเงิน และความรักตามพื้นดวงของคุณ</div>
-
 
     <div class="shop-grid">
 
-
       <!-- Item 1 -->
 
-
       <div class="shop-card">
-
 
         <div class="shop-img-holder"><img src="wallpaper_mockup.png" alt="วอลเปเปอร์เสริมดวงชะตา" style="width: 100%; height: 100%; object-fit: cover;"></div>
 
-
         <div class="shop-title">วอลเปเปอร์เสริมดวงเฉพาะดวงชะตา</div>
-
 
         <div class="shop-price">299 ฿</div>
 
-
         <div class="shop-desc">วอลเปเปอร์หน้าจอมือถือที่สร้างขึ้นเฉพาะตัวคุณ คำนวณจากตำแหน่งดาวลัคนาเดิมในราศีเกิดของคุณ เพื่อหนุนเรื่องที่ต้องการมากที่สุด (การเงิน/งาน/รัก)</div>
-
 
         <button class="btn btn-coral" onclick="openShopModal('วอลเปเปอร์เสริมดวงชะตาเฉพาะบุคคล', 299, 'wallpaper')">🛒 สั่งทำเฉพาะตัว</button>
 
-
       </div>
-
 
       <!-- Item 2 -->
 
-
       <div class="shop-card">
-
 
         <div class="shop-img-holder"><img src="pdf_book_mockup.png" alt="คัมภีร์ดวงชะตา" style="width: 100%; height: 100%; object-fit: cover;"></div>
 
-
         <div class="shop-title">คัมภีร์คำทำนายชีวิตประจำปี 2569</div>
-
 
         <div class="shop-price">199 ฿</div>
 
-
         <div class="shop-desc">รายงานเอกสาร PDF คำทำนายวิเคราะห์แนวโน้มชีวิตแบบเจาะลึก 12 เดือน วิเคราะห์อิทธิพลของเสาร์ ราหู และพฤหัสบดีที่โคจรจรทับดาวชะตาเดิมของคุณ</div>
-
 
         <button class="btn btn-coral" onclick="openShopModal('คัมภีร์คำทำนายชีวิตประจำปี 2569', 199, 'report')">🛒 สั่งซื้อรายงาน</button>
 
-
       </div>
-
 
       <!-- Item 3 -->
 
-
       <div class="shop-card">
-
 
         <div class="shop-img-holder"><img src="bracelet_mockup.png" alt="กำไลหินมงคล" style="width: 100%; height: 100%; object-fit: cover;"></div>
 
-
         <div class="shop-title">กำไลหินธิเบตหนุนธาตุมงคล</div>
-
 
         <div class="shop-price">499 ฿</div>
 
-
         <div class="shop-desc">สร้อยข้อมือหินแท้ธรรมชาติ คัดสรรประเภทหินตามธาตุราศีลัคนาของดวงชะตา ช่วยปรับความสมดุลพลังงานและดึงดูดกระแสทรัพย์สินเงินทอง</div>
-
 
         <button class="btn btn-coral" onclick="openShopModal('สร้อยข้อมือหินมงคลหนุนธาตุชะตา', 499, 'bracelet')">🛒 สั่งบูชาสินค้า</button>
 
-
       </div>
-
 
       <!-- Item 4 -->
 
-
       <div class="shop-card">
-
 
         <div class="shop-img-holder"><img src="yantra_mockup.png" alt="ยันต์ดวงพิชัยสงคราม" style="width: 100%; height: 100%; object-fit: cover;"></div>
 
-
         <div class="shop-title">ยันต์ดวงพิชัยสงคราม</div>
-
 
         <div class="shop-price">999 ฿</div>
 
-
         <div class="shop-desc">แผ่นทองจารึกดวงชะตากำเนิดล้อมด้วยยันต์พระคาถาพิชัยสงครามโบราณ ปรับแต่งตามตำแหน่งดวงชะตาและลัคนาของคุณโดยเฉพาะ ช่วยปกป้องคุ้มครองและหนุนนำโชคลาภความเจริญรุ่งเรืองสูงสุด</div>
-
 
         <button class="btn btn-coral" onclick="openShopModal('ยันต์ดวงพิชัยสงคราม', 999, 'yantra')">🛒 สั่งบูชาสินค้า</button>
 
-
       </div>
-
 
     </div>
 
-
   </div>
 
-
 </div>
-
-
-
-
 
 <!-- CHECKOUT MOCK MODAL -->
 
-
 <div class="mu-modal" id="shopModal">
-
 
   <div class="mu-modal-content">
 
-
     <button class="modal-close-btn" onclick="closeShopModal()" aria-label="ปิดหน้าต่าง">&times;</button>
-
 
     <div style="font-size: 1.3rem; font-weight: 700; color: var(--text); border-bottom: 2.5px solid #E8D0A0; padding-bottom: 0.5rem; margin-bottom: 1rem;" id="modalItemTitle">ยืนยันการบูชาสินค้า</div>
 
-
     <div style="font-size: 0.95rem; margin-bottom: 1.2rem;">
-
 
       <span style="color: var(--dim);">สินค้า:</span> <strong id="modalItemName">-</strong><br>
 
-
       <span style="color: var(--dim);">ราคา:</span> <strong style="color: var(--coral-d);" id="modalItemPrice">- ฿</strong>
 
-
     </div>
-
-
-    
-
 
     <div id="modalFormArea" style="margin-bottom: 1.5rem; padding: 1rem; background: var(--cream1); border-radius: 10px; border: 1px solid #D4AF3744;">
 
-
       <!-- Populated dynamically depending on product -->
 
-
     </div>
-
-
-
-
 
     <div style="text-align: center;">
 
-
       <button class="btn btn-coral" style="padding: 0.6rem 2.5rem; width: 100%;" onclick="orderViaLine()">💬 สั่งบูชาและแจ้งทาง LINE</button>
-
 
     </div>
 
-
   </div>
-
 
 </div>
 
-
-
-
-
-
-
-
 <!-- ============================================================
-
 
      JAVASCRIPT
 
-
      ============================================================ -->
-
 
 <!-- Core -->
 
-
 <script src="state.js" defer></script>
-
 
 <script src="astro-calc.js" defer></script>
 
-
 <!-- Rendering -->
-
 
 <script src="wheel-renderer.js" defer></script>
 
-
 <script src="table-renderer.js" defer></script>
-
 
 <script src="thaksa.js" defer></script>
 
-
 <!-- Features -->
-
 
 <script src="location-manager.js" defer></script>
 
-
 <script src="booking.js" defer></script>
-
 
 <script src="siimsi.js" defer></script>
 
-
 <script src="free-horoscope.js" defer></script>
-
 
 <script src="shop.js" defer></script>
 
-
 <script src="community.js" defer></script>
-
 
 <!-- Orchestrator (must be last) -->
 
-
 <script src="app-init.js" defer></script>
-
 
 </body>
 
-
 </html>
-
-
